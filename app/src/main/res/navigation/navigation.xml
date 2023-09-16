@@ -8,4 +8,63 @@
         android:id="@+id/homeFragment"
         android:name="com.example.stack.home.HomeFragment"
         android:label="HomeFragment" />
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.stack.user.UserFragment"
+        android:label="UserFragment" />
+
+    <fragment
+        android:id="@+id/chatroomFragment"
+        android:name="com.example.stack.chatroom.ChatRoomFragment"
+        android:label="ChatRoomFragment" />
+
+    <fragment
+        android:id="@+id/findBroFragment"
+        android:name="com.example.stack.findbro.FindBroFragment"
+        android:label="FindBroFragment" />
+
+    <fragment
+        android:id="@+id/positionCorrectionFragment"
+        android:name="com.example.stack.position.PositionCorrectionFragment"
+        android:label="PositionCorrectionFragment" />
+
+    <fragment
+        android:id="@+id/planFragment"
+        android:name="com.example.stack.plan.PlanFragment"
+        android:label="PlanFragment" />
+
+    <fragment
+        android:id="@+id/loginDialog"
+        android:name="com.example.stack.login.LoginDialog"
+        android:label="LoginDialog" />
+
+    <action android:id="@+id/navigate_to_home_fragment" app:destination="@id/homeFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_user_fragment" app:destination="@id/userFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_find_bro_fragment" app:destination="@id/findBroFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_plan_fragment" app:destination="@id/planFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_chatroom_fragment" app:destination="@id/chatroomFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_position_correction_fragment" app:destination="@id/positionCorrectionFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action android:id="@+id/navigate_to_login_dialog" app:destination="@id/loginDialog"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
 </navigation>

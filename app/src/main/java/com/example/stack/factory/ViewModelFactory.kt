@@ -3,7 +3,7 @@ package com.example.stack.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.stack.home.HomeViewModel
-import com.example.stack.repository.StackRepository
+import com.example.stack.data.StackRepository
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(

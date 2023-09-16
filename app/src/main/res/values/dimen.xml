@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bottom Navigation -->
+    <dimen name="height_bottom_nav_view_main">60dp</dimen>
+    <dimen name="size_bottom_nav_icon">36dp</dimen>
+    <dimen name="elevation_all">4dp</dimen>
+    <!-- Login Dialog -->
+    <dimen name="height_login">400dp</dimen>
+    <dimen name="height_payment_editor">56dp</dimen>
+    <dimen name="size_payment_progress">24dp</dimen>
+
+
+</resources>

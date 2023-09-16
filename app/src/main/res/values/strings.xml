@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Stack</string>
+
+    <!-- Login Dialog -->
+    <string name="login_title">請先登入會員</string>
+    <string name="login_description">登入會員後即可使用個人功能。</string>
+    <string name="login_facebook_text">Facebook 登入</string>
+    <string name="login_native_text">會員帳號登入</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="email_cannot_be_empty">Email 不可為空。</string>
+    <string name="password_cannot_be_empty">Password 不可為空。</string>
 </resources>
