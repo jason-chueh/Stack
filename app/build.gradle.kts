@@ -110,12 +110,12 @@ dependencies {
 
 
     // Moshi
-    implementation ("com.squareup.moshi:moshi:1.9.3")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.9.3")
+    implementation ("com.squareup.moshi:moshi:1.14.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.14.0")
+    kapt ("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     //Gson
     implementation ("com.google.code.gson:gson:2.10.1")
-
 
     // Retrofit - Deprecated plugins - No more required
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

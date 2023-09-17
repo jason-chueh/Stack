@@ -21,11 +21,9 @@ class HomeFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.button.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToUserFragment())
+        binding.fab.setOnClickListener{
+            viewModel.test()
         }
-
-        viewModel.test()
 
         return binding.root
     }

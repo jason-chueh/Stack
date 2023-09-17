@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.stack.data.DefaultRepository
 import com.example.stack.data.StackRepository
+import com.example.stack.data.local.ExerciseDao
+import com.example.stack.data.local.ExerciseRecordDao
 import com.example.stack.data.local.StackDatabase
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.network.NetworkDataSource
@@ -46,5 +48,11 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideTaskDao(database: StackDatabase): UserDao = database.userDao
+    fun provideUserDao(database: StackDatabase): UserDao = database.userDao
+
+    @Provides
+    fun provideExerciseDao(database: StackDatabase): ExerciseDao = database.exerciseDao
+
+    @Provides
+    fun provideExerciseRecordDao(database: StackDatabase): ExerciseRecordDao = database.exerciseRecordDao
 }

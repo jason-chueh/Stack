@@ -16,7 +16,9 @@ data class User(
     @ColumnInfo(name = "user_email")
     var email: String = "",
     @ColumnInfo(name = "user_picture")
-    val picture: String? = null,
-    @ColumnInfo(name = "user_gym")
-    val gym: String? = null
+    val picture: String? = "",
+    @ColumnInfo(name = "user_gym_latitude")
+    val gymLatitude: String? = "",
+    @ColumnInfo(name = "user_gym_longitude")
+    val gymLongitude: String? = ""
 ) : Parcelable

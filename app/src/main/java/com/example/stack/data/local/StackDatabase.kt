@@ -4,15 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.stack.data.dataclass.Exercise
+import com.example.stack.data.dataclass.ExerciseRecord
+import com.example.stack.data.dataclass.RepsAndWeightsConverter
 import com.example.stack.data.dataclass.User
-
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@TypeConverters(RepsAndWeightsConverter::class)
+@Database(entities = [User::class, Exercise::class, ExerciseRecord::class], version = 2, exportSchema = false)
 abstract class StackDatabase : RoomDatabase() {
 
     /**
      * Connects the database to the DAO.
      */
     abstract val userDao: UserDao
+    abstract val exerciseDao: ExerciseDao
+    abstract val exerciseRecordDao: ExerciseRecordDao
 
     /**
      * Define a companion object, this allows us to add functions on the StylishDatabase class.
