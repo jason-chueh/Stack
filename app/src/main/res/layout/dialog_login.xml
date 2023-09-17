@@ -66,9 +66,42 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"
                 android:background="@color/gray_cccccc"
-                app:layout_constraintBottom_toTopOf="@+id/layout_login_email"
+                app:layout_constraintBottom_toTopOf="@+id/layout_login_name"
                 app:layout_constraintEnd_toEndOf="@+id/button_login_native"
                 app:layout_constraintStart_toStartOf="@+id/button_login_native"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_login_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/PaymentColorTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/layout_login_email"
+                app:boxStrokeColor="@{@color/gray_646464}"
+                app:boxBackgroundColor="@{@color/gray_646464}">
+
+                <EditText
+                    android:id="@+id/edit_login_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_payment_editor"
+                    android:hint="@string/login_name"
+                    android:textColor="@color/black_3f3a3a"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/edit_login_email"
+                    android:text="@={viewModel.name}"
+                    android:textColorHint="@{@color/gray_646464}"
+                    android:backgroundTint="@{@color/gray_646464}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_login_email"

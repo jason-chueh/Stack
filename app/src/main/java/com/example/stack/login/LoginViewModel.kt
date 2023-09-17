@@ -1,11 +1,16 @@
 package com.example.stack.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.LoadApiStatus
 import com.example.stack.data.dataclass.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +22,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private val stackRepository: StackRepository) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
+    private var auth: FirebaseAuth = Firebase.auth
+
 
     val user: LiveData<User>
         get() = _user
@@ -29,7 +36,6 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
 
     // Handle leave login
     private val _leave = MutableLiveData<Boolean>()
-
     val leave: LiveData<Boolean>
         get() = _leave
 
@@ -44,10 +50,22 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
 
     val error: LiveData<String>
         get() = _error
-
+    // two-way data binding
     val email = MutableLiveData<String>()
-
+    // two-way data binding
     val password = MutableLiveData<String>()
+
+    val name = MutableLiveData<String>()
+
+    private val _loginErrorToast = MutableLiveData<Boolean>(false)
+
+    val loginErrorToast: LiveData<Boolean>
+        get() = _loginErrorToast
+
+    private val _registerErrorToast = MutableLiveData<Boolean>(false)
+
+    val registerErrorToast: LiveData<Boolean>
+        get() = _registerErrorToast
 
     private val _invalidCheckout = MutableLiveData<Int>()
 
@@ -61,7 +79,55 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     fun nativeLogin(){
+        viewModelScope.launch {
 
+            if(email.value!=null && password.value!=null){
+            auth.signInWithEmailAndPassword(email.value!!, password.value!!)
+                .addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        val user = auth.currentUser
+                        if(UserManager.user == null && name.value != null){
+                            UserManager.user = User(user!!.uid, name.value!!, user!!.email!!)
+                        }
+                        coroutineScope.launch {
+                            UserManager.user?.let { stackRepository.upsertUser(it) }
+                        }
+                        leave()
+                    } else {
+                        _loginErrorToast.value = true
+                        createAccount(email.value!!, password.value!!)
+                        // If sign in fails, display a message to the user.
+                        Log.i("signin", "createUserWithEmail:failure")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createAccount(email: String, password: String) {
+        // [START create_user_with_email]
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.i("login", "createUserWithEmail:success")
+                    val user = auth.currentUser
+                    if(UserManager.user == null){
+                        UserManager.user = User(user!!.uid, user!!.displayName!!, user!!.email!!)
+                    }
+                    coroutineScope.launch {
+                        UserManager.user?.let { stackRepository.upsertUser(it) }
+                    }
+
+                    leave()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.i("login", "createUserWithEmail:failure", task.exception)
+                    _registerErrorToast.value = true
+                }
+            }
+        // [END create_user_with_email]
     }
 
     /**
@@ -86,8 +152,6 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
      */
     fun login() {
         _status.value = LoadApiStatus.LOADING
-
-
     }
 
 
@@ -101,6 +165,14 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
 
     fun onLeaveCompleted() {
         _leave.value = null
+    }
+
+    fun onLoginErrorToastCompleted(){
+        _loginErrorToast.value = false
+    }
+
+    fun onRegisterErrorToastCompleted(){
+        _registerErrorToast.value = false
     }
 
     fun nothing() {}

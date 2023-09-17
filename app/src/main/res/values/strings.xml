@@ -8,6 +8,14 @@
     <string name="login_native_text">會員帳號登入</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
+    <string name="login_name">用戶名稱</string>
     <string name="email_cannot_be_empty">Email 不可為空。</string>
     <string name="password_cannot_be_empty">Password 不可為空。</string>
+    <string name="home">健身</string>
+    <string name="position">動作監測</string>
+    <string name="find_bro">找健友</string>
+    <string name="user">用戶資料</string>
+    <string name="login">登入</string>
+    <string name="chatroom">聊天</string>
+    <string name="plan">健身計畫</string>
 </resources>

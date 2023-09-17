@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.example.stack.databinding.FragmentHomeBinding
 import com.example.stack.databinding.FragmentUserBinding
 import com.example.stack.home.HomeViewModel
+import com.example.stack.login.UserManager
 
 class UserFragment: Fragment() {
     lateinit var binding: FragmentUserBinding
@@ -19,6 +20,9 @@ class UserFragment: Fragment() {
     ): View? {
         binding = FragmentUserBinding.inflate(inflater, container, false)
 
+        binding.logout.setOnClickListener {
+            UserManager.clear()
+        }
 
 
         return binding.root

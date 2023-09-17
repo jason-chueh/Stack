@@ -113,6 +113,10 @@ dependencies {
     implementation ("com.squareup.moshi:moshi:1.9.3")
     implementation ("com.squareup.moshi:moshi-kotlin:1.9.3")
 
+    //Gson
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+
     // Retrofit - Deprecated plugins - No more required
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     // implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
@@ -159,6 +163,8 @@ dependencies {
     //firestore
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+
 }
 kapt {
     correctErrorTypes = true

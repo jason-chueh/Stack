@@ -12,15 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val stackRepository: StackRepository) : ViewModel() {
-    val db = Firebase.firestore
+
     fun test(){
         stackRepository.test2()
-        val exercise = Exercise("jason","test")
-        db.collection("exercise").add(exercise).addOnSuccessListener {
-            Log.i("test","success")
-        }.addOnFailureListener{
-            e -> Log.i("test","$e")
-        }
     }
 }
 
