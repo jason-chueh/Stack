@@ -6,6 +6,7 @@ import com.example.stack.data.DefaultRepository
 import com.example.stack.data.StackRepository
 import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
+import com.example.stack.data.local.ExerciseYoutubeDao
 import com.example.stack.data.local.StackDatabase
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.network.NetworkDataSource
@@ -55,4 +56,7 @@ object DatabaseModule {
 
     @Provides
     fun provideExerciseRecordDao(database: StackDatabase): ExerciseRecordDao = database.exerciseRecordDao
+
+    @Provides
+    fun provideExerciseYoutubeDao(database: StackDatabase): ExerciseYoutubeDao = database.exerciseYoutubeDao
 }

@@ -18,10 +18,12 @@ data class ExerciseRecord(
     val startTime: Long,
     @ColumnInfo(name = "exercise_id")
     val exerciseId: String,
+
     @TypeConverters(RepsAndWeightsConverter::class)
     @ColumnInfo(name = "repsAndWeights")
     val repsAndWeights: List<RepsAndWeights>
 ): Parcelable
+
 @Parcelize
 data class RepsAndWeights(
     val reps: Int,

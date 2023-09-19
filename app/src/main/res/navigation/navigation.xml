@@ -39,32 +39,67 @@
         android:name="com.example.stack.login.LoginDialog"
         android:label="LoginDialog" />
 
-    <action android:id="@+id/navigate_to_home_fragment" app:destination="@id/homeFragment"
+    <fragment
+        android:id="@+id/exerciseDetailFragment"
+        android:name="com.example.stack.home.exercisedetail.ExerciseDetailFragment"
+        android:label="ExerciseDetailFragment" />
+
+
+    <action
+        android:id="@+id/navigate_to_home_fragment"
+        app:destination="@id/homeFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_user_fragment" app:destination="@id/userFragment"
+    <action
+        android:id="@+id/navigate_to_user_fragment"
+        app:destination="@id/userFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_find_bro_fragment" app:destination="@id/findBroFragment"
+    <action
+        android:id="@+id/navigate_to_find_bro_fragment"
+        app:destination="@id/findBroFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_plan_fragment" app:destination="@id/planFragment"
+    <action
+        android:id="@+id/navigate_to_plan_fragment"
+        app:destination="@id/planFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_chatroom_fragment" app:destination="@id/chatroomFragment"
+    <action
+        android:id="@+id/navigate_to_chatroom_fragment"
+        app:destination="@id/chatroomFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_position_correction_fragment" app:destination="@id/positionCorrectionFragment"
+    <action
+        android:id="@+id/navigate_to_position_correction_fragment"
+        app:destination="@id/positionCorrectionFragment"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
 
-    <action android:id="@+id/navigate_to_login_dialog" app:destination="@id/loginDialog"
+    <action
+        android:id="@+id/navigate_to_login_dialog"
+        app:destination="@id/loginDialog"
         app:popUpTo="@id/navigation"
         app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_exercise_detail_fragment"
+        app:destination="@id/exerciseDetailFragment" />
+    <fragment
+        android:id="@+id/instructionFragment"
+        android:name="com.example.stack.home.instruction.InstructionFragment"
+        android:label="InstructionFragment">
+        <argument
+            android:name="youtubeKey"
+            app:argType="com.example.stack.data.dataclass.ExerciseYoutube" />
+    </fragment>
+    <action
+        android:id="@+id/navigate_to_instruction_fragment"
+        app:destination="@id/instructionFragment" />
 
 </navigation>

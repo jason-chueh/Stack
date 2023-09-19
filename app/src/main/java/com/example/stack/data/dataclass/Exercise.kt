@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-@Entity
+@Entity(tableName = "exercise_table")
 @Parcelize
 data class Exercise(
     @PrimaryKey

@@ -1,22 +1,15 @@
 package com.example.stack.home
 
-import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.RepsAndWeights
-import com.example.stack.data.network.ExerciseApi
-import com.example.stack.data.network.ExerciseApiService
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
 
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel

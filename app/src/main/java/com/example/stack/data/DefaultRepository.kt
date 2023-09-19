@@ -1,24 +1,28 @@
 package com.example.stack.data
 
 import android.util.Log
+import com.example.stack.data.dataclass.ChatGptRequest
+import com.example.stack.data.dataclass.ChatGptResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseFromFireStore
 import com.example.stack.data.dataclass.ExerciseRecord
-import com.example.stack.data.dataclass.RepsAndWeights
+import com.example.stack.data.dataclass.ExerciseYoutube
 import com.example.stack.data.dataclass.User
+import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.toExercise
 import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
+import com.example.stack.data.local.ExerciseYoutubeDao
 import com.example.stack.data.local.UserDao
-import com.example.stack.data.network.ExerciseApi
+import com.example.stack.data.network.StackApi
 import com.example.stack.data.network.NetworkDataSource
+import com.example.stack.data.network.PythonManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,10 +31,14 @@ class DefaultRepository @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val userDao: UserDao,
     private val exerciseDao: ExerciseDao,
-    private val exerciseRecordDao: ExerciseRecordDao
+    private val exerciseRecordDao: ExerciseRecordDao,
+    private val exerciseYoutubeDao: ExerciseYoutubeDao
 ) : StackRepository {
 
     val db = Firebase.firestore
+    val py = PythonManager.getInstance()
+    val moduleTranscript = py.getModule("Transcript")
+    val moduleYoutubeSearch = py.getModule("YoutubeSearch")
     override suspend fun test2():List<ExerciseRecord> {
         var result = listOf<ExerciseRecord>()
         try {
@@ -98,7 +106,7 @@ class DefaultRepository @Inject constructor(
                 "leverage machine",
                 "smith machine"
             )) {
-                val result = ExerciseApi.retrofitService.getExerciseByEquipment(
+                val result = StackApi.retrofitService.getExerciseByEquipment(
                     k, "e0d0cc3fd4msh947dd855c1dc15dp148aa7jsn860ea01e79c1",
                     "exercisedb.p.rapidapi.com"
                 )
@@ -118,5 +126,63 @@ class DefaultRepository @Inject constructor(
         } catch (e: java.lang.Exception) {
             Log.i("api", "$e")
         }
+    }
+
+    override suspend fun getYoutubeVideo(exerciseId: String, exerciseName: String): List<VideoItem> {
+            var videoList = listOf<VideoItem>()
+            try {
+                val result_json = moduleYoutubeSearch.callAttr("youtubeSearch", exerciseName)
+                    .toJava(String::class.java)
+                val moshi = Moshi.Builder().build()
+                val listType = Types.newParameterizedType(List::class.java, VideoItem::class.java)
+                val adapter = moshi.adapter<List<VideoItem>>(listType)
+                videoList = adapter.fromJson(result_json)!!
+                Log.i("python", "$videoList")
+//                videoList.forEach {
+//                    try {
+//                        moduleTranscript.callAttr("getTranscript", it.id)
+//                        it.haveTranscript = 1
+//                        Log.i("python","change!")
+//                    } catch (e: Exception) {
+//                        Log.e("python", "$e")
+//                    }
+//                }
+                Log.i("python","${videoList.size}")
+            } catch (e: Exception) {
+                Log.e("python", "$e")
+            }
+            return videoList
+    }
+
+
+    override suspend fun getTranscript(youtubeId: String): String{
+        val result: String
+        try{
+            result = moduleTranscript.callAttr("getTranscript", youtubeId).toJava(String::class.java)
+        }catch(e: Exception){
+            Log.i("python","$e")
+            return ""
+        }
+        return result
+    }
+
+    override suspend fun searchYoutubeByExercise(exerciseId: String): List<ExerciseYoutube> {
+        return exerciseYoutubeDao.getYoutubeByExerciseId(exerciseId)
+    }
+
+    override suspend fun searchYoutubeByYoutubeId(youtubeId: String): ExerciseYoutube {
+        return exerciseYoutubeDao.getYoutubeByYoutubeId(youtubeId)
+    }
+
+    override suspend fun insertYoutubeList(youtubeList: List<ExerciseYoutube>) {
+        exerciseYoutubeDao.insertYoutube(youtubeList)
+    }
+
+    override suspend fun updateYoutubeData(exerciseYoutube: ExerciseYoutube) {
+        exerciseYoutubeDao.updateYoutube(exerciseYoutube)
+    }
+
+    override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse {
+        return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
     }
 }

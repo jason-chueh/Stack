@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 
 import androidx.navigation.findNavController
+import com.example.stack.data.network.PythonManager
 import com.example.stack.databinding.ActivityMainBinding
 import com.example.stack.login.UserManager
 import com.example.stack.util.CurrentFragmentType
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        PythonManager.initialize(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
