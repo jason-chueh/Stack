@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.stack.NavigationDirections
 import com.example.stack.databinding.FragmentFindbroBinding
 import com.example.stack.databinding.FragmentUserBinding
 
@@ -16,7 +18,9 @@ class FindBroFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFindbroBinding.inflate(inflater, container, false)
-
+        binding.textView2.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToMapsFragment())
+        }
 
 
         return binding.root

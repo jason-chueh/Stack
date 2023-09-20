@@ -101,5 +101,13 @@
     <action
         android:id="@+id/navigate_to_instruction_fragment"
         app:destination="@id/instructionFragment" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.stack.findbro.MapsFragment"
+        android:label="MapsFragment" />
+
+    <action
+        android:id="@+id/navigate_to_maps_fragment"
+        app:destination="@id/mapsFragment" />
 
 </navigation>
