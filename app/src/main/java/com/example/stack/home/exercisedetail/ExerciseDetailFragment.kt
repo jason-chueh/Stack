@@ -36,7 +36,7 @@ class ExerciseDetailFragment : Fragment() {
         binding = FragmentExerciseDetailBinding.inflate(inflater, container, false)
 
         Glide.with(this)
-            .load("https://api.exercisedb.io/image/7FuyHY-AOz1aCQ")
+            .load("https://v2.exercisedb.io/image/Ef62PQAd3KeylT")
             .into(binding.gifImageView)
 
         val adapter = ExerciseDetailAdapter{

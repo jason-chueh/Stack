@@ -18,17 +18,49 @@ data class ExerciseRecord(
     val startTime: Long,
     @ColumnInfo(name = "exercise_id")
     val exerciseId: String,
-
+    @ColumnInfo(name = "exercise_name")
+    val exerciseName: String,
     @TypeConverters(RepsAndWeightsConverter::class)
     @ColumnInfo(name = "repsAndWeights")
-    val repsAndWeights: List<RepsAndWeights>
+    var repsAndWeights: MutableList<RepsAndWeights>
 ): Parcelable
+
+data class ExerciseRecordWithCheck(
+    val userId: String,
+    val startTime: Long,
+    val exerciseId: String,
+    val exerciseName: String,
+    var repsAndWeights: MutableList<RepsAndWeightsWithCheck>
+)
 
 @Parcelize
 data class RepsAndWeights(
     val reps: Int,
     val weight: Int
 ): Parcelable
+
+
+data class RepsAndWeightsWithCheck(
+    val reps: Int,
+    val weight: Int,
+    var check: Boolean = false
+)
+
+fun RepsAndWeights.toRepsAndWeightsWithCheck()=
+    RepsAndWeightsWithCheck(
+        reps = reps,
+        weight = weight,
+        check = false
+    )
+
+fun ExerciseRecord.toExerciseRecordWithCheck()=
+    ExerciseRecordWithCheck(
+        userId = userId,
+        startTime = startTime,
+        exerciseId = exerciseId,
+        exerciseName = exerciseName,
+        repsAndWeights = repsAndWeights.map{it.toRepsAndWeightsWithCheck()}.toMutableList()
+    )
 
 
 class RepsAndWeightsConverter {

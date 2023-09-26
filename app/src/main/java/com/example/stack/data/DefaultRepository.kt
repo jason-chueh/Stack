@@ -1,8 +1,11 @@
 package com.example.stack.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import com.example.stack.BuildConfig
 import com.example.stack.data.dataclass.ChatGptRequest
 import com.example.stack.data.dataclass.ChatGptResponse
+import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseFromFireStore
 import com.example.stack.data.dataclass.ExerciseRecord
@@ -25,6 +28,7 @@ import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class DefaultRepository @Inject constructor(
@@ -67,6 +71,10 @@ class DefaultRepository @Inject constructor(
         }
     }
 
+    override fun getUsers(): LiveData<List<User>> {
+            return userDao.getUsers()
+    }
+
     override suspend fun upsertExerciseList(exercises: List<Exercise>) {
         withContext(Dispatchers.IO) {
             exerciseDao.upsertExerciseList(exercises)
@@ -107,7 +115,7 @@ class DefaultRepository @Inject constructor(
                 "smith machine"
             )) {
                 val result = StackApi.retrofitService.getExerciseByEquipment(
-                    k, "e0d0cc3fd4msh947dd855c1dc15dp148aa7jsn860ea01e79c1",
+                    k, BuildConfig.EXERCISE_KEY,
                     "exercisedb.p.rapidapi.com"
                 )
                 Log.i("api", "$result")
@@ -182,7 +190,23 @@ class DefaultRepository @Inject constructor(
         exerciseYoutubeDao.updateYoutube(exerciseYoutube)
     }
 
-    override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse {
-        return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
+    override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse? {
+        try{
+            return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
+        }
+        catch(e: Exception){
+            Log.i("chatgpt","$e")
+            return null
+        }
+    }
+
+    override suspend fun getDistanceMatrix(origins: String, destinations: String, apiKey: String): DistanceMatrixResponse?{
+        try{
+            return StackApi.distanceMatrixService.getDistanceMatrix(origins, destinations, apiKey)
+        }
+        catch(e: Exception){
+            Log.i("googleMap","$e")
+            return null
+        }
     }
 }

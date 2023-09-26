@@ -22,7 +22,7 @@ class HomeFragment: Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.fab.setOnClickListener{
-            viewModel.test()
+            findNavController().navigate(NavigationDirections.navigateToWorkoutFragment())
         }
 
         return binding.root

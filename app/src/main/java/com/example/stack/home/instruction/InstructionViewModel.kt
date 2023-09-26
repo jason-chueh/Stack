@@ -38,13 +38,16 @@ class InstructionViewModel @Inject constructor(private val stackRepository: Stac
                     if (transcript == "") {
                         instructionString = "The transcript is not available in this tutorial."
                     } else {
-                        instructionString =
-                            stackRepository.getInstruction(ChatGptRequest(prompt = (promptPrefix + transcript))).choices[0].text
+                        val response = stackRepository.getInstruction(ChatGptRequest(prompt = (promptPrefix + transcript)))
+                        if(response != null){
+                            instructionString = response.choices[0].text
+                        }
+
                         exerciseYoutube.instruction = instructionString
                     }
 
                     stackRepository.updateYoutubeData(exerciseYoutube)
-                    Log.i("chatgpt", "${exerciseYoutube.instruction}")
+                    Log.i("chatgpt", "get instruction from chatgpt ${exerciseYoutube.instruction}")
 
                 } else if (exerciseYoutube.transcript == "") {
                     instructionString = "The transcript is not available in this tutorial."

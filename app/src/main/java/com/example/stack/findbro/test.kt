@@ -1,4 +1,5 @@
 package com.example.stack.findbro
+
 import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,126 +16,245 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.text.method.ScrollingMovementMethod
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import com.android.volley.BuildConfig
 import com.example.stack.R
+import com.example.stack.databinding.FragmentFindLocationBinding
+import com.example.stack.databinding.FragmentFindbroBinding
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.io.IOException
-class MapsActivity() : FragmentActivity(), OnMapReadyCallback, LocationListener,
-    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import java.util.Properties
 
-    private var mMap: GoogleMap? = null
-    internal lateinit var mLastLocation: Location
-    internal var mCurrLocationMarker: Marker? = null
-    internal var mGoogleApiClient: GoogleApiClient? = null
-    internal lateinit var mLocationRequest: LocationRequest
+private const val RESULT_SEPARATOR = "\n---\n\t"
+
+private const val FIELD_SEPARATOR = "\n\t"
+class FindLocationFragment() : Fragment(), OnMapReadyCallback {
+    lateinit var binding: FragmentFindLocationBinding
+    lateinit var mMap: GoogleMap
+    private lateinit var placesClient: PlacesClient
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!Places.isInitialized()) {
+            // Places SDK is not initialized, so initialize it
+            Places.initialize(this.requireActivity(), com.example.stack.BuildConfig.MAPS_API_KEY)
+        }
+
         super.onCreate(savedInstanceState)
-        setContentView(
-            R.layout.fragment_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentFindLocationBinding.inflate(inflater, container, false)
+        // Create a new PlacesClient instance
+        placesClient = Places.createClient(this.requireContext())
+        checkPermissionThenFindCurrentPlace()
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as AutocompleteSupportFragment?
+        autocompleteFragment!!.setPlaceFields(
+            listOf(
+                Place.Field.ID,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG
+            )
+        )
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onError(p0: Status) {
+                Log.i("googleMap", "${p0}")
+            }
+
+            override fun onPlaceSelected(place: Place) {
+                val address = place.address.toString()
+                mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
+                Log.i("googleMap", "${place}")
+
+            }
+        })
+        return binding.root
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient()
-                mMap!!.isMyLocationEnabled = true
+    }
+
+    private fun checkPermissionThenFindCurrentPlace() {
+        when {
+            (ContextCompat.checkSelfPermission(
+                this.requireContext(),
+                ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this.requireContext(),
+                ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) -> {
+                // You can use the API that requires the permission.
+                findCurrentPlace()
+            }
+            shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)
+            -> {
+                Log.d(TAG, "Showing permission rationale dialog")
+                // TODO: In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected. In this UI,
+                // include a "cancel" or "no thanks" button that allows the user to
+                // continue using your app without granting the permission.
+            }
+            else -> {
+                // Ask for both the ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION permissions.
+                ActivityCompat.requestPermissions(
+                    this.requireActivity(),
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    PERMISSION_REQUEST_CODE
+                )
+            }
+        }
+    }
+    companion object {
+        private val TAG = "CurrentPlaceActivity"
+        private const val PERMISSION_REQUEST_CODE = 9
+    }
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        if (requestCode != PERMISSION_REQUEST_CODE) {
+            super.onRequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults
+            )
+            return
+        } else if (permissions.toList().zip(grantResults.toList())
+                .firstOrNull { (permission, grantResult) ->
+                    grantResult == PackageManager.PERMISSION_GRANTED && (permission == ACCESS_FINE_LOCATION || permission == ACCESS_COARSE_LOCATION)
+                } != null
+        )
+        // At least one location permission has been granted, so proceed with Find Current Place
+            findCurrentPlace()
+    }
+    @RequiresPermission(anyOf = [ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION])
+    private fun findCurrentPlace() {
+        // Use fields to define the data types to return.
+        val placeFields: List<Place.Field> =
+            listOf(Place.Field.NAME, Place.Field.ID, Place.Field.ADDRESS, Place.Field.LAT_LNG)
+
+        // Use the builder to create a FindCurrentPlaceRequest.
+        val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
+
+        // Call findCurrentPlace and handle the response (first check that the user has granted permission).
+        if (ContextCompat.checkSelfPermission(this.requireContext(), ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this.requireContext(), ACCESS_COARSE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            // Retrieve likely places based on the device's current location
+            lifecycleScope.launch {
+                try {
+                    val response = placesClient.findCurrentPlace(request).await()
+//                    binding.responseView.text = response.prettyPrint()
+
+                    val strongestCandidate = response.placeLikelihoods[0].place
+
+                    mMap.addMarker(MarkerOptions().position(strongestCandidate.latLng)
+                        .title(strongestCandidate.name)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.add)
+                    ))
+                    Log.i("googleMap","${strongestCandidate.latLng.latitude}")
+                    Log.i("googleMap","${strongestCandidate.latLng.latitude.toString()}")
+                    Log.i("googleMap","${strongestCandidate.latLng.longitude}")
+                    Log.i("googleMap","${strongestCandidate.latLng.longitude.toString()}")
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(strongestCandidate.latLng))
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10f),2000, null)
+                    // Enable scrolling on the long list of likely places
+                    val movementMethod = ScrollingMovementMethod()
+//                    binding.responseView.movementMethod = movementMethod
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.i("googleMap","$e")
+//                    binding.responseView.text = e.message
+                }
             }
         } else {
-            buildGoogleApiClient()
-            mMap!!.isMyLocationEnabled = true
+            Log.d(TAG, "LOCATION permission not granted")
+            checkPermissionThenFindCurrentPlace()
+
         }
     }
-
-    @Synchronized
-    protected fun buildGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .addApi(LocationServices.API).build()
-        mGoogleApiClient!!.connect()
+    private fun FindCurrentPlaceResponse.prettyPrint(): String {
+        return stringify(this, false)
     }
-
-    override fun onConnected(bundle: Bundle?) {
-
-        mLocationRequest = LocationRequest()
-        mLocationRequest.interval = 1000
-        mLocationRequest.fastestInterval = 1000
-        mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.getFusedLocationProviderClient(this)
-        }
+    private fun stringify(place: Place): String {
+        return "${place.name?.plus(" (") ?: ""}${place.address?.plus(")") ?: ""}"
     }
-
-    override fun onConnectionSuspended(i: Int) {
-    }
-
-    override fun onLocationChanged(location: Location) {
-
-        mLastLocation = location
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker!!.remove()
-        }
-        //Place current location marker
-        val latLng = LatLng(location.latitude, location.longitude)
-        val markerOptions = MarkerOptions()
-        markerOptions.position(latLng)
-        markerOptions.title("Current Position")
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        mCurrLocationMarker = mMap!!.addMarker(markerOptions)
-
-        //move map camera
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        mMap!!.animateCamera(CameraUpdateFactory.zoomTo(11f))
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.getFusedLocationProviderClient(this)
-        }
-
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-
-    }
-
-    fun searchLocation(view: View) {
-        val locationSearch:EditText = findViewById<EditText>(R.id.editText)
-        lateinit var location: String
-        location = locationSearch.text.toString()
-        var addressList: List<Address>? = null
-
-        if (location == null || location == "") {
-            Toast.makeText(applicationContext,"provide location",Toast.LENGTH_SHORT).show()
-        }
-        else{
-
-            val geoCoder = Geocoder(this)
-            try {
-                addressList = geoCoder.getFromLocationName(location, 1)
-
-            } catch (e: IOException) {
-                e.printStackTrace()
+    private fun stringify(response: FindCurrentPlaceResponse, raw: Boolean): String {
+        val builder = StringBuilder()
+        builder.append(response.placeLikelihoods.size).append(" Current Place Results:")
+        if (raw) {
+            builder.append(RESULT_SEPARATOR)
+            appendListToStringBuilder(builder, response.placeLikelihoods)
+        } else {
+            for (placeLikelihood in response.placeLikelihoods) {
+                builder
+                    .append(RESULT_SEPARATOR)
+                    .append("Likelihood: ")
+                    .append(placeLikelihood.likelihood)
+                    .append(FIELD_SEPARATOR)
+                    .append("Place: ")
+                    .append(stringify(placeLikelihood.place))
             }
-            val address = addressList!![0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            mMap!!.addMarker(MarkerOptions().position(latLng).title(location))
-            mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-            Toast.makeText(applicationContext, address.latitude.toString() + " " + address.longitude, Toast.LENGTH_LONG).show()
+        }
+        return builder.toString()
+    }
+    private fun <T> appendListToStringBuilder(builder: StringBuilder, items: List<T>) {
+        if (items.isEmpty()) {
+            return
+        }
+        builder.append(items[0])
+        for (i in 1 until items.size) {
+            builder.append(RESULT_SEPARATOR)
+            builder.append(items[i])
         }
     }
 }

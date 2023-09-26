@@ -35,8 +35,12 @@ android {
                 install "youtube-search-python"
             }
         }
+//        Properties properties = new Properties()
+//        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+//        buildConfigField "String", "API_KEY", "\"${properties.getProperty("MAPS_API_KEY")}\""
     }
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }
@@ -172,6 +176,10 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
+    implementation ("com.google.android.libraries.places:places:3.1.0")
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+
+
 
 }
 kapt {

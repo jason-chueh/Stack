@@ -1,12 +1,11 @@
 package com.example.stack
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -14,6 +13,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.example.stack.data.network.PythonManager
 import com.example.stack.databinding.ActivityMainBinding
+import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.login.UserManager
 import com.example.stack.util.CurrentFragmentType
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         PythonManager.initialize(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNav()
         setupNavController()
 
+        navigateToWorkoutFragmentWithIntent(intent)
 
         viewModel.currentFragmentType.observe(
             this,
@@ -50,6 +52,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToWorkoutFragmentWithIntent(intent)
     }
 
     private fun setupNavController() {
@@ -113,6 +120,11 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+        }
+    }
+    private fun navigateToWorkoutFragmentWithIntent(intent: Intent?){
+        if(intent?.action == ACTION_SHOW_WORKOUT_FRAGMENT){
+            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment())
         }
     }
 }

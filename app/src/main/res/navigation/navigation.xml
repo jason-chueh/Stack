@@ -109,5 +109,27 @@
     <action
         android:id="@+id/navigate_to_maps_fragment"
         app:destination="@id/mapsFragment" />
+    <fragment
+        android:id="@+id/findLocationFragment"
+        android:name="com.example.stack.findbro.FindLocationFragment"
+        android:label="FindLocationFragment" />
+    <action
+        android:id="@+id/navigate_to_find_location_fragment"
+        app:destination="@id/findLocationFragment" />
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.example.stack.home.workout.WorkoutFragment"
+        android:label="WorkoutFragment" />
+    <action
+        android:id="@+id/navigate_to_workout_fragment"
+        app:destination="@+id/workoutFragment"
+        app:launchSingleTop="true"/>
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.stack.home.workout.timer.TimerFragment"
+        android:label="TimerFragment" />
+    <action
+        android:id="@+id/navigate_to_timer_fragment"
+        app:destination="@+id/timerFragment"/>
 
 </navigation>

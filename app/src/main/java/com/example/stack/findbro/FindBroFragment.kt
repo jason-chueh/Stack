@@ -9,7 +9,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.databinding.FragmentFindbroBinding
 import com.example.stack.databinding.FragmentUserBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FindBroFragment: Fragment() {
     lateinit var binding: FragmentFindbroBinding
     override fun onCreateView(
@@ -20,6 +22,9 @@ class FindBroFragment: Fragment() {
         binding = FragmentFindbroBinding.inflate(inflater, container, false)
         binding.textView2.setOnClickListener {
             findNavController().navigate(NavigationDirections.navigateToMapsFragment())
+        }
+        binding.textView3.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToFindLocationFragment())
         }
 
 
