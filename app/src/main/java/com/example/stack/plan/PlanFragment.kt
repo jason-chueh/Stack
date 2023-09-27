@@ -18,7 +18,9 @@ import com.example.stack.databinding.FragmentUserBinding
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PlanFragment : Fragment() {
     lateinit var binding: FragmentPlanBinding
     override fun onCreateView(
@@ -28,9 +30,6 @@ class PlanFragment : Fragment() {
     ): View? {
         binding = FragmentPlanBinding.inflate(inflater, container, false)
 
-        binding.textView.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToExerciseDetailFragment())
-        }
 
 
 

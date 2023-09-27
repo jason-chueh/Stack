@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/yesButton"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/check_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/setCount"
+        app:layout_constraintEnd_toStartOf="@+id/setCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setCount" />
+
+    <TextView
+        android:id="@+id/setCount"
+        style="@style/recordText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/kgCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/kgCount"
+        style="@style/recordText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/repsCount"
+        app:layout_constraintStart_toEndOf="@+id/setCount"
+        app:layout_constraintTop_toTopOf="@+id/setCount" />
+
+    <EditText
+        android:id="@+id/repsCount"
+        style="@style/recordText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/kgCount"
+        app:layout_constraintTop_toTopOf="@+id/setCount" />
+
+    <ImageView
+        android:id="@+id/noButton"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/cross_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/repsCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/repsCount"
+        app:layout_constraintTop_toTopOf="@+id/repsCount" />
+</androidx.constraintlayout.widget.ConstraintLayout>

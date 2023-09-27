@@ -1,18 +1,25 @@
 package com.example.stack.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import com.example.stack.BuildConfig
 import com.example.stack.data.dataclass.ChatGptRequest
 import com.example.stack.data.dataclass.ChatGptResponse
+import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseFromFireStore
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseYoutube
+import com.example.stack.data.dataclass.Template
+import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
 import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.toExercise
 import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
 import com.example.stack.data.local.ExerciseYoutubeDao
+import com.example.stack.data.local.TemplateDao
+import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.network.StackApi
 import com.example.stack.data.network.NetworkDataSource
@@ -25,6 +32,7 @@ import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class DefaultRepository @Inject constructor(
@@ -32,7 +40,9 @@ class DefaultRepository @Inject constructor(
     private val userDao: UserDao,
     private val exerciseDao: ExerciseDao,
     private val exerciseRecordDao: ExerciseRecordDao,
-    private val exerciseYoutubeDao: ExerciseYoutubeDao
+    private val exerciseYoutubeDao: ExerciseYoutubeDao,
+    private val templateDao: TemplateDao,
+    private val templateExerciseRecordDao: TemplateExerciseRecordDao
 ) : StackRepository {
 
     val db = Firebase.firestore
@@ -65,6 +75,10 @@ class DefaultRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             userDao.upsertUser(user)
         }
+    }
+
+    override fun getUsers(): LiveData<List<User>> {
+            return userDao.getUsers()
     }
 
     override suspend fun upsertExerciseList(exercises: List<Exercise>) {
@@ -107,7 +121,7 @@ class DefaultRepository @Inject constructor(
                 "smith machine"
             )) {
                 val result = StackApi.retrofitService.getExerciseByEquipment(
-                    k, "e0d0cc3fd4msh947dd855c1dc15dp148aa7jsn860ea01e79c1",
+                    k, BuildConfig.EXERCISE_KEY,
                     "exercisedb.p.rapidapi.com"
                 )
                 Log.i("api", "$result")
@@ -182,7 +196,48 @@ class DefaultRepository @Inject constructor(
         exerciseYoutubeDao.updateYoutube(exerciseYoutube)
     }
 
-    override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse {
-        return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
+    override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse? {
+        try{
+            return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
+        }
+        catch(e: Exception){
+            Log.i("chatgpt","$e")
+            return null
+        }
     }
+
+    override suspend fun getDistanceMatrix(origins: String, destinations: String, apiKey: String): DistanceMatrixResponse?{
+        try{
+            return StackApi.distanceMatrixService.getDistanceMatrix(origins, destinations, apiKey)
+        }
+        catch(e: Exception){
+            Log.i("googleMap","$e")
+            return null
+        }
+    }
+
+    override suspend fun upsertTemplate(template: Template) {
+        try{
+            templateDao.upsertTemplate(template)
+        }
+        catch(e: Exception){
+            Log.i("template","$e")
+        }
+    }
+
+    override suspend fun searchTemplateIdListByUserId(userId: String): List<String> {
+        return templateDao.searchTemplateIdListByUserId(userId)
+    }
+
+    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>){
+        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecordsList)
+    }
+
+    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecord: TemplateExerciseRecord) {
+        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecord)
+    }
+    override suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>{
+        return templateExerciseRecordDao.getTemplateExerciseRecordListByTemplateId(templateId)
+    }
+
 }

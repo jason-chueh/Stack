@@ -8,6 +8,8 @@ import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
 import com.example.stack.data.local.ExerciseYoutubeDao
 import com.example.stack.data.local.StackDatabase
+import com.example.stack.data.local.TemplateDao
+import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.network.NetworkDataSource
 import com.example.stack.data.network.StackNetworkDataSource
@@ -59,4 +61,11 @@ object DatabaseModule {
 
     @Provides
     fun provideExerciseYoutubeDao(database: StackDatabase): ExerciseYoutubeDao = database.exerciseYoutubeDao
+
+    @Provides
+    fun provideTemplateDao(database: StackDatabase): TemplateDao = database.templateDao
+
+    @Provides
+    fun provideTemplateExerciseRecordDao(database: StackDatabase): TemplateExerciseRecordDao = database.templateExerciseRecordDao
+
 }

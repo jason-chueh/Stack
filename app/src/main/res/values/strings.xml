@@ -18,4 +18,9 @@
     <string name="login">登入</string>
     <string name="chatroom">聊天</string>
     <string name="plan">健身計畫</string>
+    <string name="your_weight">What\'s your weight?</string>
+    <string name="your_height">What\'s your height?</string>
+    <string name="next">next</string>
+    <string name="what_is_your_biological_sex">What is your biological sex?</string>
+    <string name="congrats">恭喜！已爲你制定個人健身計畫</string>
 </resources>

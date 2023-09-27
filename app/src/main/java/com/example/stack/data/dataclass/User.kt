@@ -18,7 +18,7 @@ data class User(
     @ColumnInfo(name = "user_picture")
     val picture: String? = "",
     @ColumnInfo(name = "user_gym_latitude")
-    val gymLatitude: String? = "",
+    val gymLatitude: String? = null,
     @ColumnInfo(name = "user_gym_longitude")
-    val gymLongitude: String? = ""
+    val gymLongitude: String? = null
 ) : Parcelable

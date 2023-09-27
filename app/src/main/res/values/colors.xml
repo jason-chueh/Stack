@@ -42,4 +42,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!-- template -->
+    <color name="lightOrange">#FFF3EC </color>
+    <color name="Orange">#FF8E46 </color>
+    <color name="lightgrey">#BDBCC7</color>
+
+    <color name="templateGrey">#E0E0E0</color>
+
 </resources>

@@ -109,5 +109,72 @@
     <action
         android:id="@+id/navigate_to_maps_fragment"
         app:destination="@id/mapsFragment" />
+    <fragment
+        android:id="@+id/findLocationFragment"
+        android:name="com.example.stack.findbro.FindLocationFragment"
+        android:label="FindLocationFragment" />
+    <action
+        android:id="@+id/navigate_to_find_location_fragment"
+        app:destination="@id/findLocationFragment" />
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.example.stack.home.workout.WorkoutFragment"
+        android:label="WorkoutFragment" />
+    <action
+        android:id="@+id/navigate_to_workout_fragment"
+        app:destination="@+id/workoutFragment"
+        app:launchSingleTop="true" />
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.stack.home.workout.timer.TimerFragment"
+        android:label="TimerFragment" />
+
+    <action
+        android:id="@+id/navigate_to_timer_fragment"
+        app:destination="@+id/timerFragment" />
+    <fragment
+        android:id="@+id/planTinderFragment"
+        android:name="com.example.stack.plan.PlanTinderFragment"
+        android:label="PlanTinderFragment" />
+
+    <action
+        android:id="@+id/navigate_to_plan_tinder_fragment"
+        app:destination="@+id/planTinderFragment" />
+
+    <fragment
+        android:id="@+id/inputFragment"
+        android:name="com.example.stack.plan.InputFragment"
+        android:label="InputFragment" />
+
+    <action
+        android:id="@+id/navigate_to_input_fragment"
+        app:destination="@+id/inputFragment" />
+
+    <fragment
+        android:id="@+id/heightFragment"
+        android:name="com.example.stack.plan.HeightFragment"
+        android:label="HeightFragment" />
+
+    <action
+        android:id="@+id/navigate_to_height_fragment"
+        app:destination="@+id/heightFragment" />
+
+    <fragment
+        android:id="@+id/genderFragment"
+        android:name="com.example.stack.plan.GenderFragment"
+        android:label="GenderFragment" />
+
+    <action
+        android:id="@+id/navigate_to_gender_fragment"
+        app:destination="@+id/genderFragment" />
+
+    <fragment
+        android:id="@+id/templateFragment"
+        android:name="com.example.stack.home.template.TemplateFragment"
+        android:label="TemplateFragment" />
+
+    <action
+        android:id="@+id/navigate_to_template_fragment"
+        app:destination="@+id/templateFragment" />
 
 </navigation>
