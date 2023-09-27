@@ -16,6 +16,7 @@ class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<Exercise, E
     private var previousSelectedPosition = RecyclerView.NO_POSITION
     inner class ExerciseViewHolder(val binding: ItemExerciseBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(exercise: Exercise){
+            binding.exercise = exercise
             if(selectedPosition == absoluteAdapterPosition){
 
                 val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.lightOrange)

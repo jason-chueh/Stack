@@ -23,25 +23,14 @@ class WorkoutDetailAdapter(
     ListAdapter<RepsAndWeightsWithCheck, WorkoutDetailAdapter.WorkoutDetailViewHolder>(DiffCallback) {
 
 
-
-    //    private var checkList : MutableList<Boolean>?  = null
-    private val checkedPositions = mutableSetOf<Int>()
-
-//    init{
-//        Log.i("initadpater","$currentList")
-//        if(currentList.size != 0){
-//            checkList = MutableList(currentList.size) { false }
-//
-//        }
-//    }
-
     companion object DiffCallback : DiffUtil.ItemCallback<RepsAndWeightsWithCheck>() {
         override fun areItemsTheSame(oldItem: RepsAndWeightsWithCheck, newItem: RepsAndWeightsWithCheck): Boolean {
-            return oldItem == newItem
-
+            return false
+            return (oldItem.reps == newItem.reps && oldItem.weight == newItem.weight)
         }
 
         override fun areContentsTheSame(oldItem: RepsAndWeightsWithCheck, newItem: RepsAndWeightsWithCheck): Boolean {
+            return false
             return oldItem == newItem
         }
     }
@@ -51,9 +40,7 @@ class WorkoutDetailAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(repsAndWeights: RepsAndWeightsWithCheck) {
 //            val isChecked = absoluteAdapterPosition in checkedPositions
-
             val isChecked = repsAndWeights.check
-
 
             binding.repsCount.isEnabled = !isChecked
             binding.kgCount.isEnabled = !isChecked
@@ -67,28 +54,14 @@ class WorkoutDetailAdapter(
                 binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.white))
             }
 
-
-
-
-//            if (isChecked) {
-//                binding.kgCount.setText(previousKg)
-//                binding.repsCount.setText(previousReps)
-//            }
-
             binding.setCount.text = (absoluteAdapterPosition + 1).toString()
             binding.yesButton.setOnClickListener {
                 try {
                     Log.i("workout", "yes")
                     val reps = binding.repsCount.text.toString().toInt()
                     val kg = binding.kgCount.text.toString().toInt()
-                    yesOnClick(exercisePosition, absoluteAdapterPosition, repsAndWeights)
-                    if (!isChecked) {
-//                        checkedPositions.add(absoluteAdapterPosition)
-                    }
 
-//                    previousReps = reps.toString()
-//                    previousKg = kg.toString()
-
+                    yesOnClick(exercisePosition, absoluteAdapterPosition, RepsAndWeightsWithCheck(reps, kg, true))
                     notifyItemChanged(absoluteAdapterPosition)
                 } catch (e: Exception) {
                     Log.i("workout", "WorkoutDetailAdapter $e")
@@ -97,7 +70,6 @@ class WorkoutDetailAdapter(
             binding.noButton.setOnClickListener {
                 if(isChecked){
                     noOnClick(exercisePosition, absoluteAdapterPosition, repsAndWeights)
-//                    checkedPositions.remove(absoluteAdapterPosition)
                     notifyItemChanged(absoluteAdapterPosition)
                 }
             }
@@ -112,7 +84,7 @@ class WorkoutDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: WorkoutDetailViewHolder, position: Int) {
-        val repsAndWeights = getItem(position)
-        holder.bind(repsAndWeights)
+        val repsAndWeightsWithCheck = getItem(position)
+        holder.bind(repsAndWeightsWithCheck)
     }
 }

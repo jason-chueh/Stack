@@ -22,9 +22,12 @@ class HomeFragment: Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.fab.setOnClickListener{
-            findNavController().navigate(NavigationDirections.navigateToWorkoutFragment())
+            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
         }
-
+//        viewModel.upsertTemplate()
+//        viewModel.searchTemplateByUserId()
+//        viewModel.upsertTemplateExerciseRecordList()
+        viewModel.searchAllTemplateAndExerciseByUserId()
         return binding.root
     }
 }

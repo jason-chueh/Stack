@@ -47,4 +47,6 @@
     <color name="Orange">#FF8E46 </color>
     <color name="lightgrey">#BDBCC7</color>
 
+    <color name="templateGrey">#E0E0E0</color>
+
 </resources>

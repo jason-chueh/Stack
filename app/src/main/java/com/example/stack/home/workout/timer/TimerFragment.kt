@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
             binding.pbTimer.progress = (mService?.timeSelected?.value?.minus(it))!!
         }
         mService?.timeSelected?.observe(viewLifecycleOwner){
+            Log.i("timer","it")
             binding.pbTimer.max = it
         }
     }
@@ -192,9 +194,12 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
             } else {
                 when (mService) {
                     null -> {
+                        Log.i("timer","null: ${timeSet.text}")
+                        progressBar.max = timeSet.text.toString().toInt()
                         sendCommandToService(ACTION_START_SERVICE, Bundle().apply { putInt("timeSelected", timeSet.text.toString().toInt()) }, autoStart = false)
                     }
                     else -> {
+                        Log.i("timer","service exist: ${timeSet.text}")
                         mService?.resetTime()
                         mService?.timeSelected?.postValue(timeSet.text.toString().toInt())
                         progressBar.max = mService?.timeSelected?.value ?: 0
@@ -202,7 +207,6 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
                 }
                 timeLeftTv.text = timeSet.text
                 btnStart.text = "Start"
-
             }
             timeDialog.dismiss()
         }

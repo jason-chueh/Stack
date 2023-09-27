@@ -10,12 +10,16 @@ import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseFromFireStore
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseYoutube
+import com.example.stack.data.dataclass.Template
+import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
 import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.toExercise
 import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
 import com.example.stack.data.local.ExerciseYoutubeDao
+import com.example.stack.data.local.TemplateDao
+import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.network.StackApi
 import com.example.stack.data.network.NetworkDataSource
@@ -36,7 +40,9 @@ class DefaultRepository @Inject constructor(
     private val userDao: UserDao,
     private val exerciseDao: ExerciseDao,
     private val exerciseRecordDao: ExerciseRecordDao,
-    private val exerciseYoutubeDao: ExerciseYoutubeDao
+    private val exerciseYoutubeDao: ExerciseYoutubeDao,
+    private val templateDao: TemplateDao,
+    private val templateExerciseRecordDao: TemplateExerciseRecordDao
 ) : StackRepository {
 
     val db = Firebase.firestore
@@ -209,4 +215,29 @@ class DefaultRepository @Inject constructor(
             return null
         }
     }
+
+    override suspend fun upsertTemplate(template: Template) {
+        try{
+            templateDao.upsertTemplate(template)
+        }
+        catch(e: Exception){
+            Log.i("template","$e")
+        }
+    }
+
+    override suspend fun searchTemplateIdListByUserId(userId: String): List<String> {
+        return templateDao.searchTemplateIdListByUserId(userId)
+    }
+
+    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>){
+        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecordsList)
+    }
+
+    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecord: TemplateExerciseRecord) {
+        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecord)
+    }
+    override suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>{
+        return templateExerciseRecordDao.getTemplateExerciseRecordListByTemplateId(templateId)
+    }
+
 }

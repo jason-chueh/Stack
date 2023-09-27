@@ -99,13 +99,13 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.navigation_find_bro -> {
 
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindBroFragment())
+                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.navigation_plan -> {
 
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToPlanFragment())
+                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
                     return@setOnItemSelectedListener true
                 }
 

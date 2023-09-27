@@ -211,23 +211,23 @@ val users = listOf(
         name = "Jane Smith",
         email = "janesmith@example.com",
         picture = "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
-        gymLatitude = "34.0522",
-        gymLongitude = "-118.2437"
+        gymLatitude = "25.036849942931823",
+        gymLongitude = "121.5678825086946"
     ),
     User(
         id = "3",
         name = "Alice Johnson",
         email = "alicejohnson@example.com",
         picture = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0D1BTf79SsmH4qhA0b7fDNqAOEr1SpHMBnw&usqp=CAU",
-        gymLatitude = "40.7128",
-        gymLongitude = "-74.0060"
+        gymLatitude = "25.035505661816206",
+        gymLongitude = "121.56710488737288"
     ),
     User(
         id = "4",
         name = "Bob Anderson",
         email = "bobanderson@example.com",
         picture = "https://wallpapers.com/images/hd/cool-profile-picture-ld8f4n1qemczkrig.jpg",
-        gymLatitude = "41.8781",
-        gymLongitude = "-87.6298"
+        gymLatitude = "25.035677968823585",
+        gymLongitude = "121.56719318469423"
     )
 )

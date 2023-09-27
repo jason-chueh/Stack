@@ -14,10 +14,17 @@ import com.example.stack.data.dataclass.Exercise
 import com.example.stack.databinding.DialogExerciseListBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WorkoutFragment: Fragment() {
-    private val viewModel: WorkoutViewModel by viewModels()
+    @Inject lateinit var factory: WorkoutViewModel.Factory
+
+    private val viewModel: WorkoutViewModel by viewModels{
+        WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
+    }
+
+
     lateinit var binding: FragmentWorkoutBinding
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,11 +33,13 @@ class WorkoutFragment: Fragment() {
     ): View? {
         binding = FragmentWorkoutBinding.inflate(inflater, container, false)
 
-        val adapter = WorkoutAdapter(fun(_,_){
+        val adapter = WorkoutAdapter({ _, _ ->
             findNavController().navigate(NavigationDirections.navigateToExerciseDetailFragment())
         }, viewModel.updateSetToTrue, viewModel.updateSetToFalse ,viewModel.addSet)
 
+
         binding.workoutRecyclerView.adapter = adapter
+
 
         viewModel.dataList.observe(viewLifecycleOwner){
             Log.i("workout","$it")
@@ -45,6 +54,15 @@ class WorkoutFragment: Fragment() {
             findNavController().navigate(NavigationDirections.navigateToTimerFragment())
         }
 
+        binding.finish.setOnClickListener {
+
+        }
+        binding.cancel.setOnClickListener {
+
+        }
+
+
+
 
         return binding.root
     }
@@ -57,7 +75,7 @@ class WorkoutFragment: Fragment() {
         var position: Int = -1
         val adapter = ExerciseAdapter(fun(chosePosition: Int){
             if(chosePosition>=0) {
-                Log.i("workout","add exercise called!!!")
+//                Log.i("workout","add exercise called!!!")
                 position = chosePosition
             }
         })
@@ -81,7 +99,7 @@ val exerciseList = listOf(
     Exercise(
         id = "1",
         name = "Push-up",
-        target = "Chest",
+        target = "pectorals",
         gifUrl = "https://example.com/push-up.gif",
         bodyPart = "Upper Body",
         equipment = "None"
@@ -89,7 +107,7 @@ val exerciseList = listOf(
     Exercise(
         id = "2",
         name = "Squat",
-        target = "Legs",
+        target = "glutes",
         gifUrl = "https://example.com/squat.gif",
         bodyPart = "Lower Body",
         equipment = "None"
@@ -97,7 +115,7 @@ val exerciseList = listOf(
     Exercise(
         id = "3",
         name = "Pull-up",
-        target = "Back",
+        target = "upper back",
         gifUrl = "https://example.com/pull-up.gif",
         bodyPart = "Upper Body",
         equipment = "Pull-up bar"
@@ -105,15 +123,15 @@ val exerciseList = listOf(
     Exercise(
         id = "4",
         name = "Plank",
-        target = "Core",
+        target = "abs",
         gifUrl = "https://example.com/plank.gif",
-        bodyPart = "Core",
+        bodyPart = "core",
         equipment = "None"
     ),
     Exercise(
         id = "5",
         name = "Dumbbell Curl",
-        target = "Biceps",
+        target = "biceps",
         gifUrl = "https://example.com/dumbbell-curl.gif",
         bodyPart = "Upper Body",
         equipment = "Dumbbells"

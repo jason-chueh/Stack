@@ -5,45 +5,28 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import android.location.Address
-import android.location.Geocoder
-import android.os.Build
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.location.LocationServices
-import android.location.Location
 import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.android.volley.BuildConfig
+import androidx.navigation.fragment.findNavController
+import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.databinding.FragmentFindLocationBinding
-import com.example.stack.databinding.FragmentFindbroBinding
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationRequest
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
@@ -53,8 +36,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.IOException
-import java.util.Properties
 
 private const val RESULT_SEPARATOR = "\n---\n\t"
 
@@ -86,6 +67,11 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         checkPermissionThenFindCurrentPlace()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
+        binding.complete.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToMapsFragment())
+        }
 
         val autocompleteFragment =
             childFragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as AutocompleteSupportFragment?

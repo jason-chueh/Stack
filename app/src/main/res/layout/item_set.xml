@@ -19,13 +19,14 @@
         android:id="@+id/setCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/kgCount"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,10 +34,9 @@
         android:id="@+id/kgCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:inputType="number"
         app:layout_constraintEnd_toStartOf="@+id/repsCount"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/setCount"
         app:layout_constraintTop_toTopOf="@+id/setCount" />
 
@@ -44,10 +44,9 @@
         android:id="@+id/repsCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/kgCount"
         app:layout_constraintTop_toTopOf="@+id/setCount" />
 

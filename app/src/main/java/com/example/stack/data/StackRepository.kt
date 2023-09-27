@@ -7,6 +7,8 @@ import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseYoutube
+import com.example.stack.data.dataclass.Template
+import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
 import com.example.stack.data.dataclass.VideoItem
 
@@ -38,4 +40,15 @@ interface StackRepository {
     suspend fun getInstruction(chatGptRequest: ChatGptRequest):ChatGptResponse?
 
     suspend fun getDistanceMatrix(origins: String, destinations: String, apiKey: String): DistanceMatrixResponse?
+
+    suspend fun upsertTemplate(template: Template)
+
+    suspend fun searchTemplateIdListByUserId(userId: String): List<String>
+
+    suspend fun upsertTemplateExerciseRecord(templateExerciseRecords: TemplateExerciseRecord)
+
+    suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>)
+
+    suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
+
 }

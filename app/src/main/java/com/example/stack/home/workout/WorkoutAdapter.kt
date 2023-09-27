@@ -17,7 +17,7 @@ class WorkoutAdapter(
     val clickListener: (name: String, id: String) -> Unit,
     val yesOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
     val noOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
-    val addSetOnClick: (exercisePosition: Int)->Unit
+    val addSetOnClick: (exercisePosition: Int) -> Unit
 ) : ListAdapter<ExerciseRecordWithCheck, WorkoutAdapter.WorkoutViewHolder>(DiffCallback) {
 
     inner class WorkoutViewHolder(val binding: ItemExerciseRecordBinding) :
@@ -50,12 +50,23 @@ class WorkoutAdapter(
 
     companion object DiffCallback : DiffUtil.ItemCallback<ExerciseRecordWithCheck>() {
         override fun areItemsTheSame(oldItem: ExerciseRecordWithCheck, newItem: ExerciseRecordWithCheck): Boolean {
-            Log.i("workout", "DiffCallbackCalled")
+//            Log.i("workout", "DiffCallbackCalled")
             return oldItem.exerciseId == newItem.exerciseId
         }
 
         override fun areContentsTheSame(oldItem: ExerciseRecordWithCheck, newItem: ExerciseRecordWithCheck): Boolean {
-            return oldItem.repsAndWeights == newItem.repsAndWeights
+//            Log.i("workout", "areContentsTheSame")
+            return oldItem.repsAndWeights.compareContent(newItem.repsAndWeights)
+        }
+
+        private fun <E> List<E>.compareContent(target: List<E>): Boolean {
+            if(this.size != target.size) return false
+            for(i in this.indices){
+                if(this[i] != target[i]) {
+                    return false
+                }
+            }
+            return true
         }
     }
 }

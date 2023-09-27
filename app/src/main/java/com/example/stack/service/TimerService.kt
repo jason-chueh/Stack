@@ -57,7 +57,6 @@ class TimerService : LifecycleService() {
     val isStart = MutableLiveData(true)
     var timeCountDown: CountDownTimer? = null
     private var pauseOffSet: Long = 0
-    private var isFirst = true
 
     inner class LocalBinder : Binder() {
         fun getService(): TimerService = this@TimerService
@@ -92,6 +91,7 @@ class TimerService : LifecycleService() {
                 ACTION_START_SERVICE -> {
                     intent.extras?.getInt("timeSelected")?.let { time ->
                         timeSelected.value = time
+                        timeProgress.value = 0
                     }
 //                    startTimerSetup()
                 }
@@ -171,7 +171,6 @@ class TimerService : LifecycleService() {
             if(!isStart.value!!){
                 startTimer()
             }
-
         }
     }
 
