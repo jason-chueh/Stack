@@ -1,12 +1,13 @@
 package com.example.stack.home.workout.timer
 
+import android.Manifest
 import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,16 +17,17 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.stack.R
 import com.example.stack.databinding.DialogAddBinding
 import com.example.stack.databinding.DialogTimerBinding
-import com.example.stack.service.ACTION_ADD_TIME
-import com.example.stack.service.ACTION_RESET
 import com.example.stack.service.ACTION_START_SERVICE
-import com.example.stack.service.INT_EXTRA_KEY
 import com.example.stack.service.TimerService
+
 
 class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
     lateinit var binding: DialogTimerBinding
@@ -60,8 +62,29 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.LoginDialog)
+
+
         super.onCreate(savedInstanceState)
     }
+
+//    private val notificationPermissionLauncher =
+//        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+//            hasNotificationPermissionGranted = isGranted
+//            if (!isGranted) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    if (Build.VERSION.SDK_INT >= 33) {
+//                        if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
+//                            showNotificationPermissionRationale()
+//                        } else {
+//                            showSettingDialog()
+//                        }
+//                    }
+//                }
+//            } else {
+//                Toast.makeText(applicationContext, "notification permission granted", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
 
 
     override fun onCreateView(
@@ -69,6 +92,21 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val permissionState =
+            ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+        // If the permission is not granted, request it.
+        if (permissionState == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(
+                this.requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                1
+            )
+        }
+
+        if(mService == null){
+            sendCommandToService(ACTION_START_SERVICE)
+        }
+
         binding = DialogTimerBinding.inflate(inflater, container, false)
 //        sendCommandToService(ACTION_START_SERVICE)
 
@@ -195,7 +233,7 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
                 when (mService) {
                     null -> {
                         Log.i("timer","null: ${timeSet.text}")
-                        progressBar.max = timeSet.text.toString().toInt()
+//                        progressBar.max = timeSet.text.toString().toInt()
                         sendCommandToService(ACTION_START_SERVICE, Bundle().apply { putInt("timeSelected", timeSet.text.toString().toInt()) }, autoStart = false)
                     }
                     else -> {

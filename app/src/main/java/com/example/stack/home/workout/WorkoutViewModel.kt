@@ -24,7 +24,7 @@ class WorkoutViewModel @AssistedInject constructor(
     private val test: String
 ) :
     ViewModel() {
-    val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>()
+    val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>(list)
     val startTime = System.currentTimeMillis()
 
     @AssistedFactory
@@ -40,56 +40,6 @@ class WorkoutViewModel @AssistedInject constructor(
             }
         }
     }
-
-    init{
-        Log.i("hiltviewmodel",test)
-    }
-
-
-
-
-
-    val mockData1 = ExerciseRecord(
-        userId = "user123",
-        startTime = System.currentTimeMillis(),
-        exerciseId = "exercise1",
-        exerciseName = "Push-ups",
-        repsAndWeights = mutableListOf(
-            RepsAndWeights(reps = 15, weight = 0),
-            RepsAndWeights(reps = 15, weight = 0)
-        )
-    )
-
-    val mockData2 = ExerciseRecord(
-        userId = "user123",
-        startTime = System.currentTimeMillis(),
-        exerciseId = "exercise2",
-        exerciseName = "Squats",
-        repsAndWeights = mutableListOf(RepsAndWeights(reps = 20, weight = 30))
-    )
-
-    val mockData3 = ExerciseRecord(
-        userId = "user123",
-        startTime = System.currentTimeMillis(),
-        exerciseId = "exercise3",
-        exerciseName = "Bench Press",
-        repsAndWeights = mutableListOf(RepsAndWeights(reps = 10, weight = 50))
-    )
-
-    val mockData4 = ExerciseRecord(
-        userId = "user123",
-        startTime = System.currentTimeMillis(),
-        exerciseId = "exercise4",
-        exerciseName = "Pull-ups",
-        repsAndWeights = mutableListOf(RepsAndWeights(reps = 8, weight = 0))
-    )
-
-    val list = mutableListOf(
-        mockData1,
-        mockData2,
-        mockData3,
-        mockData4
-    ).map { it.toExerciseRecordWithCheck() }.toMutableList()
 
     init {
         dataList.value = list
@@ -157,4 +107,49 @@ class WorkoutViewModel @AssistedInject constructor(
     fun finishWorkout() {
 
     }
+
+
+
+
 }
+val mockData1 = ExerciseRecord(
+    userId = "user123",
+    startTime = System.currentTimeMillis(),
+    exerciseId = "exercise1",
+    exerciseName = "Push-ups",
+    repsAndWeights = mutableListOf(
+        RepsAndWeights(reps = 15, weight = 0),
+        RepsAndWeights(reps = 15, weight = 0)
+    )
+)
+
+val mockData2 = ExerciseRecord(
+    userId = "user123",
+    startTime = System.currentTimeMillis(),
+    exerciseId = "exercise2",
+    exerciseName = "Squats",
+    repsAndWeights = mutableListOf(RepsAndWeights(reps = 20, weight = 30))
+)
+
+val mockData3 = ExerciseRecord(
+    userId = "user123",
+    startTime = System.currentTimeMillis(),
+    exerciseId = "exercise3",
+    exerciseName = "Bench Press",
+    repsAndWeights = mutableListOf(RepsAndWeights(reps = 10, weight = 50))
+)
+
+val mockData4 = ExerciseRecord(
+    userId = "user123",
+    startTime = System.currentTimeMillis(),
+    exerciseId = "exercise4",
+    exerciseName = "Pull-ups",
+    repsAndWeights = mutableListOf(RepsAndWeights(reps = 8, weight = 0))
+)
+
+val list = mutableListOf(
+    mockData1,
+    mockData2,
+    mockData3,
+    mockData4
+).map { it.toExerciseRecordWithCheck() }.toMutableList()

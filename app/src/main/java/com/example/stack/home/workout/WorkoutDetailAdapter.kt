@@ -25,12 +25,10 @@ class WorkoutDetailAdapter(
 
     companion object DiffCallback : DiffUtil.ItemCallback<RepsAndWeightsWithCheck>() {
         override fun areItemsTheSame(oldItem: RepsAndWeightsWithCheck, newItem: RepsAndWeightsWithCheck): Boolean {
-            return false
             return (oldItem.reps == newItem.reps && oldItem.weight == newItem.weight)
         }
 
         override fun areContentsTheSame(oldItem: RepsAndWeightsWithCheck, newItem: RepsAndWeightsWithCheck): Boolean {
-            return false
             return oldItem == newItem
         }
     }
@@ -52,7 +50,10 @@ class WorkoutDetailAdapter(
             }
             else{
                 binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.white))
+                binding.repsCount.setText("")
+                binding.kgCount.setText("")
             }
+
 
             binding.setCount.text = (absoluteAdapterPosition + 1).toString()
             binding.yesButton.setOnClickListener {

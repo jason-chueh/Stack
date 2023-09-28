@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class WorkoutFragment: Fragment() {
     @Inject lateinit var factory: WorkoutViewModel.Factory
 
-    private val viewModel: WorkoutViewModel by viewModels{
+    private val viewModel: WorkoutViewModel by activityViewModels{
         WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
     }
 
@@ -32,7 +33,7 @@ class WorkoutFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWorkoutBinding.inflate(inflater, container, false)
-
+        Log.i("workout","$viewModel")
         val adapter = WorkoutAdapter({ _, _ ->
             findNavController().navigate(NavigationDirections.navigateToExerciseDetailFragment())
         }, viewModel.updateSetToTrue, viewModel.updateSetToFalse ,viewModel.addSet)

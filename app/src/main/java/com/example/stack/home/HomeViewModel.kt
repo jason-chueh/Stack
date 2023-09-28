@@ -127,5 +127,9 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         exerciseId = "2407",
         repsAndWeights = mutableListOf<RepsAndWeights>()
     )
+
+    fun chester(n: Int): Int{
+        return n*(n+1)/2
+    }
 }
 

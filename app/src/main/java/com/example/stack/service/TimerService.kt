@@ -120,9 +120,12 @@ class TimerService : LifecycleService() {
             }
 
             override fun onFinish() {
-
                 resetTime()
-                // notification
+
+                val notification = curNotificationBuilder.setContentText("Times up! Keep grinding in Stack by click")
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.notify(NOTIFICATION_ID, notification.build())
             }
         }
     }
@@ -162,8 +165,11 @@ class TimerService : LifecycleService() {
 
     fun addExtraTime() {
         if (timeSelected.value != 0) {
+
             timeSelected.value = (timeSelected.value?.plus(15))
+
             timePause()
+
             timeProgress.value = timeProgress.value
 
             startTimer(timeSelected.value!! ,pauseOffSet)
@@ -184,14 +190,6 @@ class TimerService : LifecycleService() {
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
     }
 
-//    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
-//        this,
-//        0,
-//        Intent(this, MainActivity::class.java).also {
-//            it.action = ACTION_SHOW_WORKOUT_FRAGMENT
-//        },
-//        FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-//    )
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
@@ -240,6 +238,8 @@ class TimerService : LifecycleService() {
 
 // Remove the notification
         notificationManager.cancel(NOTIFICATION_ID)
+
+
 
 // Stop the service
 //        stopSelf()
