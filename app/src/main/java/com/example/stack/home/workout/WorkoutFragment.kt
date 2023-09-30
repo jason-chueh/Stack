@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.data.dataclass.Exercise
@@ -18,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WorkoutFragment: Fragment() {
+class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
     @Inject lateinit var factory: WorkoutViewModel.Factory
 
     private val viewModel: WorkoutViewModel by activityViewModels{
@@ -34,12 +33,15 @@ class WorkoutFragment: Fragment() {
     ): View? {
         binding = FragmentWorkoutBinding.inflate(inflater, container, false)
         Log.i("workout","$viewModel")
-        val adapter = WorkoutAdapter({ _, _ ->
-            findNavController().navigate(NavigationDirections.navigateToExerciseDetailFragment())
+
+        val adapter = WorkoutAdapter({ exerciseName, exerciseId ->
+            findNavController().navigate(NavigationDirections.navigateToExerciseDetailFragment(exerciseId, exerciseName))
         }, viewModel.updateSetToTrue, viewModel.updateSetToFalse ,viewModel.addSet)
 
 
         binding.workoutRecyclerView.adapter = adapter
+
+        viewModel.getAllExerciseFromDb()
 
 
         viewModel.dataList.observe(viewLifecycleOwner){
@@ -48,7 +50,10 @@ class WorkoutFragment: Fragment() {
         }
 
         binding.addExercise.setOnClickListener {
-            showExerciseDialog()
+            val dialog = ExerciseDialog()
+            dialog.setExerciseDialogListener(this)
+            dialog.show(childFragmentManager, "EXERCISE_DIALOG_TAG")
+//            showExerciseDialog()
         }
 
         binding.timer.setOnClickListener {
@@ -63,8 +68,6 @@ class WorkoutFragment: Fragment() {
         }
 
 
-
-
         return binding.root
     }
 
@@ -73,20 +76,20 @@ class WorkoutFragment: Fragment() {
         val loginDialog = AlertDialog.Builder(this.requireContext())
             .setView(exerciseBinding.root)
             .create()
-        var position: Int = -1
-        val adapter = ExerciseAdapter(fun(chosePosition: Int){
-            if(chosePosition>=0) {
-//                Log.i("workout","add exercise called!!!")
-                position = chosePosition
-            }
+
+        var exerciseName: String = ""
+        var exerciseId: String = ""
+        val adapter = ExerciseAdapter(fun(name: String, id: String){
+            exerciseName = name
+            exerciseId = id
         })
-        exerciseBinding.btnSubmit.setOnClickListener {
-            if(position>=0) {
-                val exercise = exerciseList[position]
-                viewModel.addExerciseRecord(exercise.id,exercise.name)
-                loginDialog.dismiss()
-            }
-        }
+//        exerciseBinding.btnSubmit.setOnClickListener {
+//            if(position>=0) {
+//                val exercise = exerciseList[position]
+//                viewModel.addExerciseRecord(exercise.id,exercise.name)
+//                loginDialog.dismiss()
+//            }
+//        }
         exerciseBinding.exerciseRecyclerView.adapter = adapter
 
         adapter.submitList(exerciseList)
@@ -95,11 +98,15 @@ class WorkoutFragment: Fragment() {
 
 
     }
+
+    override fun onExerciseSelected(position: Int) {
+        Log.i("terry", "$position")
+    }
 }
 val exerciseList = listOf(
     Exercise(
-        id = "1",
-        name = "Push-up",
+        id = "0026",
+        name = "barbell bench squat",
         target = "pectorals",
         gifUrl = "https://example.com/push-up.gif",
         bodyPart = "Upper Body",

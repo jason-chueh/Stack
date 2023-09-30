@@ -1,5 +1,6 @@
 package com.example.stack.home.workout
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,7 +12,7 @@ import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.ItemExerciseBinding
 //adapter for exercise list (dialog)
-class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<Exercise, ExerciseAdapter.ExerciseViewHolder>(DiffCallback) {
+class ExerciseAdapter(val clickListener: (String, String) -> Unit): ListAdapter<Exercise, ExerciseAdapter.ExerciseViewHolder>(DiffCallback) {
     private var selectedPosition = RecyclerView.NO_POSITION
     private var previousSelectedPosition = RecyclerView.NO_POSITION
     inner class ExerciseViewHolder(val binding: ItemExerciseBinding): RecyclerView.ViewHolder(binding.root){
@@ -30,15 +31,15 @@ class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<Exercise, E
                 val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.white)
                 binding.root.setBackgroundColor(resolvedColor)
 
-                val textColor = ContextCompat.getColor(binding.root.context, R.color.lightgrey)
+                val textColor = ContextCompat.getColor(binding.root.context, R.color.mediumBlack)
                 binding.exerciseNameInDialog.setTextColor(textColor)
 
             }
 
             binding.exerciseNameInDialog.text = exercise.name
             binding.root.setOnClickListener{
-
-                clickListener(absoluteAdapterPosition)
+                Log.i("filter","${exercise.name},  ${exercise.id}")
+                clickListener(exercise.id, exercise.name)
                 selectedPosition = absoluteAdapterPosition
                 notifyItemChanged(selectedPosition)
                 if(previousSelectedPosition != -1){

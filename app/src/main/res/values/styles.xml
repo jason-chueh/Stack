@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="recordText">
         <item name="android:layout_width">wrap_content</item>
@@ -8,5 +8,16 @@
     </style>
     <style name="circular">
         <item name="cornerSize">50%</item>
+    </style>
+
+
+    <style name="Widget.Material3.Chip.Filter.Elevated">
+        <item name="android:elevation" tools:ignore="NewApi">
+            @dimen/dimen_1</item>
+        <item name="android:stateListAnimator" tools:ignore="NewApi">
+            @animator/m3_elevated_chip_state_list_anim
+        </item>
+        <item name="chipStrokeColor">@android:color/transparent</item>
+        <item name="chipBackgroundColor">@color/m3_elevated_chip_background_color</item>
     </style>
 </resources>

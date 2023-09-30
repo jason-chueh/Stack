@@ -39,6 +39,12 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         }
     }
 
+    fun exerciseApi(){
+        viewModelScope.launch {
+            stackRepository.refreshExerciseDb()
+        }
+    }
+
     fun upsertTemplate(){
         viewModelScope.launch{
             withContext(Dispatchers.IO){

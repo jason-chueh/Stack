@@ -9,10 +9,11 @@ import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseYoutube
 import com.example.stack.data.dataclass.RepsAndWeightsConverter
+import com.example.stack.data.dataclass.StringListConverter
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
-@TypeConverters(RepsAndWeightsConverter::class)
+@TypeConverters(RepsAndWeightsConverter::class, StringListConverter::class)
 @Database(entities = [User::class, Exercise::class, ExerciseRecord::class
     , ExerciseYoutube::class, TemplateExerciseRecord::class
     , Template::class], version = 2, exportSchema = false)

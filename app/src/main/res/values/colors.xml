@@ -49,4 +49,18 @@
 
     <color name="templateGrey">#E0E0E0</color>
 
+
+    <!-- template-->
+    <!--primary-->
+    <!--blue series-->
+    <color name="darkestBlue">#3746CC</color>
+    <color name="mediumBlue">#5362E6</color>
+    <color name="lightBlue">#838CE6</color>
+    <color name="lightGrey">#EAEAF1</color>
+
+    <!--primary-->
+    <!--black series-->
+    <color name="darkestBlack">#27262A</color>
+    <color name="mediumBlack">#2B2E47</color>
+    <color name="lightBlack">#484A67</color>
 </resources>

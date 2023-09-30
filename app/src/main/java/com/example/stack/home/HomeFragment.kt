@@ -27,7 +27,7 @@ class HomeFragment: Fragment() {
 //        viewModel.upsertTemplate()
 //        viewModel.searchTemplateByUserId()
 //        viewModel.upsertTemplateExerciseRecordList()
-        viewModel.searchAllTemplateAndExerciseByUserId()
+//        viewModel.exerciseApi()
         return binding.root
     }
 }

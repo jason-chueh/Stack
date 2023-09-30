@@ -25,6 +25,10 @@ interface StackRepository {
 
     suspend fun exerciseApiToDb()
 
+    suspend fun getAllExercise(): List<Exercise>
+
+    suspend fun getExerciseById(exerciseId: String): Exercise?
+
     suspend fun getYoutubeVideo(exerciseId: String, exerciseName: String): List<VideoItem>
 
     suspend fun getTranscript(youtubeId: String): String?
@@ -50,5 +54,6 @@ interface StackRepository {
     suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>)
 
     suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
+
 
 }

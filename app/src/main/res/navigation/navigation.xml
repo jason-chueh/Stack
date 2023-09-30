@@ -42,8 +42,14 @@
     <fragment
         android:id="@+id/exerciseDetailFragment"
         android:name="com.example.stack.home.exercisedetail.ExerciseDetailFragment"
-        android:label="ExerciseDetailFragment" />
-
+        android:label="ExerciseDetailFragment">
+        <argument
+            android:name="exerciseId"
+            app:argType="string" />
+        <argument
+            android:name="exerciseName"
+            app:argType="string" />
+    </fragment>
 
     <action
         android:id="@+id/navigate_to_home_fragment"

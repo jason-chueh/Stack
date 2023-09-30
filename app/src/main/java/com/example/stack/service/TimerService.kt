@@ -126,6 +126,8 @@ class TimerService : LifecycleService() {
 
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.notify(NOTIFICATION_ID, notification.build())
+
+                stopSelf()
             }
         }
     }
@@ -239,9 +241,6 @@ class TimerService : LifecycleService() {
 // Remove the notification
         notificationManager.cancel(NOTIFICATION_ID)
 
-
-
 // Stop the service
-//        stopSelf()
     }
 }

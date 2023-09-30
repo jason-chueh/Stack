@@ -86,7 +86,7 @@ class DefaultRepository @Inject constructor(
             exerciseDao.upsertExerciseList(exercises)
         }
     }
-
+    //Get all the exercise data from fireStore and refresh dataBase
     override suspend fun refreshExerciseDb() {
         try {
             withContext(Dispatchers.IO) {
@@ -108,7 +108,7 @@ class DefaultRepository @Inject constructor(
             Log.e("api", "refreshExerciseDb: $e")
         }
     }
-
+    //Get all the exercise from API, and send it to fireStore
     override suspend fun exerciseApiToDb() {
         try {
             for (k in listOf<String>(
@@ -122,7 +122,8 @@ class DefaultRepository @Inject constructor(
             )) {
                 val result = StackApi.retrofitService.getExerciseByEquipment(
                     k, BuildConfig.EXERCISE_KEY,
-                    "exercisedb.p.rapidapi.com"
+                    "exercisedb.p.rapidapi.com",
+                    20
                 )
                 Log.i("api", "$result")
                 Log.i("api", "${result.size}")
@@ -140,6 +141,14 @@ class DefaultRepository @Inject constructor(
         } catch (e: java.lang.Exception) {
             Log.i("api", "$e")
         }
+    }
+
+    override suspend fun getAllExercise(): List<Exercise> {
+        return exerciseDao.getAllExercise()
+    }
+
+    override suspend fun getExerciseById(exerciseId: String): Exercise? {
+        return exerciseDao.getExerciseById(exerciseId)
     }
 
     override suspend fun getYoutubeVideo(exerciseId: String, exerciseName: String): List<VideoItem> {

@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
+import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseRecordWithCheck
 import com.example.stack.data.dataclass.RepsAndWeights
@@ -15,6 +17,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -27,14 +32,22 @@ class WorkoutViewModel @AssistedInject constructor(
     val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>(list)
     val startTime = System.currentTimeMillis()
 
+    val exerciseList = MutableLiveData<List<Exercise>>()
+
+    val filteredExerciseList = MutableLiveData<List<Exercise>>()
+
     @AssistedFactory
-    interface Factory{
-        fun create(test:String): WorkoutViewModel
+    interface Factory {
+        fun create(test: String): WorkoutViewModel
     }
-    companion object{
-        fun provideWorkoutViewModelFactory(factory: Factory, test: String ): ViewModelProvider.Factory{
-            return object: ViewModelProvider.Factory{
-                override fun<T : ViewModel> create(modelClass: Class<T>):T{
+
+    companion object {
+        fun provideWorkoutViewModelFactory(
+            factory: Factory,
+            test: String
+        ): ViewModelProvider.Factory {
+            return object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return factory.create(test) as T
                 }
             }
@@ -46,21 +59,36 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
 
-    fun addExerciseRecord(exerciseId: String, exerciseName: String) {
-        Log.i("exercise", "$exerciseId, $exerciseName")
+    fun getAllExerciseFromDb() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val resultList = stackRepository.getAllExercise()
+                    exerciseList.postValue(resultList)
+                    filteredExerciseList.postValue(resultList)
+                } catch (e: Exception) {
+                    Log.i("workout", "$e")
+                }
+            }
+        }
+    }
+
+
+    fun addExerciseRecord(exerciseId:String, exerciseName: String) {
+
         dataList.value?.let { oldList ->
             val newList = mutableListOf<ExerciseRecordWithCheck>()
             newList.apply {
                 addAll(oldList)
-                add(
-                    ExerciseRecordWithCheck(
-                        UserManager.user!!.id,
-                        startTime,
-                        exerciseId,
-                        exerciseName,
-                        mutableListOf()
+                    add(
+                        ExerciseRecordWithCheck(
+                            UserManager.user!!.id,
+                            startTime,
+                            exerciseId,
+                            exerciseName,
+                            mutableListOf()
+                        )
                     )
-                )
             }
             dataList.value = newList
         }
@@ -109,14 +137,13 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
 
-
-
 }
+
 val mockData1 = ExerciseRecord(
     userId = "user123",
     startTime = System.currentTimeMillis(),
-    exerciseId = "exercise1",
-    exerciseName = "Push-ups",
+    exerciseId = "0026",
+    exerciseName = "barbell bench squat",
     repsAndWeights = mutableListOf(
         RepsAndWeights(reps = 15, weight = 0),
         RepsAndWeights(reps = 15, weight = 0)

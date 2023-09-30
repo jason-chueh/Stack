@@ -128,7 +128,8 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
         return binding.root
     }
 
-    private fun sendCommandToService(action: String, bundle: Bundle? = null, autoStart: Boolean = true)= Intent(requireContext(), TimerService::class.java).also{ intent ->
+    private fun sendCommandToService(action: String, bundle: Bundle? = null, autoStart: Boolean = true)=
+        Intent(requireContext(), TimerService::class.java).also{ intent ->
         intent.action = action
         bundle?.let {
             intent.putExtras(it)
@@ -222,6 +223,7 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
         )
 
         timeDialog.setContentView(dialogAddBinding.root)
+
         val timeSet = dialogAddBinding.etGetTime
         val timeLeftTv: TextView = binding.tvTimeLeft
         val btnStart: Button = binding.btnPlayPause

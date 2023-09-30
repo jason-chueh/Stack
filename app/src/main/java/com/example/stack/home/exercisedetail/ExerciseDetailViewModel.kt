@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
+import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseYoutube
 import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.toExerciseYoutube
@@ -22,6 +23,8 @@ class ExerciseDetailViewModel @Inject constructor(private val stackRepository: S
     ViewModel() {
 
     val videoResultList = MutableLiveData<List<ExerciseYoutube>>()
+
+    var exercise = MutableLiveData<Exercise>()
     fun getVideoList(exerciseId: String, exerciseName: String) {
         viewModelScope.launch {
             var tempList = listOf<ExerciseYoutube>()
@@ -42,6 +45,15 @@ class ExerciseDetailViewModel @Inject constructor(private val stackRepository: S
                 }
             }
             videoResultList.value = tempList
+        }
+    }
+
+    fun getExerciseById(exerciseId: String){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                var result = stackRepository.getExerciseById(exerciseId)
+                result?.let{exercise.postValue(it)}
+            }
         }
     }
 
