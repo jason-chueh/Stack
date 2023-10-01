@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.navigation_position -> {
 
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToPositionCorrectionFragment())
+                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToChatroomFragment())
                     return@setOnItemSelectedListener true
                 }
 

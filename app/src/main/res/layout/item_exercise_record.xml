@@ -2,8 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp">
 
     <TextView
         android:id="@+id/exerciseName"
@@ -11,57 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/rubik_medium"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/Orange"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
-
-    <TextView
-        android:id="@+id/set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="SET"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toStartOf="@+id/kg"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
-
-    <TextView
-        android:id="@+id/kg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="KG"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toStartOf="@+id/reps"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/set"
-        app:layout_constraintTop_toTopOf="@+id/set" />
-
-    <TextView
-        android:id="@+id/reps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="REPS"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/kg"
-        app:layout_constraintTop_toTopOf="@+id/kg" />
 
     <TextView
         android:id="@+id/addSet"
@@ -69,8 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/rubik_medium"
         android:text="+New set"
-        android:textColor="@color/Orange"
+        android:textColor="@color/mediumBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,11 +35,11 @@
         android:id="@+id/repsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set" />
+        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

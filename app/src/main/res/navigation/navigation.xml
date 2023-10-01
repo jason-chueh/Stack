@@ -182,5 +182,17 @@
     <action
         android:id="@+id/navigate_to_template_fragment"
         app:destination="@+id/templateFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.stack.chatroom.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="chatroom"
+            app:argType="com.example.stack.data.dataclass.Chatroom" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigate_to_chat_fragment"
+        app:destination="@+id/chatFragment" />
 
 </navigation>

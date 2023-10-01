@@ -15,6 +15,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.lang.Math.abs
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @BindingAdapter("imageUrl")
@@ -97,6 +102,13 @@ fun setImageResourceFromText(imageView: ImageView, inputText: String?) {
     }
 }
 
+@BindingAdapter("chatroomTime")
+fun showChatroomMessageTime(textView: TextView, inputTime: Long){
+    val formattedTime = formatMessageTimestamp(inputTime)
+    textView.text = formattedTime
+}
+
+
 // Define a function to map input text to image resources (customize this as needed)
 private fun getImageResourceForText(inputText: String): Int {
     // Example logic: Map inputText to corresponding image resource IDs
@@ -121,6 +133,36 @@ private fun getImageResourceForText(inputText: String): Int {
         "triceps" -> R.drawable.tricep_detail
         "upper back" -> R.drawable.back_detail
         else -> R.drawable.core_detail
+    }
+}
+
+fun formatMessageTimestamp(timestamp: Long): String {
+    val now = Calendar.getInstance().timeInMillis
+    Log.i("chatroom","now: $now")
+    val diffMillis = abs(now - timestamp)
+    Log.i("chatroom","diff: $diffMillis")
+    val minuteMillis: Long = 60 * 1000
+    val hourMillis: Long = 60 * minuteMillis
+    val dayMillis: Long = 24 * hourMillis
+
+    return when {
+        diffMillis < minuteMillis -> "just now"
+        diffMillis < 2 * minuteMillis -> "a minute ago"
+        diffMillis < hourMillis -> "${diffMillis / minuteMillis} minutes ago"
+        diffMillis < 2 * hourMillis -> "an hour ago"
+        diffMillis < dayMillis -> "${diffMillis / hourMillis} hours ago"
+        diffMillis < 2 * dayMillis -> "yesterday"
+        else -> {
+            // Format as per your preference (e.g., "MMM dd, yyyy hh:mm a")
+            val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+            val date = Date(timestamp)
+            val formattedDate = dateFormat.format(date)
+            val formattedTime = timeFormat.format(date)
+
+            "$formattedDate"
+        }
     }
 }
 

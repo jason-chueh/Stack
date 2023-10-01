@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
+import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
@@ -14,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 import javax.inject.Inject
 
@@ -88,6 +90,12 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
                     }
                 }
             }
+        }
+    }
+
+    fun createChatroom(){
+        viewModelScope.launch {
+            stackRepository.createChatroomAtFireStore(Chatroom(userId1 = UserManager.user!!.id, userId2 = "23426", userName = listOf("ww","232"), userPic = listOf("",""), lastMessage = "hi", lastMessageTime = Calendar.getInstance().timeInMillis))
         }
     }
 

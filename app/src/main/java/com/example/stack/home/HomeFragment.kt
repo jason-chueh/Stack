@@ -28,6 +28,7 @@ class HomeFragment: Fragment() {
 //        viewModel.searchTemplateByUserId()
 //        viewModel.upsertTemplateExerciseRecordList()
 //        viewModel.exerciseApi()
+        viewModel.createChatroom()
         return binding.root
     }
 }

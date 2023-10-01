@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.stack.chatroom.ChatViewModel
 import com.example.stack.data.StackRepository
+import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseRecordWithCheck
@@ -35,12 +37,6 @@ class WorkoutViewModel @AssistedInject constructor(
     val exerciseList = MutableLiveData<List<Exercise>>()
 
     val filteredExerciseList = MutableLiveData<List<Exercise>>()
-
-    @AssistedFactory
-    interface Factory {
-        fun create(test: String): WorkoutViewModel
-    }
-
     companion object {
         fun provideWorkoutViewModelFactory(
             factory: Factory,
@@ -52,6 +48,10 @@ class WorkoutViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+    @AssistedFactory
+    interface Factory {
+        fun create(test: String): WorkoutViewModel
     }
 
     init {

@@ -1,8 +1,10 @@
 package com.example.stack.data
 
 import androidx.lifecycle.LiveData
+import com.example.stack.data.dataclass.Chat
 import com.example.stack.data.dataclass.ChatGptRequest
 import com.example.stack.data.dataclass.ChatGptResponse
+import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
@@ -55,5 +57,10 @@ interface StackRepository {
 
     suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
 
+    fun createChatroomAtFireStore(chatroom: Chatroom)
+
+    suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit)
+
+    fun sendChatMessageToFireStore(chat: Chat)
 
 }

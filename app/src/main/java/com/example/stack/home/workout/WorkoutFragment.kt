@@ -56,11 +56,22 @@ class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
 //            showExerciseDialog()
         }
 
-        binding.timer.setOnClickListener {
+        binding.timerIcon.setOnClickListener {
             findNavController().navigate(NavigationDirections.navigateToTimerFragment())
         }
+        binding.timerText.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToTimerFragment())
+        }
+        binding.pencil.setOnClickListener {
+            if(binding.workoutTitleText.isEnabled){
+                binding.workoutTitleText.isEnabled = false
+            }
+            else{
+                binding.workoutTitleText.isEnabled = true
+            }
+        }
 
-        binding.finish.setOnClickListener {
+        binding.finishWorkoutText.setOnClickListener {
 
         }
         binding.cancel.setOnClickListener {
