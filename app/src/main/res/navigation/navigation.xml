@@ -125,7 +125,12 @@
     <fragment
         android:id="@+id/workoutFragment"
         android:name="com.example.stack.home.workout.WorkoutFragment"
-        android:label="WorkoutFragment" />
+        android:label="WorkoutFragment" >
+        <argument
+            android:name="templateExercises"
+            app:argType="com.example.stack.data.dataclass.TemplateExerciseRecord[]"
+            app:nullable="true" />
+    </fragment>
     <action
         android:id="@+id/navigate_to_workout_fragment"
         app:destination="@+id/workoutFragment"

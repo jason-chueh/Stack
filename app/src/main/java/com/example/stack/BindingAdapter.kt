@@ -153,7 +153,6 @@ fun formatMessageTimestamp(timestamp: Long): String {
         diffMillis < dayMillis -> "${diffMillis / hourMillis} hours ago"
         diffMillis < 2 * dayMillis -> "yesterday"
         else -> {
-            // Format as per your preference (e.g., "MMM dd, yyyy hh:mm a")
             val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
             val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 

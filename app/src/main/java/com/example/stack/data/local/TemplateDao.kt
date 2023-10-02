@@ -13,4 +13,7 @@ interface TemplateDao {
     @Query("SELECT template_id FROM template WHERE user_id = :userId")
     fun searchTemplateIdListByUserId(userId: String): List<String>
 
+    @Query("SELECT * FROM template WHERE user_id = :userId")
+    fun searchTemplatesListByUserId(userId: String): List<Template>
+
 }

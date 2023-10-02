@@ -6,6 +6,7 @@ import androidx.room.Update
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import com.example.stack.data.dataclass.ExerciseRecord
 
 @Dao
@@ -13,6 +14,9 @@ interface ExerciseRecordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseRecord(exerciseRecord: ExerciseRecord)
+
+    @Upsert
+    suspend fun upsertExerciseRecordList(exerciseRecordList: List<ExerciseRecord>)
 
     @Update
     suspend fun updateExerciseRecord(exerciseRecord: ExerciseRecord)

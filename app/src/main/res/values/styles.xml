@@ -20,4 +20,12 @@
         <item name="chipStrokeColor">@android:color/transparent</item>
         <item name="chipBackgroundColor">@color/m3_elevated_chip_background_color</item>
     </style>
+
+
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:textColorPrimary">@color/mediumBlue</item>
+    </style>
+    <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@color/mediumBlue</item>
+    </style>
 </resources>

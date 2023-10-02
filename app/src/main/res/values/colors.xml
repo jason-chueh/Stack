@@ -53,6 +53,7 @@
     <!-- template-->
     <!--primary-->
     <!--blue series-->
+    <color name="blackBlue">#282B51</color>
     <color name="darkestBlue">#3746CC</color>
     <color name="mediumBlue">#5362E6</color>
     <color name="lightBlue">#838CE6</color>
@@ -63,4 +64,5 @@
     <color name="darkestBlack">#27262A</color>
     <color name="mediumBlack">#2B2E47</color>
     <color name="lightBlack">#484A67</color>
+    <color name="darkGrey">#99999B</color>
 </resources>

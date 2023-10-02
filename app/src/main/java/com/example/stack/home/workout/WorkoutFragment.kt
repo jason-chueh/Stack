@@ -1,17 +1,25 @@
 package com.example.stack.home.workout
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
+import com.example.stack.R
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.databinding.DialogExerciseListBinding
+import com.example.stack.databinding.DialogSaveTemplateBinding
+import com.example.stack.databinding.DialogTemplateBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,6 +30,15 @@ class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
 
     private val viewModel: WorkoutViewModel by activityViewModels{
         WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val templateExerciseList = WorkoutFragmentArgs.fromBundle(requireArguments()).templateExercises?.toList()
+        if(templateExerciseList != null){
+            viewModel.setDataListFromBundle(templateExerciseList)
+        }
+        Log.i("template","$templateExerciseList")
+        super.onCreate(savedInstanceState)
     }
 
 
@@ -63,51 +80,59 @@ class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
             findNavController().navigate(NavigationDirections.navigateToTimerFragment())
         }
         binding.pencil.setOnClickListener {
-            if(binding.workoutTitleText.isEnabled){
-                binding.workoutTitleText.isEnabled = false
-            }
-            else{
-                binding.workoutTitleText.isEnabled = true
-            }
+            binding.workoutTitleText.isEnabled = !binding.workoutTitleText.isEnabled
         }
 
         binding.finishWorkoutText.setOnClickListener {
-
+            showSaveAsTemplateDialog()
         }
         binding.cancel.setOnClickListener {
-
+            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+            viewModel.cancelWorkout()
         }
 
 
         return binding.root
     }
 
-    fun showExerciseDialog() {
-        val exerciseBinding = DialogExerciseListBinding.inflate(LayoutInflater.from(this.requireContext()))
-        val loginDialog = AlertDialog.Builder(this.requireContext())
-            .setView(exerciseBinding.root)
-            .create()
+    private fun showSaveAsTemplateDialog() {
+        val dialog = Dialog(this.requireContext())
+        val dialogBinding: DialogSaveTemplateBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_save_template,
+            null,
+            false
+        )
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
 
-        var exerciseName: String = ""
-        var exerciseId: String = ""
-        val adapter = ExerciseAdapter(fun(name: String, id: String){
-            exerciseName = name
-            exerciseId = id
-        })
-//        exerciseBinding.btnSubmit.setOnClickListener {
-//            if(position>=0) {
-//                val exercise = exerciseList[position]
-//                viewModel.addExerciseRecord(exercise.id,exercise.name)
-//                loginDialog.dismiss()
-//            }
-//        }
-        exerciseBinding.exerciseRecyclerView.adapter = adapter
+        dialog.show()
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        adapter.submitList(exerciseList)
+        dialogBinding.lifecycleOwner = viewLifecycleOwner
 
-        loginDialog.show()
+        dialogBinding.continueText.setOnClickListener {
+            if(!binding.workoutTitleText.text.isNullOrBlank()){
+                viewModel.finishWorkout(binding.workoutTitleText.text.toString())
 
-
+                dialog.dismiss()
+                findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+            }
+        }
+        dialogBinding.rejectText.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+            viewModel.cancelWorkout()
+        }
+        dialogBinding.cancelView.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.root.setOnClickListener{
+            dialog.dismiss()
+        }
     }
 
     override fun onExerciseSelected(position: Int) {

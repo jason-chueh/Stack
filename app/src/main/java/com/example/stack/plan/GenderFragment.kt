@@ -23,7 +23,7 @@ class GenderFragment: Fragment() {
     ): View? {
         binding = FragmentGenderBinding.inflate(inflater, container, false)
 
-        binding.nextButton.setOnClickListener {
+        binding.continueButton.setOnClickListener {
             findNavController().navigate(NavigationDirections.navigateToInputFragment())
         }
 

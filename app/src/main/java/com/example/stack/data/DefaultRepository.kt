@@ -17,6 +17,7 @@ import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
 import com.example.stack.data.dataclass.VideoItem
+import com.example.stack.data.dataclass.Workout
 import com.example.stack.data.dataclass.toChatroom
 import com.example.stack.data.dataclass.toExercise
 import com.example.stack.data.local.ExerciseDao
@@ -25,6 +26,8 @@ import com.example.stack.data.local.ExerciseYoutubeDao
 import com.example.stack.data.local.TemplateDao
 import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
+import com.example.stack.data.local.UserInfoDao
+import com.example.stack.data.local.WorkoutDao
 import com.example.stack.data.network.StackApi
 import com.example.stack.data.network.NetworkDataSource
 import com.example.stack.data.network.PythonManager
@@ -46,13 +49,15 @@ class DefaultRepository @Inject constructor(
     private val exerciseRecordDao: ExerciseRecordDao,
     private val exerciseYoutubeDao: ExerciseYoutubeDao,
     private val templateDao: TemplateDao,
-    private val templateExerciseRecordDao: TemplateExerciseRecordDao
+    private val templateExerciseRecordDao: TemplateExerciseRecordDao,
+    private val workoutDao: WorkoutDao,
+    private val userInfoDao: UserInfoDao
 ) : StackRepository {
 
     val db = Firebase.firestore
     val py = PythonManager.getInstance()
-    val moduleTranscript = py.getModule("Transcript")
-    val moduleYoutubeSearch = py.getModule("YoutubeSearch")
+    private val moduleTranscript = py.getModule("Transcript")
+    private val moduleYoutubeSearch = py.getModule("YoutubeSearch")
     override suspend fun test2(): List<ExerciseRecord> {
         var result = listOf<ExerciseRecord>()
         try {
@@ -170,15 +175,7 @@ class DefaultRepository @Inject constructor(
             val adapter = moshi.adapter<List<VideoItem>>(listType)
             videoList = adapter.fromJson(result_json)!!
             Log.i("python", "$videoList")
-//                videoList.forEach {
-//                    try {
-//                        moduleTranscript.callAttr("getTranscript", it.id)
-//                        it.haveTranscript = 1
-//                        Log.i("python","change!")
-//                    } catch (e: Exception) {
-//                        Log.e("python", "$e")
-//                    }
-//                }
+
             Log.i("python", "${videoList.size}")
         } catch (e: Exception) {
             Log.e("python", "$e")
@@ -247,6 +244,10 @@ class DefaultRepository @Inject constructor(
 
     override suspend fun searchTemplateIdListByUserId(userId: String): List<String> {
         return templateDao.searchTemplateIdListByUserId(userId)
+    }
+
+    override suspend fun searchTemplatesByUserId(userId: String): List<Template> {
+        return templateDao.searchTemplatesListByUserId(userId)
     }
 
     override suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>) {
@@ -319,5 +320,20 @@ class DefaultRepository @Inject constructor(
         }
     }
 
+    override suspend fun findAllWorkoutById(userId: String): List<Workout> {
+        return workoutDao.findAllWorkoutById(userId)
+    }
+
+    override suspend fun upsertWorkout(workout: Workout) {
+        workoutDao.upsertWorkout(workout)
+    }
+
+    override suspend fun upsertExerciseRecordList(exerciseRecordList: List<ExerciseRecord>) {
+        exerciseRecordDao.upsertExerciseRecordList(exerciseRecordList)
+    }
+
+    override suspend fun getAllExercisesByUserId(userId: String): List<ExerciseRecord> {
+        return exerciseRecordDao.getExerciseRecordsByUserId(userId)
+    }
 
 }

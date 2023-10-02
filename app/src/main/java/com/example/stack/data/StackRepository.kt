@@ -13,6 +13,7 @@ import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
 import com.example.stack.data.dataclass.VideoItem
+import com.example.stack.data.dataclass.Workout
 
 interface StackRepository {
     suspend fun test2(): List<ExerciseRecord>
@@ -49,6 +50,8 @@ interface StackRepository {
 
     suspend fun upsertTemplate(template: Template)
 
+    suspend fun searchTemplatesByUserId(userId: String): List<Template>
+
     suspend fun searchTemplateIdListByUserId(userId: String): List<String>
 
     suspend fun upsertTemplateExerciseRecord(templateExerciseRecords: TemplateExerciseRecord)
@@ -62,5 +65,13 @@ interface StackRepository {
     suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit)
 
     fun sendChatMessageToFireStore(chat: Chat)
+
+    suspend fun upsertWorkout(workout: Workout)
+
+    suspend fun findAllWorkoutById(userId: String): List<Workout>
+
+    suspend fun upsertExerciseRecordList(exerciseRecordList: List<ExerciseRecord>)
+
+    suspend fun getAllExercisesByUserId(userId: String): List<ExerciseRecord>
 
 }

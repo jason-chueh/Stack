@@ -13,10 +13,13 @@ import com.example.stack.data.dataclass.StringListConverter
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
+import com.example.stack.data.dataclass.UserInfo
+import com.example.stack.data.dataclass.Workout
+
 @TypeConverters(RepsAndWeightsConverter::class, StringListConverter::class)
 @Database(entities = [User::class, Exercise::class, ExerciseRecord::class
     , ExerciseYoutube::class, TemplateExerciseRecord::class
-    , Template::class], version = 2, exportSchema = false)
+    , Template::class, Workout::class, UserInfo::class], version = 1, exportSchema = false)
 abstract class StackDatabase : RoomDatabase() {
 
     /**
@@ -28,6 +31,8 @@ abstract class StackDatabase : RoomDatabase() {
     abstract val exerciseYoutubeDao: ExerciseYoutubeDao
     abstract val templateExerciseRecordDao: TemplateExerciseRecordDao
     abstract val templateDao: TemplateDao
+    abstract val workoutDao: WorkoutDao
+    abstract val userInfoDao: UserInfoDao
     /**
      * Define a companion object, this allows us to add functions on the StylishDatabase class.
      *

@@ -13,7 +13,11 @@ import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseRecordWithCheck
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
+import com.example.stack.data.dataclass.TemplateExerciseRecord
+import com.example.stack.data.dataclass.Workout
+import com.example.stack.data.dataclass.toExerciseRecord
 import com.example.stack.data.dataclass.toExerciseRecordWithCheck
+import com.example.stack.data.dataclass.toTemplateExerciseWithCheck
 import com.example.stack.login.UserManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -22,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -31,12 +36,13 @@ class WorkoutViewModel @AssistedInject constructor(
     private val test: String
 ) :
     ViewModel() {
-    val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>(list)
-    val startTime = System.currentTimeMillis()
+    val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>()
+    private var startTime = System.currentTimeMillis()
 
     val exerciseList = MutableLiveData<List<Exercise>>()
 
     val filteredExerciseList = MutableLiveData<List<Exercise>>()
+
     companion object {
         fun provideWorkoutViewModelFactory(
             factory: Factory,
@@ -49,13 +55,53 @@ class WorkoutViewModel @AssistedInject constructor(
             }
         }
     }
+
     @AssistedFactory
     interface Factory {
         fun create(test: String): WorkoutViewModel
     }
 
-    init {
-        dataList.value = list
+    fun setDataListFromBundle(templateExerciseList: List<TemplateExerciseRecord>) {
+        if (UserManager.user?.id != null) {
+            startTime = System.currentTimeMillis()
+            dataList.value = templateExerciseList.map {
+                it.toTemplateExerciseWithCheck(
+                    UserManager.user!!.id,
+                    startTime
+                )
+            }
+        }
+    }
+
+    fun cancelWorkout() {
+
+    }
+
+
+    fun finishWorkout(workoutName: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                if (UserManager.user?.id != null) {
+                    stackRepository.upsertWorkout(
+                        Workout(
+                            userId = UserManager.user!!.id,
+                            workoutName = workoutName,
+                            startTime = startTime,
+                            endTime = Calendar.getInstance().timeInMillis
+                        )
+                    )
+                    val filteredExerciseRecords = dataList.value?.map { exerciseRecord ->
+                        exerciseRecord.copy(
+                            repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }.toMutableList()
+                        )
+                    }?.filter { it.repsAndWeights.isNotEmpty() }
+
+                    Log.i("finishWorkout","$filteredExerciseRecords")
+                    filteredExerciseRecords?.map{it.toExerciseRecord()}
+                        ?.let { stackRepository.upsertExerciseRecordList(it) }
+                }
+            }
+        }
     }
 
 
@@ -74,21 +120,21 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
 
-    fun addExerciseRecord(exerciseId:String, exerciseName: String) {
+    fun addExerciseRecord(exerciseId: String, exerciseName: String) {
 
         dataList.value?.let { oldList ->
             val newList = mutableListOf<ExerciseRecordWithCheck>()
             newList.apply {
                 addAll(oldList)
-                    add(
-                        ExerciseRecordWithCheck(
-                            UserManager.user!!.id,
-                            startTime,
-                            exerciseId,
-                            exerciseName,
-                            mutableListOf()
-                        )
+                add(
+                    ExerciseRecordWithCheck(
+                        UserManager.user!!.id,
+                        startTime,
+                        exerciseId,
+                        exerciseName,
+                        mutableListOf()
                     )
+                )
             }
             dataList.value = newList
         }
@@ -131,10 +177,6 @@ class WorkoutViewModel @AssistedInject constructor(
             dataList.value = updatedList
 
         }
-
-    fun finishWorkout() {
-
-    }
 
 
 }

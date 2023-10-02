@@ -1,13 +1,16 @@
 package com.example.stack.home
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.Chatroom
+import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
+import com.example.stack.data.dataclass.Workout
 import com.example.stack.login.UserManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,128 +25,184 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val stackRepository: StackRepository) :
     ViewModel() {
-    fun fromRepsAndWeightsList(repsAndWeights: List<RepsAndWeights>?): String? {
-        return Gson().toJson(repsAndWeights)
-    }
-    fun toRepsAndWeightsList(repsAndWeightsJson: String?): List<RepsAndWeights>? {
-        val type = object : TypeToken<List<RepsAndWeights>>() {}.type
-        return Gson().fromJson(repsAndWeightsJson, type)
-    }
-    fun test() {
-        val result = fromRepsAndWeightsList(listOf(RepsAndWeights(3,3),RepsAndWeights(4,4)))
-        Log.i("gson","$result")
-        val result2 = toRepsAndWeightsList(result)
-        Log.i("gson","convert back: $result2")
+
+    val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
+    val userWorkoutRecords = MutableLiveData<List<Workout>?>()
+
+
+    fun getUserExerciseData() {
 
         viewModelScope.launch {
-            val result = stackRepository.test2()
-            Log.i("gson","$result")
+            withContext(Dispatchers.IO){
+                val exerciseRecordList = UserManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
+
+                userExerciseRecords.postValue(exerciseRecordList)
+            }
         }
     }
 
-    fun exerciseApi(){
+    fun getUserWorkoutData(){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                val workoutList = UserManager.user?.id?.let{ stackRepository.findAllWorkoutById(it)}
+                userWorkoutRecords.postValue(workoutList)
+            }
+        }
+    }
+
+    fun exerciseApi() {
         viewModelScope.launch {
             stackRepository.refreshExerciseDb()
         }
     }
 
-    fun upsertTemplate(){
-        viewModelScope.launch{
-            withContext(Dispatchers.IO){
-                stackRepository.upsertTemplate(personalTemplate)
-            }
-        }
-    }
-
-    fun searchTemplateByUserId(){
+    fun upsertTemplate() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                var resultList = UserManager.user?.id?.let { stackRepository.searchTemplateIdListByUserId(it) }
-                Log.i("template","$resultList")
+            withContext(Dispatchers.IO) {
+                stackRepository.upsertTemplate(personalTemplate)
+                stackRepository.upsertTemplate(emptyTemplate)
+                stackRepository.upsertTemplate(legTemplate)
             }
         }
     }
 
-    fun upsertTemplateExerciseRecord(){
-        viewModelScope.launch{
-            withContext(Dispatchers.IO){
-                stackRepository.upsertTemplateExerciseRecord(templateExerciseRecord)
+    fun searchTemplateByUserId() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                var resultList =
+                    UserManager.user?.id?.let { stackRepository.searchTemplateIdListByUserId(it) }
+                Log.i("template", "$resultList")
             }
         }
     }
 
-    fun upsertTemplateExerciseRecordList(){
-        viewModelScope.launch{
-            withContext(Dispatchers.IO){
-                stackRepository.upsertTemplateExerciseRecord(listOf(templateExerciseRecord, templateExerciseRecord4, templateExerciseRecord5))
+    fun upsertTemplateExerciseRecord() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                stackRepository.upsertTemplateExerciseRecord(templateExerciseRecord1)
             }
         }
     }
-    fun searchAllTemplateAndExerciseByUserId(){
-        viewModelScope.launch{
-            withContext(Dispatchers.IO){
-                val resultList = UserManager.user?.let { stackRepository.searchTemplateIdListByUserId(it.id) }
+
+    fun upsertTemplateExerciseRecordList() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                stackRepository.upsertTemplateExerciseRecord(
+                    listOf(
+                        templateExerciseRecord1,
+                        templateExerciseRecord2,
+                        templateExerciseRecord3,
+                        templateExerciseRecord4,
+                        templateExerciseRecord5,
+                        templateExerciseRecord6,
+                        templateExerciseRecord7,
+                        templateExerciseRecord8
+                    )
+                )
+            }
+        }
+    }
+
+    fun searchAllTemplateAndExerciseByUserId() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val resultList =
+                    UserManager.user?.let { stackRepository.searchTemplateIdListByUserId(it.id) }
                 if (resultList != null) {
-                    for(i in resultList){
-                        var exerciserList =  stackRepository.getTemplateExerciseRecordListByTemplateId(i)
-                        Log.i("template","$exerciserList")
+                    for (i in resultList) {
+                        var exerciserList =
+                            stackRepository.getTemplateExerciseRecordListByTemplateId(i)
+                        Log.i("template", "$exerciserList")
                     }
                 }
             }
         }
     }
 
-    fun createChatroom(){
+    fun createChatroom() {
         viewModelScope.launch {
-            stackRepository.createChatroomAtFireStore(Chatroom(userId1 = UserManager.user!!.id, userId2 = "23426", userName = listOf("ww","232"), userPic = listOf("",""), lastMessage = "hi", lastMessageTime = Calendar.getInstance().timeInMillis))
+            if(UserManager.user?.id != null){
+                stackRepository.createChatroomAtFireStore(
+                    Chatroom(
+                        userId1 = UserManager.user!!.id,
+                        userId2 = "23426",
+                        userName = listOf("ww", "232"),
+                        userPic = listOf("", ""),
+                        lastMessage = "hi",
+                        lastMessageTime = Calendar.getInstance().timeInMillis
+                    )
+                )
+            }
         }
     }
 
+    val legTemplate = Template(
+        templateId = "2",
+        userId = "K8O0QzYjHrRkGTyJz1rgXpyaggn2",
+        templateName = "Killer Leg Workout template",
+    )
 
 
     val emptyTemplate = Template(
-        templateId = "123",
+        templateId = "0",
         userId = "K8O0QzYjHrRkGTyJz1rgXpyaggn2",
         templateName = "Empty template",
     )
     val personalTemplate = Template(
-        templateId = "456",
+        templateId = "1",
         userId = "K8O0QzYjHrRkGTyJz1rgXpyaggn2",
         templateName = "Full body workout template",
     )
-    val templateExerciseRecord = TemplateExerciseRecord(
-        templateId = "123",
+    val templateExerciseRecord1 = TemplateExerciseRecord(
+        templateId = "1",
         exerciseName = "barbell bench front squat",
         exerciseId = "0024",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf<RepsAndWeights>(RepsAndWeights(3,3), RepsAndWeights(3,3),RepsAndWeights(3,3))
     )
     val templateExerciseRecord2 = TemplateExerciseRecord(
-        templateId = "123",
+        templateId = "1",
         exerciseName = "barbell bench press",
         exerciseId = "0025",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf<RepsAndWeights>(RepsAndWeights(3,3), RepsAndWeights(4, 3))
     )
     val templateExerciseRecord3 = TemplateExerciseRecord(
-        templateId = "123",
+        templateId = "1",
         exerciseName = "barbell bench squat",
         exerciseId = "0026",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf<RepsAndWeights>(RepsAndWeights(3,3), RepsAndWeights(4, 3))
     )
     val templateExerciseRecord4 = TemplateExerciseRecord(
-        templateId = "456",
-        exerciseName = "barbell bench squat",
-        exerciseId = "0026",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
-    )
-    val templateExerciseRecord5 = TemplateExerciseRecord(
-        templateId = "456",
+        templateId = "1",
         exerciseName = "barbell biceps curl",
         exerciseId = "2407",
         repsAndWeights = mutableListOf<RepsAndWeights>()
     )
 
-    fun chester(n: Int): Int{
-        return n*(n+1)/2
-    }
+    val templateExerciseRecord5 = TemplateExerciseRecord(
+        templateId = "2",
+        exerciseName = "barbell bench front squat",
+        exerciseId = "0024",
+        repsAndWeights = mutableListOf<RepsAndWeights>()
+    )
+    val templateExerciseRecord6 = TemplateExerciseRecord(
+        templateId = "2",
+        exerciseName = "barbell deadlift",
+        exerciseId = "0032",
+        repsAndWeights = mutableListOf<RepsAndWeights>()
+    )
+    val templateExerciseRecord7 = TemplateExerciseRecord(
+        templateId = "2",
+        exerciseName = "barbell clean and press",
+        exerciseId = "0028",
+        repsAndWeights = mutableListOf<RepsAndWeights>()
+    )
+    val templateExerciseRecord8 = TemplateExerciseRecord(
+        templateId = "2",
+        exerciseName = "dumbbell bench squat",
+        exerciseId = "0291",
+        repsAndWeights = mutableListOf<RepsAndWeights>()
+    )
+
+
 }
 
