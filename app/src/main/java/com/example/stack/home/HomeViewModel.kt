@@ -1,6 +1,7 @@
 package com.example.stack.home
 
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +11,10 @@ import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
+import com.example.stack.data.dataclass.UserInfo
 import com.example.stack.data.dataclass.Workout
 import com.example.stack.login.UserManager
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
+import java.util.UUID
 
 import javax.inject.Inject
 
@@ -29,6 +33,30 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
     val userWorkoutRecords = MutableLiveData<List<Workout>?>()
 
+    fun uploadImageToFireStorage(stringOfUri: String) {
+        var currentUri = ""
+        val reference = FirebaseStorage.getInstance().reference
+        val path = UUID.randomUUID().leastSignificantBits
+        val imageRef = reference.child("images/$path.jpg")
+
+        val uploadTask = imageRef.putFile(stringOfUri.toUri())
+
+        uploadTask.addOnSuccessListener { uri ->
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                currentUri = uri.toString()
+                UserManager.user = UserManager.user?.copy(picture = currentUri)
+                UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+                viewModelScope.launch{
+                    UserManager.user?.let { stackRepository.upsertUser(it) }
+                }
+//                uploadProfileToFirebase(currentUri)
+                Log.i("personal image", "upload successfully, url is $uri")
+            }
+        }.addOnFailureListener {
+            Log.e("personal image", "failed: $it")
+        }
+        Log.i("personal image", "currentUri is $currentUri")
+    }
 
     fun getUserExerciseData() {
 

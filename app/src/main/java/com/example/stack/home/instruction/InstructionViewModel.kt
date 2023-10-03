@@ -17,12 +17,14 @@ class InstructionViewModel @Inject constructor(private val stackRepository: Stac
     ViewModel() {
 
     val instruction = MutableLiveData<String>()
+    val title = MutableLiveData<String>()
     fun getInstruction(youtubeId: String) {
 
         var instructionString: String = ""
 
         val promptPrefix =
-            "This is the transcript of a youtube video, summarize the transcript and turn it into instructions"
+            "This is the transcript of a exercise tutorial youtube video, summarize the transcript and list each step so that reader can " +
+                    "follow the instructions to learn the exercise. Each step should end with line break. The following is the video transcript:"
 
         //trancript == null means that the video haven't been searched before, transcript == "" means the transcript does not exist
         viewModelScope.launch {

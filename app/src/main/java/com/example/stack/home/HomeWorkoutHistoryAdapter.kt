@@ -57,6 +57,7 @@ class HomeWorkoutHistoryAdapter :
         fun bind(workout: Workout) {
             binding.templateTitleText.text = workout.workoutName
             binding.dateText.text = formatTimestampToMonthDay(workout.startTime)
+            binding.workoutDuration.text = formatTimeDuration(workout.endTime - workout.startTime)
         }
     }
 
@@ -65,6 +66,7 @@ class HomeWorkoutHistoryAdapter :
         fun bind(workout: Workout) {
             binding.templateTitleText.text = workout.workoutName
             binding.dateText.text = formatTimestampToMonthDay(workout.startTime)
+            binding.workoutDuration.text = formatTimeDuration(workout.endTime - workout.startTime)
 
         }
     }
@@ -84,5 +86,14 @@ class HomeWorkoutHistoryAdapter :
         val date = Date(timestamp)
         val dateFormat = SimpleDateFormat("MMMM, d", Locale.getDefault())
         return dateFormat.format(date)
+    }
+    fun formatTimeDuration(milliseconds: Long): String {
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt()
+        val minutes = ((milliseconds % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+
+        val hoursText = if (hours > 0) "$hours h " else ""
+        val minutesText = if (minutes > 0) "$minutes min" else ""
+
+        return "$hoursText$minutesText"
     }
 }

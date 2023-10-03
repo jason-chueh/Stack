@@ -114,6 +114,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
     }
 
     private fun checkPermissionThenFindCurrentPlace() {

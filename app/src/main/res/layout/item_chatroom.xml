@@ -7,24 +7,34 @@
         <variable
             name="chatroom"
             type="com.example.stack.data.dataclass.Chatroom" />
+        <variable
+            name="url"
+            type="String" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corner_with_blue_bg"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        >
+
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/pic"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
+            app:imageUrl="@{url}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/circular"
-            android:src="@drawable/lean" />
+            app:shapeAppearanceOverlay="@style/circular" />
 
         <TextView
             android:id="@+id/chatroomName"
@@ -33,8 +43,8 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/rubik_medium"
             android:text="TextView"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/pic"
             app:layout_constraintTop_toTopOf="@+id/pic" />
 
@@ -42,10 +52,10 @@
             android:id="@+id/messageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/rubik_medium"
-            android:textColor="@color/lightBlack"
-            android:textSize="16sp"
+            android:textColor="@color/darkGrey"
+            android:textSize="18sp"
             app:chatroomTime="@{chatroom.lastMessageTime}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chatroomName" />
@@ -55,15 +65,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/rubik_medium"
             android:text="TextView"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/pic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pic"
-            app:layout_constraintTop_toBottomOf="@+id/chatroomName" />
+            app:layout_constraintStart_toEndOf="@+id/pic" />
 
 <!--        <View-->
 <!--            android:id="@+id/view7"-->

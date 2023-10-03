@@ -6,7 +6,7 @@
         android:title=""/>
     <item
         android:id="@+id/navigation_user"
-        android:icon="@drawable/user_selector"
+        android:icon="@drawable/chart_histogram"
         android:title=""/>
 
     <item
@@ -16,7 +16,7 @@
 
     <item
         android:id="@+id/navigation_position"
-        android:icon="@drawable/position_selector"
+        android:icon="@drawable/messages"
         android:title=""/>
 
     <item

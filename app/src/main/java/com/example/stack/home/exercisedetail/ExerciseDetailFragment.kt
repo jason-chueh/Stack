@@ -34,7 +34,7 @@ class ExerciseDetailFragment : Fragment() {
         exerciseName = ExerciseDetailFragmentArgs.fromBundle(requireArguments()).exerciseName
         Log.i("exerciseDetail","$exerciseId, $exerciseName")
         viewModel.getExerciseById(exerciseId)
-        viewModel.getVideoList("001","squat")
+        viewModel.getVideoList(exerciseId,exerciseName)
         super.onCreate(savedInstanceState)
     }
     override fun onCreateView(

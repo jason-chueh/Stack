@@ -104,8 +104,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.navigation_find_bro -> {
-
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
+                    if(UserManager.user?.gymLongitude != null){
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToMapsFragment())
+                    }
+                    else{
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
+                    }
                     return@setOnItemSelectedListener true
                 }
 

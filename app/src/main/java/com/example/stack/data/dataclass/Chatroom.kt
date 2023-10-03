@@ -10,7 +10,7 @@ data class Chatroom(
     var userId1: String = "",
     var userId2: String = "",
     var userName: List<String> = listOf(),
-    var userPic: List<String> = listOf(),
+    var userPic: List<String?> = listOf(),
     var lastMessage: String = "",
     var lastMessageTime: Long = 0
 ): Parcelable

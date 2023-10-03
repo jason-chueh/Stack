@@ -37,14 +37,14 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-@BindingAdapter("imageUrl")
-fun loadImageUrl(view: ImageView, imageUrl: String?) {
-    imageUrl?.let {
-        Glide.with(view.context)
-            .load(imageUrl)
-            .into(view)
-    }
-}
+//@BindingAdapter("imageUrl")
+//fun loadImageUrl(view: ImageView, imageUrl: String?) {
+//    imageUrl?.let {
+//        Glide.with(view.context)
+//            .load(imageUrl)
+//            .into(view)
+//    }
+//}
 
 @BindingAdapter("instructionList")
 fun setInstructionList(textView: TextView, instructionList: List<String>) {

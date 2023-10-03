@@ -80,7 +80,6 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
 
     fun nativeLogin(){
         viewModelScope.launch {
-
             if(email.value!=null && password.value!=null){
             auth.signInWithEmailAndPassword(email.value!!, password.value!!)
                 .addOnCompleteListener() { task ->
@@ -89,9 +88,11 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                         val user = auth.currentUser
                         if(UserManager.user == null && name.value != null){
                             UserManager.user = User(user!!.uid, name.value!!, user!!.email!!)
+                            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                         }
                         coroutineScope.launch {
                             UserManager.user?.let { stackRepository.upsertUser(it) }
+                            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                         }
                         leave()
                     } else {
@@ -114,10 +115,11 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                     Log.i("login", "createUserWithEmail:success")
                     val user = auth.currentUser
                     if(UserManager.user == null){
-                        UserManager.user = User(user!!.uid, user!!.displayName!!, user!!.email!!)
+                        UserManager.user = User(user!!.uid, user.displayName!!, user.email!!)
                     }
                     coroutineScope.launch {
                         UserManager.user?.let { stackRepository.upsertUser(it) }
+                        UserManager.user?.let{stackRepository.uploadUserToFireStore(it)}
                     }
 
                     leave()

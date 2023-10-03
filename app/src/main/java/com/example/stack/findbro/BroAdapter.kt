@@ -32,9 +32,9 @@ class BroAdapter(val clickListener: (user: User) -> Unit) :
 
         fun bind(user: User) {
             binding.user = user
-//            binding.root.setOnClickListener {
-//                clickListener(exercise)
-//            }
+            binding.root.setOnClickListener {
+                clickListener(user)
+            }
         }
     }
 

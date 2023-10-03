@@ -64,6 +64,8 @@ interface StackRepository {
 
     suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit)
 
+    fun updateChatroom(chatroom: Chatroom)
+
     fun sendChatMessageToFireStore(chat: Chat)
 
     suspend fun upsertWorkout(workout: Workout)
@@ -73,5 +75,7 @@ interface StackRepository {
     suspend fun upsertExerciseRecordList(exerciseRecordList: List<ExerciseRecord>)
 
     suspend fun getAllExercisesByUserId(userId: String): List<ExerciseRecord>
+
+    fun uploadUserToFireStore(user: User)
 
 }

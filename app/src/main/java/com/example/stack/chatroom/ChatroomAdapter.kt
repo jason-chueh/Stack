@@ -32,9 +32,11 @@ class ChatroomAdapter(val onClick: (Chatroom)->Unit) :
             binding.chatroom = chatroom
             if(UserManager.user?.id == chatroom.userId1){
                 binding.chatroomName.text = chatroom.userName[1]
+                binding.url = chatroom.userPic[1]
             }
             else{
                 binding.chatroomName.text = chatroom.userName[0]
+                binding.url = chatroom.userPic[0]
             }
             binding.lastChat.text = chatroom.lastMessage
             binding.root.setOnClickListener{

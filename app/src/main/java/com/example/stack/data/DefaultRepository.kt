@@ -168,7 +168,9 @@ class DefaultRepository @Inject constructor(
     ): List<VideoItem> {
         var videoList = listOf<VideoItem>()
         try {
-            val result_json = moduleYoutubeSearch.callAttr("youtubeSearch", exerciseName)
+            val result_json = moduleYoutubeSearch.callAttr("youtubeSearch",
+                "$exerciseName tutorial"
+            )
                 .toJava(String::class.java)
             val moshi = Moshi.Builder().build()
             val listType = Types.newParameterizedType(List::class.java, VideoItem::class.java)
@@ -311,6 +313,15 @@ class DefaultRepository @Inject constructor(
         }
     }
 
+    override fun updateChatroom(chatroom: Chatroom) {
+        val ref = db.collection("chatroom").document(chatroom.roomId)
+        ref.set(chatroom).addOnSuccessListener {
+            Log.i("chatroom","update chatroom success!")
+        }.addOnFailureListener {
+            Log.i("chatroom","$it")
+        }
+    }
+
     override fun sendChatMessageToFireStore(chat: Chat) {
         val docRef = db.collection("chat").document()
         docRef.set(chat.copy(chatId = docRef.id)).addOnSuccessListener {
@@ -334,6 +345,15 @@ class DefaultRepository @Inject constructor(
 
     override suspend fun getAllExercisesByUserId(userId: String): List<ExerciseRecord> {
         return exerciseRecordDao.getExerciseRecordsByUserId(userId)
+    }
+
+    override fun uploadUserToFireStore(user: User) {
+        db.collection("user").document(user.id).set(user).addOnSuccessListener {
+            Log.i("user","$user")
+            Log.i("user","upload fireStore success!")
+        }.addOnFailureListener {
+            Log.i("user","$it")
+        }
     }
 
 }

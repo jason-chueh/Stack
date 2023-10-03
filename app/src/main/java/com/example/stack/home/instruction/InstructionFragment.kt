@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import com.example.stack.data.dataclass.ExerciseYoutube
 import com.example.stack.databinding.FragmentHomeBinding
 import com.example.stack.databinding.FragmentInstructionBinding
@@ -26,7 +27,6 @@ class InstructionFragment : Fragment() {
     private val viewModel: InstructionViewModel by viewModels()
     lateinit var bundle: ExerciseYoutube
     lateinit var youtubePlayerListener: MyYouTubePlayerListener
-
 
     //    @Inject
 //    lateinit var instructionViewModelFactory: InstructionViewModelFactory
@@ -54,6 +54,12 @@ class InstructionFragment : Fragment() {
         youTubePlayerView.addYouTubePlayerListener(
             youtubePlayerListener
         )
+
+        binding.titleTextView.text = bundle.youtubeTitle
+
+        binding.returnIcon.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         viewLifecycleOwner.lifecycle.addObserver(object: DefaultLifecycleObserver{
             override fun onStop(owner: LifecycleOwner) {

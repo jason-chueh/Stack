@@ -45,18 +45,20 @@
                 android:id="@+id/tvTimeLeft"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
                 android:text="0"
-                android:textColor="@color/Orange"
+                android:textColor="@color/blackBlue"
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
                 android:text="sec time left"
-                android:textColor="@color/Orange"
+                android:textColor="@color/darkestBlue"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -68,6 +70,7 @@
             android:background="@color/white"
             android:scaleType="fitXY"
             android:src="@drawable/time"
+            app:tint="@color/darkestBlue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pbTimer" />
@@ -79,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="+15s"
-            android:textColor="@color/Orange"
+            android:textColor="@color/darkestBlue"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/pbTimer"
@@ -95,6 +98,7 @@
             android:background="@color/white"
             android:scaleType="fitXY"
             android:src="@drawable/refresh"
+            app:tint="@color/darkestBlue"
             app:layout_constraintBottom_toBottomOf="@+id/pbTimer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/pbTimer" />
@@ -105,7 +109,8 @@
             android:layout_width="284dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/blue_gradient"
+            android:fontFamily="@font/rubik_medium"
             android:text="Start"
             android:textColor="@color/white"
             android:textSize="22sp"

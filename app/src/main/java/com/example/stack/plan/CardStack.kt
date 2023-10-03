@@ -37,7 +37,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.createFontFamilyResolver
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,16 +98,17 @@ fun CardStack(
 
         // Title Composable
         Text(
-            text = "哪些是你的健身目標？",
+            text = "What are your fitness goals？",
 
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }.padding(20.dp).wrapContentHeight(),
-
-            color = peachPink,
-            fontSize = 30.sp
+            color = Color.Black,
+            fontSize = 30.sp,
+            fontFamily= FontFamily(Font(R.font.rubika_medium2)),
+            textAlign = TextAlign.Center
         )
 
         Box(

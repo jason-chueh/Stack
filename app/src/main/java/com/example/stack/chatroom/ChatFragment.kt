@@ -64,6 +64,7 @@ class ChatFragment : Fragment() {
                     message = input.toString(),
                     sendTime = Calendar.getInstance().timeInMillis
                 ))
+                viewModel.updateChatroom(chatroom.copy(lastMessage = input.toString(), lastMessageTime = Calendar.getInstance().timeInMillis))
                 binding.input.setText("")
             }
         }

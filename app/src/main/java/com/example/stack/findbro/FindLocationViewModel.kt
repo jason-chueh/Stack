@@ -12,9 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class FindLocationViewModel @Inject constructor(private val stackRepository: StackRepository) :
     ViewModel() {
-        fun upsertUser(lat: String, long: String){
-            viewModelScope.launch {
-                UserManager.user?.let { stackRepository.upsertUser(it.copy(gymLatitude = lat, gymLongitude = long)) }
-            }
+    fun upsertUser(lat: String, long: String) {
+        viewModelScope.launch {
+            UserManager.user = UserManager.user?.copy(gymLatitude = lat, gymLongitude = long)
+            UserManager.user?.let { stackRepository.upsertUser(it) }
+            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
         }
+    }
 }

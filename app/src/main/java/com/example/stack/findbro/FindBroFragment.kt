@@ -27,7 +27,6 @@ class FindBroFragment: Fragment() {
             findNavController().navigate(NavigationDirections.navigateToFindLocationFragment())
         }
 
-
         return binding.root
     }
 }

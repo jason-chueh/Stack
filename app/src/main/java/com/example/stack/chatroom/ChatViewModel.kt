@@ -60,5 +60,7 @@ class ChatViewModel @Inject constructor(
     fun removeListener(){
         registration?.remove()
     }
-
+    fun updateChatroom(chatroom: Chatroom){
+        stackRepository.updateChatroom(chatroom)
+    }
 }

@@ -27,7 +27,7 @@ class ChatRoomFragment: Fragment() {
         }
         binding.chatroomRecyclerView.adapter = adapter
         viewModel.chatrooms.observe(viewLifecycleOwner){
-            adapter.submitList(it)
+            adapter.submitList(it.sortedByDescending { it.lastMessageTime })
         }
         return binding.root
     }
