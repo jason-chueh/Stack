@@ -15,6 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/view22"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@drawable/medium_blue_gradient"
+            app:layout_constraintBottom_toTopOf="@+id/view16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView15"
             android:layout_width="0dp"
@@ -23,6 +33,7 @@
             android:layout_marginTop="30dp"
             android:fontFamily="@font/rubik_medium"
             android:text="DashBoard"
+            android:textColor="@color/white"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +163,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/rubik_medium"
-            android:text="Previous Workout"
+            android:text="Current Workout"
             android:textColor="@color/darkGrey"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/datePreviousWorkout"
@@ -160,14 +171,16 @@
 
         <TextView
             android:id="@+id/previousWorkoutName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/rubik_medium"
             android:text="TextView"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView22"
             app:layout_constraintTop_toBottomOf="@+id/textView22" />
 

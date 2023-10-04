@@ -45,8 +45,9 @@ class HomeFragment: Fragment() {
         viewModel.upsertTemplate()
 //        viewModel.searchTemplateByUserId()
         viewModel.upsertTemplateExerciseRecordList()
-        viewModel.exerciseApi()
+//        viewModel.exerciseApi()
         viewModel.createChatroom()
+//        viewModel.exerciseApiRe()
 
         val layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeWorkoutHistoryAdapter()
@@ -63,15 +64,18 @@ class HomeFragment: Fragment() {
                 if(it.size > 0){
                     binding.previousWorkoutName.text = it.sortedByDescending{ it.startTime }[0].workoutName
                     binding.datePreviousWorkout.text = formatTimestamp(it.sortedByDescending{ it.startTime }[0].startTime)
-
                 }
                 else{
                     binding.previousWorkoutName.text = "No workout history"
                     binding.datePreviousWorkout.text = "?"
                 }
-                adapter.submitList(it)
+                adapter.submitList(it.sortedByDescending { it.startTime })
             }
         }
+        viewModel.userExerciseRecords.observe(viewLifecycleOwner){
+
+        }
+
 
 
         binding.personalImage.setOnClickListener {

@@ -15,8 +15,10 @@ import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.Workout
+import com.example.stack.data.dataclass.WorkoutToTemplate
 import com.example.stack.data.dataclass.toExerciseRecord
 import com.example.stack.data.dataclass.toExerciseRecordWithCheck
+import com.example.stack.data.dataclass.toTemplateExerciseRecord
 import com.example.stack.data.dataclass.toTemplateExerciseWithCheck
 import com.example.stack.login.UserManager
 import dagger.assisted.Assisted
@@ -40,6 +42,8 @@ class WorkoutViewModel @AssistedInject constructor(
     private var startTime = System.currentTimeMillis()
 
     val exerciseList = MutableLiveData<List<Exercise>>()
+
+    val scrollToTop = MutableLiveData<Int>()
 
     val filteredExerciseList = MutableLiveData<List<Exercise>>()
 
@@ -82,14 +86,17 @@ class WorkoutViewModel @AssistedInject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (UserManager.user?.id != null) {
-                    stackRepository.upsertWorkout(
-                        Workout(
-                            userId = UserManager.user!!.id,
-                            workoutName = workoutName,
-                            startTime = startTime,
-                            endTime = Calendar.getInstance().timeInMillis
-                        )
+
+                    val workoutToUpload = Workout(
+                        userId = UserManager.user!!.id,
+                        workoutName = workoutName,
+                        startTime = startTime,
+                        endTime = Calendar.getInstance().timeInMillis
                     )
+                    stackRepository.upsertWorkout(
+                        workoutToUpload
+                    )
+                    stackRepository.upsertTemplate(workoutToUpload.WorkoutToTemplate(workoutToUpload.startTime.toString()))
                     val filteredExerciseRecords = dataList.value?.map { exerciseRecord ->
                         exerciseRecord.copy(
                             repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }.toMutableList()
@@ -97,8 +104,10 @@ class WorkoutViewModel @AssistedInject constructor(
                     }?.filter { it.repsAndWeights.isNotEmpty() }
 
                     Log.i("finishWorkout","$filteredExerciseRecords")
-                    filteredExerciseRecords?.map{it.toExerciseRecord()}
-                        ?.let { stackRepository.upsertExerciseRecordList(it) }
+                    val exerciseRecordsListToUpload = filteredExerciseRecords?.map{it.toExerciseRecord()}
+                    exerciseRecordsListToUpload?.let { stackRepository.upsertExerciseRecordList(it) }
+                    exerciseRecordsListToUpload?.map { exerciseRecord ->  exerciseRecord.toTemplateExerciseRecord(exerciseRecord.startTime.toString())}
+                        ?.let{stackRepository.upsertTemplateExerciseRecord(it)}
                 }
             }
         }
@@ -121,11 +130,9 @@ class WorkoutViewModel @AssistedInject constructor(
 
 
     fun addExerciseRecord(exerciseId: String, exerciseName: String) {
-
         dataList.value?.let { oldList ->
             val newList = mutableListOf<ExerciseRecordWithCheck>()
             newList.apply {
-                addAll(oldList)
                 add(
                     ExerciseRecordWithCheck(
                         UserManager.user!!.id,
@@ -135,8 +142,10 @@ class WorkoutViewModel @AssistedInject constructor(
                         mutableListOf()
                     )
                 )
+                addAll(oldList)
             }
             dataList.value = newList
+            scrollToTop.value = 0
         }
     }
 
@@ -162,7 +171,6 @@ class WorkoutViewModel @AssistedInject constructor(
             )
             dataList.value = updatedList
         }
-
     val updateSetToFalse: (exercisePosition: Int, setPosition: Int, repsAndWeights: RepsAndWeightsWithCheck) -> Unit =
         { exercisePosition, setPosition, repsAndWeights ->
             Log.i("cancel", "$exercisePosition ,$setPosition")

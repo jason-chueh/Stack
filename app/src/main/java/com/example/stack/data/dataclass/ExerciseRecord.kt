@@ -26,6 +26,14 @@ data class ExerciseRecord(
     var repsAndWeights: MutableList<RepsAndWeights>
 ): Parcelable
 
+fun ExerciseRecord.toTemplateExerciseRecord(templateId: String) = TemplateExerciseRecord(
+    templateId = templateId,
+    exerciseName = exerciseName,
+    exerciseId = exerciseId,
+    repsAndWeights = repsAndWeights
+)
+
+
 data class ExerciseRecordWithCheck(
     val userId: String,
     val startTime: Long,

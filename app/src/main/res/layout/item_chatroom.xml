@@ -16,11 +16,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_corner_with_blue_bg"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        >
+        android:layout_marginBottom="4dp">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -43,8 +41,9 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/rubik_medium"
             android:text="TextView"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/lastChat"
             app:layout_constraintStart_toEndOf="@+id/pic"
             app:layout_constraintTop_toTopOf="@+id/pic" />
 
@@ -67,22 +66,24 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/rubik_medium"
             android:text="TextView"
-            android:textColor="@color/white"
+            android:textColor="@color/darkGrey"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/pic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pic" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/pic"
+            app:layout_constraintTop_toBottomOf="@+id/chatroomName" />
 
-<!--        <View-->
-<!--            android:id="@+id/view7"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="2dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:background="@color/lightGrey"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/pic"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/pic" />-->
+        <!--        <View-->
+        <!--            android:id="@+id/view7"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="2dp"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            android:layout_marginEnd="16dp"-->
+        <!--            android:background="@color/lightGrey"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/pic"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/pic" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

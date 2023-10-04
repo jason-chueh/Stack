@@ -17,3 +17,9 @@ data class Workout(
     @ColumnInfo(name = "end_time")
     val endTime: Long
 ): Parcelable
+
+fun Workout.WorkoutToTemplate(templateId: String) = Template(
+    templateId = templateId,
+    templateName = workoutName,
+    userId = userId,
+)

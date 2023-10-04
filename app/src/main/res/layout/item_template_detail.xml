@@ -9,7 +9,7 @@
         android:id="@+id/exerciseNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
         android:fontFamily="@font/rubik_medium"
         android:text="TextView"
         android:textSize="18sp"

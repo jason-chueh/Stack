@@ -61,12 +61,17 @@ class UserFragment: Fragment() {
 
 
         val dataList = listOf(Entry(1f,2f),Entry(3f,4f),Entry(5f,6f))
-        setLineChartData(dataList)
+//        setLineChartData(dataList)
 
         viewModel.userExerciseRecords.observe(viewLifecycleOwner){
             if(it!=null){
-
+                val entryList = viewModel.getExerciseEntry()
+                entryList?.let{setLineChartData(it.sortedBy { it.x })}
+                viewModel.sumUpExerciseRecords()
             }
+        }
+        viewModel.weightSum.observe(viewLifecycleOwner){
+            binding.tonLifted.text = it?.toString()
         }
         viewModel.userWorkoutRecords.observe(viewLifecycleOwner){
             if(it!=null){
@@ -74,12 +79,6 @@ class UserFragment: Fragment() {
                 binding.avgWorkoutTime.text = calculateAverageWorkoutTime(it)
             }
         }
-
-
-
-
-
-
         return binding.root
     }
 
@@ -92,6 +91,7 @@ class UserFragment: Fragment() {
         val dataSets = listOf(lineDataSet)
         binding.lineChart.data = LineData(dataSets)
 
+
         //set line chart style
         lineDataSet.setDrawFilled(true)
         lineDataSet.fillDrawable =
@@ -100,19 +100,17 @@ class UserFragment: Fragment() {
         lineDataSet.circleColors =
             listOf(ContextCompat.getColor(requireContext(), R.color.darkestBlue))
 
-        binding.lineChart.xAxis.isEnabled = false
-        binding.lineChart.axisLeft.isEnabled = false
-        binding.lineChart.axisRight.isEnabled = false
+        binding.lineChart.xAxis.isEnabled = true
+        binding.lineChart.axisLeft.isEnabled = true
+        binding.lineChart.axisRight.isEnabled = true
+        binding.lineChart.setScaleEnabled(false)
+        binding.lineChart.xAxis.setDrawGridLines(false)
+        binding.lineChart.setDrawMarkers(false)
+        binding.lineChart.legend.isEnabled = false
 
 //        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         lineDataSet.color = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
-        binding.lineChart.animateXY(3000, 3000)
-        lineDataSet.fillFormatter =
-            IFillFormatter { _, dataProvider ->
-                entries
-                dataProvider.yChartMin
-            }
-
+        binding.lineChart.animateXY(0, 3000)
     }
 
     fun calculateAverageWorkoutTime(workouts: List<Workout>): String {

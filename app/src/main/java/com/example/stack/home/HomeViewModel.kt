@@ -33,6 +33,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
     val userWorkoutRecords = MutableLiveData<List<Workout>?>()
 
+
     fun uploadImageToFireStorage(stringOfUri: String) {
         var currentUri = ""
         val reference = FirebaseStorage.getInstance().reference
@@ -81,6 +82,11 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
     fun exerciseApi() {
         viewModelScope.launch {
             stackRepository.refreshExerciseDb()
+        }
+    }
+    fun exerciseApiRe() {
+        viewModelScope.launch {
+            stackRepository.exerciseApiToDb()
         }
     }
 

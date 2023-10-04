@@ -53,9 +53,9 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavView"
             android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             android:layout_height="@dimen/height_bottom_nav_view_main"
             android:background="@color/white"
-            android:elevation="@dimen/elevation_all"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

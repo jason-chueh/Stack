@@ -60,10 +60,13 @@ class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
 
         viewModel.getAllExerciseFromDb()
 
-
         viewModel.dataList.observe(viewLifecycleOwner){
             Log.i("workout","$it")
             adapter.submitList(it)
+        }
+
+        viewModel.scrollToTop.observe(viewLifecycleOwner){
+            binding.nestedScrollView.smoothScrollTo(0, 0)
         }
 
         binding.addExercise.setOnClickListener {
@@ -118,7 +121,6 @@ class WorkoutFragment: Fragment(), ExerciseDialog.ExerciseDialogListener {
         dialogBinding.continueText.setOnClickListener {
             if(!binding.workoutTitleText.text.isNullOrBlank()){
                 viewModel.finishWorkout(binding.workoutTitleText.text.toString())
-
                 dialog.dismiss()
                 findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
             }

@@ -92,7 +92,7 @@ class HomeWorkoutHistoryAdapter :
         val minutes = ((milliseconds % (1000 * 60 * 60)) / (1000 * 60)).toInt()
 
         val hoursText = if (hours > 0) "$hours h " else ""
-        val minutesText = if (minutes > 0) "$minutes min" else ""
+        val minutesText = if (minutes > 0) "$minutes min" else "0 min"
 
         return "$hoursText$minutesText"
     }
