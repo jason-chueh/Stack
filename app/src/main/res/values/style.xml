@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PaymentColorTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/gray_cccccc</item>
+        <item name="colorControlActivated">@color/black_3f3a3a</item>
+        <item name="android:colorControlHighlight">@color/black_3f3a3a</item>
+    </style>
+    <style name="ProgressThemeDark" parent="Widget.AppCompat.ProgressBar">
+        <item name="colorAccent">@color/white</item>
+    </style>
+    <style name="NativeLoginButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/black_ripple</item>
+    </style>
+    <style name="LoginDialog">
+        <item name="android:windowBackground">@color/translucent_40</item>
+    </style>
+</resources>

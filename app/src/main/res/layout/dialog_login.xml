@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <import type="com.example.stack.data.dataclass.LoadApiStatus"/>
+        <variable name="viewModel" type="com.example.stack.login.LoginViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{() -> viewModel.leave()}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_login"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_login"
+            android:background="@drawable/bg_dialog_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{() -> viewModel.nothing()}">
+
+            <TextView
+                android:id="@+id/text_login_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/noto_sans"
+                android:letterSpacing="0.15"
+                android:maxLines="1"
+                android:text="@string/login_title"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/text_login_description"
+                tools:text="@string/login_title"/>
+
+            <TextView
+                android:id="@+id/text_login_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/noto_sans"
+                android:letterSpacing="0.15"
+                android:maxLines="2"
+                android:text="@{viewModel.error != null ? viewModel.error : @string/login_description}"
+                android:textColor="@color/black_3f3a3a"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/view_login_separation"
+                tools:text="@string/login_description"/>
+
+            <View
+                android:id="@+id/view_login_separation"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/gray_cccccc"
+                app:layout_constraintBottom_toTopOf="@+id/layout_login_name"
+                app:layout_constraintEnd_toEndOf="@+id/button_login_native"
+                app:layout_constraintStart_toStartOf="@+id/button_login_native"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_login_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/PaymentColorTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/layout_login_email"
+                app:boxStrokeColor="@{@color/gray_646464}"
+                app:boxBackgroundColor="@{@color/gray_646464}">
+
+                <EditText
+                    android:id="@+id/edit_login_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_payment_editor"
+                    android:hint="@string/login_name"
+                    android:textColor="@color/black_3f3a3a"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/edit_login_email"
+                    android:text="@={viewModel.name}"
+                    android:textColorHint="@{@color/gray_646464}"
+                    android:backgroundTint="@{@color/gray_646464}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_login_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/PaymentColorTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/layout_login_password"
+                app:boxStrokeColor="@{@color/gray_646464}"
+                app:boxBackgroundColor="@{@color/gray_646464}"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_login_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_payment_editor"
+                    android:hint="@string/login_email"
+                    android:textColor="@color/black_3f3a3a"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@+id/edit_login_password"
+                    android:text="@={viewModel.email}"
+                    android:textColorHint="@{@color/gray_646464}"
+                    android:backgroundTint="@{@color/gray_646464}"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_login_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:theme="@style/PaymentColorTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/button_login_native"
+                app:boxStrokeColor="@{@color/gray_646464}"
+                app:boxBackgroundColor="@{@color/gray_646464}"
+                >
+
+                <EditText
+                    android:id="@+id/edit_login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_payment_editor"
+                    android:hint="@string/login_password"
+                    android:textColor="@color/black_3f3a3a"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.password}"
+                    android:textColorHint="@{@color/gray_646464}"
+                    android:backgroundTint="@{@color/gray_646464}"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_login_native"
+                style="@style/NativeLoginButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/noto_sans"
+                android:gravity="center"
+                android:letterSpacing="0.15"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text='@{viewModel.status != LoadApiStatus.LOADING ? @string/login_native_text : ""}'
+                android:clickable="@{viewModel.status == LoadApiStatus.LOADING ? false : true}"
+                android:onClick="@{() -> viewModel.nativeLogin()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="@string/login_native_text"/>
+
+            <ProgressBar
+                android:layout_width="@dimen/size_payment_progress"
+                android:layout_height="@dimen/size_payment_progress"
+                android:theme="@style/ProgressThemeDark"
+                android:visibility="@{viewModel.status == LoadApiStatus.LOADING ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@+id/button_login_native"
+                app:layout_constraintEnd_toEndOf="@+id/button_login_native"
+                app:layout_constraintStart_toStartOf="@+id/button_login_native"
+                app:layout_constraintTop_toTopOf="@+id/button_login_native"/>
+
+            <Button
+                android:id="@+id/button_login_close"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/button_dialog_close_ripple"
+                android:onClick="@{() -> viewModel.leave()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

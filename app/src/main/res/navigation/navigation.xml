@@ -8,4 +8,196 @@
         android:id="@+id/homeFragment"
         android:name="com.example.stack.home.HomeFragment"
         android:label="HomeFragment" />
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.stack.user.UserFragment"
+        android:label="UserFragment" />
+
+    <fragment
+        android:id="@+id/chatroomFragment"
+        android:name="com.example.stack.chatroom.ChatRoomFragment"
+        android:label="ChatRoomFragment" />
+
+    <fragment
+        android:id="@+id/findBroFragment"
+        android:name="com.example.stack.findbro.FindBroFragment"
+        android:label="FindBroFragment" />
+
+    <fragment
+        android:id="@+id/positionCorrectionFragment"
+        android:name="com.example.stack.position.PositionCorrectionFragment"
+        android:label="PositionCorrectionFragment" />
+
+    <fragment
+        android:id="@+id/planFragment"
+        android:name="com.example.stack.plan.PlanFragment"
+        android:label="PlanFragment" />
+
+    <fragment
+        android:id="@+id/loginDialog"
+        android:name="com.example.stack.login.LoginDialog"
+        android:label="LoginDialog" />
+
+    <fragment
+        android:id="@+id/exerciseDetailFragment"
+        android:name="com.example.stack.home.exercisedetail.ExerciseDetailFragment"
+        android:label="ExerciseDetailFragment">
+        <argument
+            android:name="exerciseId"
+            app:argType="string" />
+        <argument
+            android:name="exerciseName"
+            app:argType="string" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigate_to_home_fragment"
+        app:destination="@id/homeFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_user_fragment"
+        app:destination="@id/userFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_find_bro_fragment"
+        app:destination="@id/findBroFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_plan_fragment"
+        app:destination="@id/planFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_chatroom_fragment"
+        app:destination="@id/chatroomFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_position_correction_fragment"
+        app:destination="@id/positionCorrectionFragment"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_login_dialog"
+        app:destination="@id/loginDialog"
+        app:popUpTo="@id/navigation"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/navigate_to_exercise_detail_fragment"
+        app:destination="@id/exerciseDetailFragment" />
+    <fragment
+        android:id="@+id/instructionFragment"
+        android:name="com.example.stack.home.instruction.InstructionFragment"
+        android:label="InstructionFragment">
+        <argument
+            android:name="youtubeKey"
+            app:argType="com.example.stack.data.dataclass.ExerciseYoutube" />
+    </fragment>
+    <action
+        android:id="@+id/navigate_to_instruction_fragment"
+        app:destination="@id/instructionFragment" />
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.stack.findbro.MapsFragment"
+        android:label="MapsFragment" />
+
+    <action
+        android:id="@+id/navigate_to_maps_fragment"
+        app:destination="@id/mapsFragment" />
+    <fragment
+        android:id="@+id/findLocationFragment"
+        android:name="com.example.stack.findbro.FindLocationFragment"
+        android:label="FindLocationFragment" />
+    <action
+        android:id="@+id/navigate_to_find_location_fragment"
+        app:destination="@id/findLocationFragment" />
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.example.stack.home.workout.WorkoutFragment"
+        android:label="WorkoutFragment" >
+        <argument
+            android:name="templateExercises"
+            app:argType="com.example.stack.data.dataclass.TemplateExerciseRecord[]"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/navigate_to_workout_fragment"
+        app:destination="@+id/workoutFragment"
+        app:launchSingleTop="true" />
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.example.stack.home.workout.timer.TimerFragment"
+        android:label="TimerFragment" />
+
+    <action
+        android:id="@+id/navigate_to_timer_fragment"
+        app:destination="@+id/timerFragment" />
+    <fragment
+        android:id="@+id/planTinderFragment"
+        android:name="com.example.stack.plan.PlanTinderFragment"
+        android:label="PlanTinderFragment" />
+
+    <action
+        android:id="@+id/navigate_to_plan_tinder_fragment"
+        app:destination="@+id/planTinderFragment" />
+
+    <fragment
+        android:id="@+id/inputFragment"
+        android:name="com.example.stack.plan.InputFragment"
+        android:label="InputFragment" />
+
+    <action
+        android:id="@+id/navigate_to_input_fragment"
+        app:destination="@+id/inputFragment" />
+
+    <fragment
+        android:id="@+id/heightFragment"
+        android:name="com.example.stack.plan.HeightFragment"
+        android:label="HeightFragment" />
+
+    <action
+        android:id="@+id/navigate_to_height_fragment"
+        app:destination="@+id/heightFragment" />
+
+    <fragment
+        android:id="@+id/genderFragment"
+        android:name="com.example.stack.plan.GenderFragment"
+        android:label="GenderFragment" />
+
+    <action
+        android:id="@+id/navigate_to_gender_fragment"
+        app:destination="@+id/genderFragment" />
+
+    <fragment
+        android:id="@+id/templateFragment"
+        android:name="com.example.stack.home.template.TemplateFragment"
+        android:label="TemplateFragment" />
+
+    <action
+        android:id="@+id/navigate_to_template_fragment"
+        app:destination="@+id/templateFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.stack.chatroom.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="chatroom"
+            app:argType="com.example.stack.data.dataclass.Chatroom" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigate_to_chat_fragment"
+        app:destination="@+id/chatFragment" />
+
 </navigation>

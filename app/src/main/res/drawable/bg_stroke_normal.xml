@@ -1,0 +1,16 @@
+<!-- res/drawable/custom_stroke.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Color -->
+    <item android:drawable="@android:color/white" />
+
+    <!-- Stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="1dp"
+            android:color="@color/lightgrey"
+            />
+        </shape>
+    </item>
+</layer-list>
