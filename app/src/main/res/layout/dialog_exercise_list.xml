@@ -57,36 +57,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/searchText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/rubik_medium"
-                android:text="Search"
-                android:textColor="@color/lightgrey"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/searchIcon"
-                app:layout_constraintStart_toEndOf="@+id/searchIcon"
-                app:layout_constraintTop_toTopOf="@+id/searchIcon" />
-
-            <ImageView
-                android:id="@+id/searchIcon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/search"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <ImageView
                 android:id="@+id/filterIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/settings_sliders"
+                android:src="@drawable/filter"
+                app:tint = "@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -97,23 +75,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/rubik_medium"
-                android:text="Add Exercise"
+                android:text="Select Exercises"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cancel_action" />
-
-            <TextView
-                android:id="@+id/addExerciseSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:text="Workout creation"
-                android:textColor="@color/lightgrey"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addExerciseTitle" />
 
             <ImageView
                 android:id="@+id/cancel_action"
@@ -122,6 +88,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/cross"
+                app:tint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -132,8 +99,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/rubik_medium"
-                android:text="Next"
-                android:textColor="@color/lightBlue"
+                android:text="Add"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

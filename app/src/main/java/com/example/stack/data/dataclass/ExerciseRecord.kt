@@ -39,6 +39,7 @@ data class ExerciseRecordWithCheck(
     val startTime: Long,
     val exerciseId: String,
     val exerciseName: String,
+    var expand: Boolean = false,
     var repsAndWeights: MutableList<RepsAndWeightsWithCheck>
 )
 

@@ -2,6 +2,7 @@ package com.example.stack.home.workout
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -17,23 +18,44 @@ class WorkoutAdapter(
     val clickListener: (name: String, id: String) -> Unit,
     val yesOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
     val noOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
-    val addSetOnClick: (exercisePosition: Int) -> Unit
+    val addSetOnClick: (exercisePosition: Int) -> Unit,
+    val expandListener: (exercisePosition: Int)->Unit,
+    val deleteOnClick: (exercisePosition: Int, setPosition: Int) -> Unit
+
 ) : ListAdapter<ExerciseRecordWithCheck, WorkoutAdapter.WorkoutViewHolder>(DiffCallback) {
 
     inner class WorkoutViewHolder(val binding: ItemExerciseRecordBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(exerciseRecord: ExerciseRecordWithCheck) {
             binding.exerciseName.text = exerciseRecord.exerciseName
-            binding.exerciseName.setOnClickListener {
+            if(exerciseRecord.expand){
+                binding.repsRecyclerView.visibility = View.VISIBLE
+                binding.arrow.rotation = 90.0f
+                binding.addSetButton.visibility = View.VISIBLE
+                binding.infoImage.visibility = View.VISIBLE
+            }
+            else{
+                binding.repsRecyclerView.visibility = View.GONE
+                binding.arrow.rotation = 270.0f
+                binding.addSetButton.visibility = View.GONE
+                binding.infoImage.visibility = View.GONE
+
+            }
+            binding.arrow.setOnClickListener {
+                expandListener(absoluteAdapterPosition)
+            }
+            binding.infoImage.setOnClickListener {
                 clickListener(exerciseRecord.exerciseName, exerciseRecord.exerciseId)
             }
-            binding.addSet.setOnClickListener {
+            binding.addSetButton.setOnClickListener {
                 addSetOnClick(absoluteAdapterPosition)
                 notifyItemChanged(absoluteAdapterPosition)
             }
-            val adapter = WorkoutDetailAdapter(absoluteAdapterPosition, yesOnClick, noOnClick)
+            val adapter = WorkoutDetailAdapter(absoluteAdapterPosition, yesOnClick, noOnClick, deleteOnClick)
             binding.repsRecyclerView.adapter = adapter
             adapter.submitList(exerciseRecord.repsAndWeights)
+
+//            binding.repsRecyclerView.scrollToPosition()
         }
     }
 
@@ -56,7 +78,7 @@ class WorkoutAdapter(
 
         override fun areContentsTheSame(oldItem: ExerciseRecordWithCheck, newItem: ExerciseRecordWithCheck): Boolean {
 //            Log.i("workout", "areContentsTheSame")
-            return oldItem.repsAndWeights.compareContent(newItem.repsAndWeights)
+            return oldItem.repsAndWeights.compareContent(newItem.repsAndWeights) && oldItem.expand == newItem.expand
         }
 
         private fun <E> List<E>.compareContent(target: List<E>): Boolean {

@@ -11,6 +11,6 @@
     <!-- Adjust the radius to control the roundness -->
     <stroke
         android:width="3dp"
-    android:color="@color/lightgrey"
-    />
+    android:color="@color/lightgrey" />
+    <corners android:radius="10dp"/>
 </shape>

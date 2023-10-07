@@ -10,6 +10,6 @@
     <dimen name="size_payment_progress">24dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
     <dimen name="dimen_1">1dp</dimen>
-
+    <dimen name="chip_spacing">4dp</dimen>
 
 </resources>
