@@ -210,7 +210,6 @@ class TimerService : LifecycleService() {
         }
         val pendingIntent = PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
 
-
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

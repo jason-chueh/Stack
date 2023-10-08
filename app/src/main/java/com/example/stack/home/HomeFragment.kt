@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stack.NavigationDirections
+import com.example.stack.R
 import com.example.stack.databinding.FragmentHomeBinding
 import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,7 @@ class HomeFragment: Fragment() {
 //        viewModel.exerciseApi()
         viewModel.createChatroom()
 //        viewModel.exerciseApiRe()
-
+        binding.riseLottie.setColorFilter(ContextCompat.getColor(this.requireContext(), R.color.mediumBlue))
         val layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeWorkoutHistoryAdapter()
         binding.homeWorkoutRecyclerView.layoutManager = layoutManager
@@ -166,4 +167,24 @@ class HomeFragment: Fragment() {
         val dateFormat = SimpleDateFormat("d'\n' MMM", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
     }
+//    fun getTimeAgo(timestamp: Long): String {
+//        val currentTimeMillis = System.currentTimeMillis()
+//        val timeDifferenceMillis = currentTimeMillis - timestamp
+//
+//        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifferenceMillis)
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
+//        val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
+//        val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)
+//        val months = days / 30
+//        val years = days / 365
+//
+//        return when {
+//            years > 1 -> "$years years ago"
+//            months > 1 -> "$months months ago"
+//            days > 1 -> "$days days ago"
+//            hours > 1 -> "$hours hours ago"
+//            minutes > 1 -> "$minutes minutes ago"
+//            else -> "a few seconds ago"
+//        }
+//    }
 }

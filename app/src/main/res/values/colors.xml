@@ -66,4 +66,8 @@
     <color name="mediumBlack">#2B2E47</color>
     <color name="lightBlack">#484A67</color>
     <color name="darkGrey">#99999B</color>
+
+    <color name = "lightbrightBlue"> #bebdff</color>
+    <color name = "brightBlue"> #4a47ff</color>
+    <color name = "DarkbrightBlue"> #4a47ff</color>
 </resources>

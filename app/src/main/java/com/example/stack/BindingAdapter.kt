@@ -10,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.ImageViewTarget
@@ -36,6 +37,19 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
             .into(imgView)
     }
 }
+
+@BindingAdapter("gifImageResource")
+fun setGifImageResource(imageView: ImageView, resource: Int?) {
+    resource?.let {
+        val options = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.DATA) // Cache GIF data
+        Glide.with(imageView)
+            .load(it)
+            .apply(options)
+            .into(imageView)
+    }
+}
+
 
 //@BindingAdapter("imageUrl")
 //fun loadImageUrl(view: ImageView, imageUrl: String?) {

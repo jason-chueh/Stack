@@ -84,33 +84,34 @@ class UserFragment : Fragment() {
     }
 
     private fun setBarChartData(entries: List<BarEntry>) {
+        Log.i("bar chart", "$entries")
 
-        Log.i("line chart", "$entries")
+        val barDataSet = BarDataSet(entries, "Label for Bars") // Set a label for your dataset
+        val dataSets = listOf(barDataSet)
+        barDataSet.barBorderWidth =20f
+        barDataSet.barBorderColor = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
+        val barChart = binding.lineChart
+        barChart.data = BarData(dataSets)
 
-        //feed data
-        val lineDataSet = BarDataSet(entries, "")
-        val dataSets = listOf(lineDataSet)
-        binding.lineChart.data = BarData(dataSets)
-        //set line chart style
-//        lineDataSet.setDrawFilled(true)
-//        lineDataSet.fillDrawable =
-//            ContextCompat.getDrawable(requireContext(), R.drawable.blue_gradient)
-//        lineDataSet.lineWidth = 3f
-//        lineDataSet.circleColors =
-//            listOf(ContextCompat.getColor(requireContext(), R.color.darkestBlue))
+        val xAxis = barChart.xAxis
+        xAxis.valueFormatter = XAxisValueFormatter()
+        xAxis.isEnabled = true
 
-        binding.lineChart.xAxis.isEnabled = true
-        binding.lineChart.axisLeft.isEnabled = true
-        binding.lineChart.axisRight.isEnabled = true
-        binding.lineChart.setScaleEnabled(false)
-        binding.lineChart.xAxis.setDrawGridLines(false)
-        binding.lineChart.setDrawMarkers(false)
-        binding.lineChart.legend.isEnabled = false
-        binding.lineChart.description.text = ""
+        barChart.axisLeft.isEnabled = true
+        barChart.axisRight.isEnabled = true
+        barChart.setScaleEnabled(false)
+        barChart.xAxis.setDrawGridLines(false)
+        barChart.setDrawMarkers(false)
+        barChart.legend.isEnabled = false
 
-//        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        lineDataSet.color = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
-        binding.lineChart.animateXY(0, 3000)
+        // Remove the description label
+        barChart.description.isEnabled = false
+
+        // Customize bar appearance as needed
+        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
+
+        // Animate the chart if needed
+        barChart.animateXY(0, 3000)
     }
 
     private fun setExerciseLineChartData(entries: List<Entry>) {

@@ -70,7 +70,7 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
                 Pair(startTime, sum)
             }
             val resultEntries: List<BarEntry> = summedRecords.map { (startTime, sum) ->
-                BarEntry(((Calendar.getInstance().timeInMillis - startTime)/3600000).toFloat(), (sum/1000).toFloat())
+                BarEntry(startTime.toFloat(), (sum/1000).toFloat())
             }
 
             Log.i("mpAndroid","$resultEntries")

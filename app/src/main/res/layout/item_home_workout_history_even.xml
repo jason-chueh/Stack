@@ -44,7 +44,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/blue_gradient"
+        android:background="#1a1895"
         android:fontFamily="@font/rubik_medium"
         android:gravity="center"
 
