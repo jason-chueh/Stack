@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.ImageViewTarget
+import com.example.stack.util.capitalizeFirstLetterOfWords
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.lang.Math.abs
@@ -73,12 +74,12 @@ fun setInstructionList(textView: TextView, instructionList: List<String>) {
 }
 
 
-@SuppressLint("ResourceAsColor")
+@SuppressLint("ResourceAsColor", "ResourceType")
 @BindingAdapter("chips", "mainChip")
 fun setChips(chipGroup: ChipGroup, chipTextList: List<String>?, mainChip: String) {
     chipGroup.removeAllViews() // Clear existing chips
-    chipGroup.setChipSpacingHorizontalResource(R.dimen.dimen_16)
-
+    chipGroup.setChipSpacingHorizontalResource(R.dimen.chip_spacing)
+    chipGroup.chipSpacingVertical = R.dimen.chip_spacing
     val chipList = mutableListOf<String>()
     chipList.add(mainChip)
     if (chipTextList != null) {
@@ -89,7 +90,7 @@ fun setChips(chipGroup: ChipGroup, chipTextList: List<String>?, mainChip: String
     val font = ResourcesCompat.getFont(chipGroup.context, R.font.rubik_medium)
     chipList.forEach { chipText ->
         val chip = Chip(chipGroup.context)
-        chip.setChipBackgroundColorResource(R.color.lightBlue)
+        chip.setChipBackgroundColorResource(R.color.primaryColor)
         chip.setTextColor(textColor)
         chip.typeface = font
         chip.text = chipText
@@ -120,6 +121,11 @@ fun setImageResourceFromText(imageView: ImageView, inputText: String?) {
 fun showChatroomMessageTime(textView: TextView, inputTime: Long){
     val formattedTime = formatMessageTimestamp(inputTime)
     textView.text = formattedTime
+}
+
+@BindingAdapter("capitalize")
+fun capitalize(textView: TextView, inputText: String){
+    textView.text = inputText.capitalizeFirstLetterOfWords()
 }
 
 

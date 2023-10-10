@@ -38,6 +38,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/cross"
+                app:tint = "@color/onPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,8 +49,8 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.1"
-                android:text="EXERCISE"
-                android:textColor="@color/lightBlue"
+                android:text="Exercise"
+                android:textColor="@color/onPrimary"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/filterText"
                 app:layout_constraintTop_toBottomOf="@+id/filterText" />
@@ -58,13 +59,15 @@
                 android:id="@+id/exerciseGroup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                app:singleSelection="true"
                 android:layout_marginEnd="16dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exerciseGroupText"/>
+                app:layout_constraintTop_toBottomOf="@+id/exerciseGroupText"
+                app:singleSelection="true" />
 
             <TextView
                 android:id="@+id/statsGroupText"
@@ -74,8 +77,8 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.1"
-                android:text="STATS TYPE"
-                android:textColor="@color/lightBlue"
+                android:text="Stats Type"
+                android:textColor="@color/onPrimary"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/exerciseGroup" />
@@ -84,10 +87,10 @@
                 android:id="@+id/statsTypeGroup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
                 android:layout_marginTop="16dp"
                 app:singleSelection="true"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statsGroupText"/>
@@ -97,11 +100,11 @@
                 android:layout_width="200dp"
                 android:layout_height="60dp"
                 android:layout_marginBottom="50dp"
+                android:background="@drawable/round_corner_with_blue_gradient"
                 android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
-                android:text="APPLY"
-                android:background="@drawable/round_corner_with_blue_gradient"
-                android:textColor="@color/white"
+                android:text="Apply"
+                android:textColor="@color/primaryColor"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

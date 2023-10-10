@@ -12,6 +12,7 @@ import com.example.stack.data.dataclass.ExerciseRecordWithCheck
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.databinding.ItemExerciseRecordBinding
+import com.example.stack.util.capitalizeFirstLetterOfWords
 
 //adapter for workout main page
 class WorkoutAdapter(
@@ -27,7 +28,7 @@ class WorkoutAdapter(
     inner class WorkoutViewHolder(val binding: ItemExerciseRecordBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(exerciseRecord: ExerciseRecordWithCheck) {
-            binding.exerciseName.text = exerciseRecord.exerciseName
+            binding.exerciseName.text = exerciseRecord.exerciseName.capitalizeFirstLetterOfWords()
             if(exerciseRecord.expand){
                 binding.repsRecyclerView.visibility = View.VISIBLE
                 binding.arrow.rotation = 90.0f

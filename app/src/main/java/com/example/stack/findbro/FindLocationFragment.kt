@@ -68,7 +68,6 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         var userLat: String = ""
         var userLong: String = ""
 
-
         binding = FragmentFindLocationBinding.inflate(inflater, container, false)
         // Create a new PlacesClient instance
         placesClient = Places.createClient(this.requireContext())

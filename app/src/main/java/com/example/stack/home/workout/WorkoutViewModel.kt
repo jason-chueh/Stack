@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecordWithCheck
+import com.example.stack.data.dataclass.ExerciseWithCheck
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.Workout
 import com.example.stack.data.dataclass.WorkoutToTemplate
 import com.example.stack.data.dataclass.toExerciseRecord
+import com.example.stack.data.dataclass.toExerciseWithCheck
 import com.example.stack.data.dataclass.toTemplateExerciseRecord
 import com.example.stack.data.dataclass.toTemplateExerciseWithCheck
 import com.example.stack.login.UserManager
@@ -32,6 +34,7 @@ class WorkoutViewModel @AssistedInject constructor(
 ) :
     ViewModel() {
     val dataList = MutableLiveData<List<ExerciseRecordWithCheck>>()
+
     private var startTime = System.currentTimeMillis()
 
     val exerciseList = MutableLiveData<List<Exercise>>()
@@ -40,7 +43,7 @@ class WorkoutViewModel @AssistedInject constructor(
 
     val scrollToInnerPosition = MutableLiveData<IntPair>()
 
-    val filteredExerciseList = MutableLiveData<List<Exercise>>()
+    val filteredExerciseList = MutableLiveData<List<ExerciseWithCheck>>()
 
     val notifyItemChangePosition = MutableLiveData<Int>()
 
@@ -55,6 +58,14 @@ class WorkoutViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    val updateExerciseListCheck: (Int)-> Unit = {
+        position ->
+        val updateList = mutableListOf<ExerciseWithCheck>()
+        filteredExerciseList.value?.let { updateList.addAll(it) }
+        updateList[position] = updateList[position].copy(check = !updateList[position].check)
+        filteredExerciseList.value = updateList
     }
 
     @AssistedFactory
@@ -172,13 +183,23 @@ class WorkoutViewModel @AssistedInject constructor(
                 try {
                     val resultList = stackRepository.getAllExercise()
                     exerciseList.postValue(resultList)
-                    filteredExerciseList.postValue(resultList)
+                    filteredExerciseList.postValue(resultList.map{it.toExerciseWithCheck()})
                 } catch (e: Exception) {
                     Log.i("workout", "$e")
                 }
             }
         }
     }
+    fun addAllExercise(){
+        filteredExerciseList.value?.let{
+            filterListValue ->
+            val exerciseToAddList = filterListValue.filter{it.check}
+            for(i in exerciseToAddList){
+                addExerciseRecord(i.id, i.name)
+            }
+        }
+    }
+
 
 
     fun addExerciseRecord(exerciseId: String, exerciseName: String) {

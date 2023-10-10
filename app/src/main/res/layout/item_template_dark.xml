@@ -50,11 +50,11 @@
             android:layout_height="25dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
-            android:src="@drawable/angle_left"
             android:rotation="180"
+            android:src="@drawable/angle_left"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/lightBlue" />
+            app:tint="@color/onPrimary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

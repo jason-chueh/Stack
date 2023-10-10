@@ -13,5 +13,7 @@
     </style>
     <style name="LoginDialog">
         <item name="android:windowBackground">@color/translucent_40</item>
+        <item name="android:statusBarColor">@color/primaryColor</item>
+
     </style>
 </resources>

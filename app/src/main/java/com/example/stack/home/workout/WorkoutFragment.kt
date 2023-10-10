@@ -22,6 +22,7 @@ import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.databinding.DialogSaveTemplateBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
+import com.example.stack.home.workout.timer.TimerDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -137,7 +138,8 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         }
 
         binding.timerIcon.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToTimerFragment())
+            val dialog = TimerDialogFragment()
+            dialog.show(childFragmentManager, "TimerDialog")
         }
 
         binding.timerText.setOnClickListener {
@@ -196,10 +198,6 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
                 dialog.dismiss()
                 findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
             }
-        }
-
-        dialogBinding.cancelView.setOnClickListener {
-            dialog.dismiss()
         }
 
         dialogBinding.root.setOnClickListener {

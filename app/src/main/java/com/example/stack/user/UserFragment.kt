@@ -2,6 +2,7 @@ package com.example.stack.user
 
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -88,8 +89,8 @@ class UserFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Label for Bars") // Set a label for your dataset
         val dataSets = listOf(barDataSet)
-        barDataSet.barBorderWidth =20f
-        barDataSet.barBorderColor = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
+        barDataSet.barBorderWidth =15f
+        barDataSet.barBorderColor = ContextCompat.getColor(requireContext(), R.color.onTertiaryContainer)
         val barChart = binding.lineChart
         barChart.data = BarData(dataSets)
 
@@ -108,7 +109,7 @@ class UserFragment : Fragment() {
         barChart.description.isEnabled = false
 
         // Customize bar appearance as needed
-        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.darkestBlue)
+        barDataSet.color = ContextCompat.getColor(requireContext(), R.color.primaryColor)
 
         // Animate the chart if needed
         barChart.animateXY(0, 3000)
@@ -129,7 +130,7 @@ class UserFragment : Fragment() {
             ContextCompat.getDrawable(requireContext(), R.drawable.blue_gradient)
         lineDataSet.lineWidth = 3f
         lineDataSet.circleColors =
-            listOf(ContextCompat.getColor(requireContext(), R.color.darkestBlue))
+            listOf(ContextCompat.getColor(requireContext(), R.color.primaryColor))
         lineChart.xAxis.isEnabled = true
         lineChart.axisLeft.isEnabled = true
         lineChart.axisRight.isEnabled = true
@@ -179,42 +180,54 @@ class UserFragment : Fragment() {
         dialogBinding.cancelImage.setOnClickListener {
             dialog.dismiss()
         }
-        dialogBinding.exerciseGroup.setChipSpacingHorizontal(resources.getDimensionPixelSize(R.dimen.chip_spacing))
+//        dialogBinding.exerciseGroup.chipSpacingHorizontal = resources.getDimensionPixelSize(R.dimen.chip_spacing)
+        val backgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_background_color))
         if (exerciseNameList != null) {
             val sortedList = exerciseNameList.sortedBy { it.length }
             for (exerciseName in sortedList) {
                 // Create a new Chip
-                val chip = Chip(this.requireContext()) // "this" should be your activity or context
-                // Set Chip attributes
-                chip.id = View.generateViewId() // Assign a unique ID to each Chip
+//                val chip = Chip(this.requireContext()) // "this" should be your activity or context
+//                // Set Chip attributes
+//                chip.id = View.generateViewId() // Assign a unique ID to each Chip
+//                chip.text = exerciseName
+//                chip.isCheckable = true
+//                chip.setChipDrawable(
+//                    ChipDrawable.createFromAttributes(
+//                        this.requireContext(),
+//                        null,
+//                        0,
+//                        R.style.Widget_Material3_Chip_Filter_Elevated
+//                    )
+//                )
+//                chip.chipBackgroundColor = backgroundColor
+//                dialogBinding.exerciseGroup.addView(chip)
+                val chip = layoutInflater.inflate(R.layout.customize_chip_layout, null) as Chip
+                chip.id = View.generateViewId()
                 chip.text = exerciseName
-                chip.isCheckable = true
-                chip.setChipDrawable(
-                    ChipDrawable.createFromAttributes(
-                        this.requireContext(),
-                        null,
-                        0,
-                        R.style.Widget_Material3_Chip_Filter_Elevated
-                    )
-                )
                 dialogBinding.exerciseGroup.addView(chip)
             }
         }
-        dialogBinding.statsTypeGroup.chipSpacingHorizontal
+
+//        dialogBinding.statsTypeGroup.setChipSpacingHorizontal(resources.getDimensionPixelSize(R.dimen.chip_spacing))
         for (statsTypeName in listOf("maximum weight", "training volume")) {
-            val chip = Chip(this.requireContext()) // "this" should be your activity or context
-            // Set Chip attributes
-            chip.id = View.generateViewId() // Assign a unique ID to each Chip
+//            val chip = Chip(this.requireContext()) // "this" should be your activity or context
+//            // Set Chip attributes
+//            chip.id = View.generateViewId() // Assign a unique ID to each Chip
+//            chip.text = statsTypeName
+//            chip.isCheckable = true
+//            chip.setChipDrawable(
+//                ChipDrawable.createFromAttributes(
+//                    this.requireContext(),
+//                    null,
+//                    0,
+//                    R.style.Widget_Material3_Chip_Filter_Elevated
+//                )
+//            )
+//            chip.chipBackgroundColor = backgroundColor
+//            dialogBinding.statsTypeGroup.addView(chip)
+            val chip = layoutInflater.inflate(R.layout.customize_chip_layout, null) as Chip
+            chip.id = View.generateViewId()
             chip.text = statsTypeName
-            chip.isCheckable = true
-            chip.setChipDrawable(
-                ChipDrawable.createFromAttributes(
-                    this.requireContext(),
-                    null,
-                    0,
-                    R.style.Widget_Material3_Chip_Filter_Elevated
-                )
-            )
             dialogBinding.statsTypeGroup.addView(chip)
         }
 

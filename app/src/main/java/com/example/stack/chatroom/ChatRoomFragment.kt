@@ -22,10 +22,11 @@ class ChatRoomFragment: Fragment() {
     ): View? {
         binding = FragmentChatroomBinding.inflate(inflater, container, false)
         viewModel.getChatroom()
-        val adapter = ChatroomAdapter { chatroom ->
+        val adapter = ChatRoomAdapter { chatroom ->
             findNavController().navigate(NavigationDirections.navigateToChatFragment(chatroom))
         }
         binding.chatroomRecyclerView.adapter = adapter
+
         viewModel.chatrooms.observe(viewLifecycleOwner){
             adapter.submitList(it.sortedByDescending { it.lastMessageTime })
         }

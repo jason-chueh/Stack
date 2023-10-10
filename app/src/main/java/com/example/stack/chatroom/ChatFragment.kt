@@ -34,19 +34,24 @@ class ChatFragment : Fragment() {
         val adapter = UserManager.user?.id?.let { ChatAdapter(it) }
         var sender: String
         var receiver: String
+        var picture: String?
         if(UserManager.user?.id == chatroom.userId1){
             sender = chatroom.userId1 //user is the sender
-            receiver = chatroom.userId2
+            receiver = chatroom.userName[1]
+            picture = chatroom.userPic[1]
         }
         else{
             sender = chatroom.userId2
-            receiver = chatroom.userId1
+            receiver = chatroom.userName[0]
+            picture = chatroom.userPic[0]
         }
 
         viewModel.addListener(chatroom.roomId)
 
-
         binding = FragmentChatBinding.inflate(inflater, container, false)
+
+        binding.imageUrl = picture
+
         binding.imageBack.setOnClickListener {
             findNavController().navigateUp()
         }

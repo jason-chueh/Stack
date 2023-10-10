@@ -3,11 +3,11 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_selector"
-        android:title=""/>
+        android:title="DashBoard"/>
     <item
         android:id="@+id/navigation_user"
         android:icon="@drawable/chart_histogram"
-        android:title=""/>
+        android:title="Stats"/>
 
     <item
         android:id="@+id/navigation_plan"
@@ -17,10 +17,10 @@
     <item
         android:id="@+id/navigation_position"
         android:icon="@drawable/messages"
-        android:title=""/>
+        android:title="Chatroom"/>
 
     <item
         android:id="@+id/navigation_find_bro"
         android:icon="@drawable/find_bro_selector"
-        android:title=""/>
+        android:title="GymBro"/>
 </menu>

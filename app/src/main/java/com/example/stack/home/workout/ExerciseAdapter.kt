@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.R
 import com.example.stack.data.dataclass.Exercise
+import com.example.stack.data.dataclass.ExerciseWithCheck
 import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.ItemExerciseBinding
 //adapter for exercise list (dialog)
-class ExerciseAdapter(val clickListener: (String, String) -> Unit): ListAdapter<Exercise, ExerciseAdapter.ExerciseViewHolder>(DiffCallback) {
-    private var selectedPosition = RecyclerView.NO_POSITION
-    private var previousSelectedPosition = RecyclerView.NO_POSITION
-    inner class ExerciseViewHolder(val binding: ItemExerciseBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(exercise: Exercise){
-            binding.exercise = exercise
-            if(selectedPosition == absoluteAdapterPosition){
+class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<ExerciseWithCheck, ExerciseAdapter.ExerciseViewHolder>(DiffCallback) {
 
-                val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.lightOrange)
+    inner class ExerciseViewHolder(val binding: ItemExerciseBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(exercise: ExerciseWithCheck){
+            binding.exercise = exercise
+            if(exercise.check){
+
+                val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.lightGreen)
                 binding.root.setBackgroundColor(resolvedColor)
                 val textColor = ContextCompat.getColor(binding.root.context, R.color.black)
                 binding.exerciseNameInDialog.setTextColor(textColor)
@@ -39,14 +39,8 @@ class ExerciseAdapter(val clickListener: (String, String) -> Unit): ListAdapter<
             binding.exerciseNameInDialog.text = exercise.name
             binding.root.setOnClickListener{
                 Log.i("filter","${exercise.name},  ${exercise.id}")
-                clickListener(exercise.id, exercise.name)
-                selectedPosition = absoluteAdapterPosition
-                notifyItemChanged(selectedPosition)
-                if(previousSelectedPosition != -1){
-                    notifyItemChanged(previousSelectedPosition)
-                }
-                previousSelectedPosition = selectedPosition
-
+                clickListener(absoluteAdapterPosition)
+                notifyItemChanged(absoluteAdapterPosition)
             }
         }
     }
@@ -61,11 +55,11 @@ class ExerciseAdapter(val clickListener: (String, String) -> Unit): ListAdapter<
         holder.bind(exerciseRecord)
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Exercise>() {
-        override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<ExerciseWithCheck>() {
+        override fun areItemsTheSame(oldItem: ExerciseWithCheck, newItem: ExerciseWithCheck): Boolean {
             return oldItem.id == newItem.id
         }
-        override fun areContentsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
+        override fun areContentsTheSame(oldItem: ExerciseWithCheck, newItem: ExerciseWithCheck): Boolean {
             return oldItem == newItem
         }
     }

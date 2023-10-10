@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.databinding.FragmentHomeBinding
+import com.example.stack.home.template.ChooseTemplateDialog
 import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -41,7 +42,9 @@ class HomeFragment: Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.fab.setOnClickListener{
-            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+//            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+            val chooseTemplateDialog = ChooseTemplateDialog()
+            chooseTemplateDialog.show(childFragmentManager, "")
         }
         viewModel.upsertTemplate()
 //        viewModel.searchTemplateByUserId()

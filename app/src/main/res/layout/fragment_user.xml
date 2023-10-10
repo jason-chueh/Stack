@@ -14,15 +14,17 @@
         android:background="@drawable/medium_blue_gradient"
         app:layout_constraintBottom_toTopOf="@+id/view10"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_medium"
         android:text="Statistics"
         android:textColor="@color/white"
@@ -128,7 +130,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@color/surfaceVariant">
 
                     <ImageView
                         android:id="@+id/imageView6"
@@ -139,7 +142,7 @@
                         android:src="@drawable/check_circle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/mediumBlue" />
+                        app:tint="@color/onSurfaceVariant" />
 
                     <TextView
                         android:id="@+id/workoutCompletedNum"
@@ -150,6 +153,7 @@
                         android:fontFamily="@font/questrial"
                         android:text="TextView"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +168,7 @@
                         android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="workouts completed"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/workoutCompletedNum"
@@ -190,6 +194,7 @@
                     android:id="@+id/constraintLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/surfaceVariant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintTop_toBottomOf="@+id/view12">
@@ -203,7 +208,7 @@
                         android:src="@drawable/gym_1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/mediumBlue" />
+                        app:tint="@color/onSurfaceVariant" />
 
                     <TextView
                         android:id="@+id/tonLifted"
@@ -213,6 +218,7 @@
                         android:fontFamily="@font/questrial"
                         android:text="TextView"
                         android:textAlignment="textStart"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@+id/imageView61"
@@ -226,7 +232,7 @@
                         android:fontFamily="@font/rubik_medium"
                         android:text="kg"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/tonLifted"
                         app:layout_constraintStart_toEndOf="@+id/tonLifted" />
@@ -239,7 +245,7 @@
                         android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="tonnage lifted"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/tonLifted"
@@ -266,6 +272,8 @@
                     android:id="@+id/constraintLayout8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/surfaceVariant"
+
                     app:layout_constraintEnd_toStartOf="@+id/constraintLayout7"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -280,7 +288,7 @@
                         android:src="@drawable/time_quarter_past"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/mediumBlue" />
+                        app:tint="@color/onSurfaceVariant" />
 
                     <TextView
                         android:id="@+id/avgWorkoutTime"
@@ -291,6 +299,7 @@
                         android:text="TextView"
                         android:textSize="24sp"
                         android:textStyle="bold"
+                        android:textColor="@color/onSurfaceVariant"
                         app:layout_constraintStart_toEndOf="@+id/imageView62"
                         app:layout_constraintTop_toTopOf="@+id/imageView62" />
 
@@ -302,7 +311,7 @@
                         android:fontFamily="@font/rubik_medium"
                         android:text="h"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/avgWorkoutTime"
                         app:layout_constraintStart_toEndOf="@+id/avgWorkoutTime" />
@@ -315,7 +324,7 @@
                         android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="avg workout duration"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/avgWorkoutTime"
@@ -342,6 +351,7 @@
                     android:id="@+id/constraintLayout7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/surfaceVariant"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/constraintLayout8"
@@ -356,7 +366,7 @@
                         android:src="@drawable/hourglass_start"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/mediumBlue" />
+                        app:tint="@color/onSurfaceVariant" />
 
                     <TextView
                         android:id="@+id/avgRestTime"
@@ -378,7 +388,7 @@
                         android:fontFamily="@font/rubik_medium"
                         android:text="min"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/avgRestTime"
                         app:layout_constraintStart_toEndOf="@+id/avgRestTime" />
@@ -391,7 +401,7 @@
                         android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="avg rest time"
-                        android:textColor="@color/lightgrey"
+                        android:textColor="@color/onSurfaceVariant"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/avgRestTime"

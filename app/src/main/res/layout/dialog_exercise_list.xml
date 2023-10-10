@@ -39,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:letterSpacing="0.15"
-                android:text="LIBRARY"
+                android:text="Library"
                 android:textColor="@color/lightgrey"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -51,8 +50,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/blue_gradient"
+            android:layout_height="120dp"
+            android:background="@color/primaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -62,24 +61,24 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
                 android:src="@drawable/filter"
-                app:tint = "@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/addExerciseTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/addExerciseTitle"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/addExerciseTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:text="Select Exercises"
                 android:textColor="@color/white"
                 android:textSize="30sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cancel_action" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/cancel_action"
@@ -88,9 +87,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/cross"
-                app:tint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/next"

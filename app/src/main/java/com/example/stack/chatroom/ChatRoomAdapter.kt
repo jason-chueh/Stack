@@ -6,13 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.data.dataclass.Chatroom
-import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.ItemChatroomBinding
-import com.example.stack.databinding.ItemGymbroBinding
 import com.example.stack.login.UserManager
 
-class ChatroomAdapter(val onClick: (Chatroom)->Unit) :
-    ListAdapter<Chatroom, ChatroomAdapter.ChatroomViewHolder>(DiffCallback) {
+class ChatRoomAdapter(val onClick: (Chatroom)->Unit) :
+    ListAdapter<Chatroom, ChatRoomAdapter.ChatroomViewHolder>(DiffCallback) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatroomViewHolder {

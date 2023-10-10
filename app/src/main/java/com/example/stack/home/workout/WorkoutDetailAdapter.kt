@@ -47,7 +47,7 @@ class WorkoutDetailAdapter(
             val black = ContextCompat.getColor(binding.root.context, R.color.black)
 
             if(isChecked){
-                binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.lightOrange))
+                binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.lightGreen))
 //                binding.repsCount.setText(repsAndWeights.reps.toString())
 //                binding.kgCount.setText(repsAndWeights.weight.toString())
                 binding.yesButton.setColorFilter(blue)

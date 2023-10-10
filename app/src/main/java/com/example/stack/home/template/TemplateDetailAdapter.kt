@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.databinding.ItemTemplateDetailBinding
+import com.example.stack.util.capitalizeFirstLetterOfWords
 
 class TemplateDetailAdapter : ListAdapter<TemplateExerciseRecord, TemplateDetailAdapter.TemplateViewHolder>(TemplateExerciseRecordDiffCallback()) {
 
@@ -23,7 +24,7 @@ class TemplateDetailAdapter : ListAdapter<TemplateExerciseRecord, TemplateDetail
 
     inner class TemplateViewHolder(private val binding: ItemTemplateDetailBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindTemplate(template: TemplateExerciseRecord) {
-            binding.exerciseNameText.text = template.exerciseName
+            binding.exerciseNameText.text = template.exerciseName.capitalizeFirstLetterOfWords()
             binding.setNumber.text = template.repsAndWeights.size.toString()
         }
     }

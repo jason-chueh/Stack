@@ -124,6 +124,7 @@ class TimerService : LifecycleService() {
 
                 val notification = curNotificationBuilder.setContentText("Times up! Keep grinding in Stack by click")
 
+
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.notify(NOTIFICATION_ID, notification.build())
 

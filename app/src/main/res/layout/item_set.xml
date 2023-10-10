@@ -23,6 +23,7 @@
         android:layout_marginStart="16dp"
         android:gravity="center"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/yesButton"
         app:layout_constraintStart_toEndOf="@id/yesButton"
@@ -33,17 +34,16 @@
         style="@style/recordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginEnd="4dp"
         android:fontFamily="@font/questrial"
         android:inputType="number"
-        android:textSize="30sp"
         android:maxLength="3"
+        android:textColor="@color/black"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/setCount"
         app:layout_constraintEnd_toStartOf="@id/kgText"
         app:layout_constraintTop_toTopOf="@id/setCount"
-        app:layout_constraintWidth_max="60dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintWidth_max="60dp" />
 
     <TextView
         android:id="@+id/kgText"
@@ -81,15 +81,15 @@
         style="@style/recordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
         android:layout_marginEnd="4dp"
         android:fontFamily="@font/questrial"
         android:inputType="number"
+        android:maxLength="2"
+        android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/kgCount"
         app:layout_constraintEnd_toStartOf="@id/repsText"
         app:layout_constraintTop_toTopOf="@id/kgCount"
-        android:maxLength="2"
         app:layout_constraintWidth_max="50dp" />
 
 

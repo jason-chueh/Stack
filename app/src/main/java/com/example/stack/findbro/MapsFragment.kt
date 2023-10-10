@@ -23,6 +23,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.DialogBroChattingBinding
@@ -159,6 +161,7 @@ class MapsFragment : Fragment() ,OnMapReadyCallback, GoogleMap.OnMyLocationButto
         }
         dialogBinding.chatButton.setOnClickListener {
             viewModel.createChatroom(user)
+            findNavController().navigate(NavigationDirections.navigateToChatroomFragment())
             dialog.dismiss()
         }
         dialogBinding.user = user

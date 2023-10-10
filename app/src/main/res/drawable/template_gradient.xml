@@ -7,7 +7,7 @@
         android:type="linear"
         android:angle="270"/>
     <stroke
-        android:color="@color/brightBlue"
+        android:color="@color/primaryColor"
         android:width="2dp"
         />
     <corners

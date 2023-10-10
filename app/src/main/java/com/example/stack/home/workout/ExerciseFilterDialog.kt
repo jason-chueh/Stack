@@ -9,21 +9,25 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.stack.R
+import com.example.stack.data.dataclass.toExerciseWithCheck
 import com.example.stack.databinding.DialogExerciseFilterBinding
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 @AndroidEntryPoint
-class ExerciseFilterDialog: AppCompatDialogFragment() {
+class ExerciseFilterDialog : AppCompatDialogFragment() {
     lateinit var binding: DialogExerciseFilterBinding
+
     @Inject
     lateinit var factory: WorkoutViewModel.Factory
-    private val viewModel: WorkoutViewModel by activityViewModels{
+    private val viewModel: WorkoutViewModel by activityViewModels {
         WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.LoginDialog)
-        Log.i("workout","dialog: $viewModel")
+        Log.i("workout", "dialog: $viewModel")
 
         super.onCreate(savedInstanceState)
     }
@@ -41,33 +45,34 @@ class ExerciseFilterDialog: AppCompatDialogFragment() {
         }
         binding.applyButton.setOnClickListener {
             val muscleGroupIdList = binding.muscleGroup.checkedChipIds
-            muscleGroupIdList.forEach{
-                id -> val chip = binding.muscleGroup.findViewById<Chip>(id)
+            muscleGroupIdList.forEach { id ->
+                val chip = binding.muscleGroup.findViewById<Chip>(id)
                 val chipText = chip.text.toString()
-                if(chip.isChecked){
+                if (chip.isChecked) {
                     selectedMuscleChipsSet.add(chipText)
-                }
-                else{
+                } else {
                     selectedMuscleChipsSet.remove(chipText)
                 }
             }
             val equipmentGroupIdList = binding.equipmentGroup.checkedChipIds
-            equipmentGroupIdList.forEach{
-                    id -> val chip = binding.equipmentGroup.findViewById<Chip>(id)
+            equipmentGroupIdList.forEach { id ->
+                val chip = binding.equipmentGroup.findViewById<Chip>(id)
                 val chipText = chip.text.toString()
-                if(chip.isChecked){
+                if (chip.isChecked) {
                     selectedEquipmentChipsSet.add(chipText)
-                }
-                else{
+                } else {
                     selectedEquipmentChipsSet.remove(chipText)
                 }
             }
-            Log.i("filter","${viewModel.exerciseList.value}")
-            val filteredList =  viewModel.exerciseList.value?.filter {
-                exercise -> (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag -> selectedMuscleChipsSet.contains(tag)}) && exercise.equipment in selectedEquipmentChipsSet
+            Log.i("filter", "${viewModel.exerciseList.value}")
+            val filteredList = viewModel.exerciseList.value?.filter { exercise ->
+                (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag ->
+                    selectedMuscleChipsSet.contains(
+                        tag
+                    )
+                }) && exercise.equipment in selectedEquipmentChipsSet
             }
-
-            viewModel.filteredExerciseList.value = filteredList
+            viewModel.filteredExerciseList.value = filteredList?.map { it.toExerciseWithCheck() }
 
             dismiss()
         }

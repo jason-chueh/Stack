@@ -44,9 +44,7 @@ class ExerciseDetailFragment : Fragment() {
     ): View? {
         binding = FragmentExerciseDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        Glide.with(this)
-            .load("https://v2.exercisedb.io/image/Ef62PQAd3KeylT")
-            .into(binding.gifImageView)
+
         val layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         val adapter = ExerciseDetailAdapter{
