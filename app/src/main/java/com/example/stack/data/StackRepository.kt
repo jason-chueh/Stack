@@ -26,7 +26,7 @@ interface StackRepository {
 
     suspend fun refreshExerciseDb()
 
-    suspend fun exerciseApiToDb()
+    suspend fun exerciseApiToFireStore()
 
     suspend fun getAllExercise(): List<Exercise>
 
@@ -78,4 +78,7 @@ interface StackRepository {
 
     fun uploadUserToFireStore(user: User)
 
+    suspend fun deleteAllTemplate()
+
+    suspend fun deleteYoutubeById(id: String)
 }

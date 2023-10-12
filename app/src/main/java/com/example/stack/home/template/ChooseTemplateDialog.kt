@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.R
+import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.databinding.DialogChooseTemplateBinding
 import com.example.stack.databinding.DialogSaveTemplateBinding
 
@@ -35,7 +36,9 @@ class ChooseTemplateDialog: AppCompatDialogFragment() {
             dialog?.dismiss()
         }
         binding.blankWorkout.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToWorkoutFragment(null))
+            findNavController().navigate(NavigationDirections.navigateToWorkoutFragment(
+                mutableListOf<TemplateExerciseRecord>().toTypedArray()
+            ))
             dialog?.dismiss()
         }
         binding.templateWorkout.setOnClickListener {

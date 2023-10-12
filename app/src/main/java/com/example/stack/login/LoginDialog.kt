@@ -41,10 +41,18 @@ class LoginDialog : AppCompatDialogFragment() {
     ): View? {
 
         binding = DialogLoginBinding.inflate(inflater, container, false)
+
         binding.layoutLogin.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_slide_up))
 
         binding.lifecycleOwner = viewLifecycleOwner
+
         binding.viewModel = viewModel
+
+        binding.buttonLoginNative.setOnClickListener {
+            if(!binding.editLoginName.text.isNullOrBlank()){
+                viewModel.nativeLogin(binding.editLoginName.text.toString())
+            }
+        }
 
         val mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 

@@ -78,7 +78,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
     // the Coroutine runs using the Main (UI) dispatcher
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    fun nativeLogin(){
+    fun nativeLogin(displayName: String){
         viewModelScope.launch {
             if(email.value!=null && password.value!=null){
             auth.signInWithEmailAndPassword(email.value!!, password.value!!)
@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                         leave()
                     } else {
                         _loginErrorToast.value = true
-                        createAccount(email.value!!, password.value!!)
+                        createAccount(email.value!!, password.value!!, displayName)
                         // If sign in fails, display a message to the user.
                         Log.i("signin", "createUserWithEmail:failure")
                     }
@@ -106,22 +106,22 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
         }
     }
 
-    private fun createAccount(email: String, password: String) {
+    private fun createAccount(email: String, password: String, displayName: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.i("login", "createUserWithEmail:success")
+                    Log.i("login", "${auth.currentUser?.uid}")
                     val user = auth.currentUser
                     if(UserManager.user == null){
-                        UserManager.user = User(user!!.uid, user.displayName!!, user.email!!)
+                        UserManager.user = User(user!!.uid, displayName , email)
                     }
                     coroutineScope.launch {
                         UserManager.user?.let { stackRepository.upsertUser(it) }
                         UserManager.user?.let{stackRepository.uploadUserToFireStore(it)}
                     }
-
                     leave()
                 } else {
                     // If sign in fails, display a message to the user.

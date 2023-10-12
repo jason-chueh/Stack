@@ -26,8 +26,10 @@ import com.example.stack.home.template.ChooseTemplateDialog
 import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class HomeFragment: Fragment() {
@@ -46,13 +48,14 @@ class HomeFragment: Fragment() {
             val chooseTemplateDialog = ChooseTemplateDialog()
             chooseTemplateDialog.show(childFragmentManager, "")
         }
-        viewModel.upsertTemplate()
+//        viewModel.deleteYoutube()
+//        viewModel.deleteAllTemplate()
+//        viewModel.upsertTemplate()
 //        viewModel.searchTemplateByUserId()
-        viewModel.upsertTemplateExerciseRecordList()
+//        viewModel.upsertTemplateExerciseRecordList()
 //        viewModel.exerciseApi()
-        viewModel.createChatroom()
+//        viewModel.createChatroom()
 //        viewModel.exerciseApiRe()
-        binding.riseLottie.setColorFilter(ContextCompat.getColor(this.requireContext(), R.color.mediumBlue))
         val layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val adapter = HomeWorkoutHistoryAdapter()
         binding.homeWorkoutRecyclerView.layoutManager = layoutManager
@@ -67,17 +70,23 @@ class HomeFragment: Fragment() {
                 binding.totalWorkoutNum.text = it.size.toString()
                 if(it.size > 0){
                     binding.previousWorkoutName.text = it.sortedByDescending{ it.startTime }[0].workoutName
-                    binding.datePreviousWorkout.text = formatTimestamp(it.sortedByDescending{ it.startTime }[0].startTime)
+                    val lastTime = it.sortedByDescending{ it.startTime }[0].startTime
+                    binding.datePreviousWorkout.text = formatTimestamp(lastTime)
+                    binding.daysAgo.text = getTimeAgo(lastTime)
                 }
                 else{
                     binding.previousWorkoutName.text = "No workout history"
                     binding.datePreviousWorkout.text = "?"
+                    binding.daysAgo.text = "?"
                 }
                 adapter.submitList(it.sortedByDescending { it.startTime })
             }
         }
         viewModel.userExerciseRecords.observe(viewLifecycleOwner){
-
+            val totalWeight = viewModel.getTotalWeight()
+            totalWeight?.let{
+                binding.totalWeightNum.text = totalWeight.toString()
+            }
         }
 
 
@@ -170,24 +179,24 @@ class HomeFragment: Fragment() {
         val dateFormat = SimpleDateFormat("d'\n' MMM", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
     }
-//    fun getTimeAgo(timestamp: Long): String {
-//        val currentTimeMillis = System.currentTimeMillis()
-//        val timeDifferenceMillis = currentTimeMillis - timestamp
-//
-//        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifferenceMillis)
-//        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
-//        val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
-//        val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)
-//        val months = days / 30
-//        val years = days / 365
-//
-//        return when {
-//            years > 1 -> "$years years ago"
-//            months > 1 -> "$months months ago"
-//            days > 1 -> "$days days ago"
-//            hours > 1 -> "$hours hours ago"
-//            minutes > 1 -> "$minutes minutes ago"
-//            else -> "a few seconds ago"
-//        }
-//    }
+    fun getTimeAgo(timestamp: Long): String {
+        val currentTimeMillis = System.currentTimeMillis()
+        val timeDifferenceMillis = currentTimeMillis - timestamp
+
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifferenceMillis)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
+        val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
+        val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)
+        val months = days / 30
+        val years = days / 365
+
+        return when {
+            years > 1 -> "$years years"
+            months > 1 -> "$months months"
+            days > 1 -> "$days days"
+            hours > 1 -> "$hours hr"
+            minutes > 1 -> "$minutes min"
+            else -> "seconds"
+        }
+    }
 }

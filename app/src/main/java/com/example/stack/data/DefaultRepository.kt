@@ -106,7 +106,6 @@ class DefaultRepository @Inject constructor(
                 for (document in result) {
                     exerciseList.add(document.toObject<ExerciseFromFireStore>().toExercise())
                 }
-
                 Log.i("api", "refreshExerciseDb: $exerciseList")
                 Log.i("api", "refreshExerciseDb: ${exerciseList.size}")
 
@@ -120,7 +119,7 @@ class DefaultRepository @Inject constructor(
     }
 
     //Get all the exercise from API, and send it to fireStore
-    override suspend fun exerciseApiToDb() {
+    override suspend fun exerciseApiToFireStore() {
         try {
             for (k in listOf<String>(
                 "barbell",
@@ -134,7 +133,7 @@ class DefaultRepository @Inject constructor(
                 val result = StackApi.retrofitService.getExerciseByEquipment(
                     k, BuildConfig.EXERCISE_KEY,
                     "exercisedb.p.rapidapi.com",
-                    20
+                    100
                 )
                 Log.i("api", "$result")
                 Log.i("api", "${result.size}")
@@ -354,6 +353,15 @@ class DefaultRepository @Inject constructor(
         }.addOnFailureListener {
             Log.i("user","$it")
         }
+    }
+
+    override suspend fun deleteAllTemplate() {
+        templateDao.deleteAllTemplate()
+        templateExerciseRecordDao.deleteAllTemplateExerciseRecords()
+    }
+
+    override suspend fun deleteYoutubeById(id: String) {
+        exerciseYoutubeDao.deleteYoutubeById(id)
     }
 
 }

@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:background="@drawable/dark_blue_gradient">
 
         <TextView
@@ -96,10 +96,10 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:src="@drawable/crown"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/prNum"
             app:layout_constraintStart_toStartOf="@+id/imageView11"
-            app:layout_constraintTop_toTopOf="@+id/prNum" />
+            app:layout_constraintTop_toTopOf="@+id/prNum"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/prNum"
@@ -108,7 +108,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/rubik_medium"
-            android:text="PR"
+            android:text="0"
             android:textColor="@color/lightGrey"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/imageView7"

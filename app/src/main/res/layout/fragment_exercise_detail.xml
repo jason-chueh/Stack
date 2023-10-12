@@ -61,7 +61,9 @@
                 android:id="@+id/view3"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
-                android:background="@color/lightGrey"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/secondaryContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,32 +77,36 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:text="@string/muscles_involved"
-                android:textColor="@color/lightgrey"
+                android:textColor="@color/primaryColor"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:chipSpacingVertical="4dp"
+                android:layout_marginEnd="16dp"
+                app:chips="@{viewModel.exercise.secondaryMuscles}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:chips="@{viewModel.exercise.secondaryMuscles}"
-                app:mainChip="@{viewModel.exercise.target}"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:mainChip="@{viewModel.exercise.target}">
 
             </com.google.android.material.chip.ChipGroup>
 
 
             <View
                 android:id="@+id/view4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="2dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/lightGrey"
+                android:layout_marginEnd="16dp"
+                android:background="@color/secondaryContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,24 +120,25 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:text="@string/instructions"
-                android:textColor="@color/lightgrey"
+                android:textColor="@color/primaryColor"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <TextView
                 android:id="@+id/instructions"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.05"
                 android:lineSpacingExtra="8sp"
                 android:text="TextView"
-                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:instructionList="@{viewModel.exercise.instructions}"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instructionText" />
             <!--        android:nestedScrollingEnabled="false"-->
@@ -146,9 +153,11 @@
 
             <View
                 android:id="@+id/view5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="2dp"
-                android:background="@color/lightGrey"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/secondaryContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instructions" />
@@ -161,7 +170,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:text="Youtube Tutorial"
-                android:textColor="@color/lightgrey"
+                android:textColor="@color/primaryColor"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />

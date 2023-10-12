@@ -114,11 +114,11 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
 
-                R.id.navigation_plan -> {
-
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
-                    return@setOnItemSelectedListener true
-                }
+//                R.id.navigation_plan -> {
+//
+//                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
+//                    return@setOnItemSelectedListener true
+//                }
 
                 R.id.navigation_position -> {
 

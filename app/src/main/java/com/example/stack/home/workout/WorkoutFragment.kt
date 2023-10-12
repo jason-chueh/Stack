@@ -143,7 +143,8 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         }
 
         binding.timerText.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToTimerFragment())
+            val dialog = TimerDialogFragment()
+            dialog.show(childFragmentManager, "TimerDialog")
         }
 
         binding.pencil.setOnClickListener {
@@ -155,7 +156,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         }
 
         binding.cancel.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+            findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             viewModel.cancelWorkout()
         }
 
@@ -188,7 +189,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithSaveTemplate(binding.workoutTitleText.text.toString())
                 dialog.dismiss()
-                findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
 
@@ -196,7 +197,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithoutSaveTemplate(binding.workoutTitleText.text.toString())
                 dialog.dismiss()
-                findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
+                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
 

@@ -20,7 +20,7 @@ class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<ExerciseWit
             binding.exercise = exercise
             if(exercise.check){
 
-                val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.lightGreen)
+                val resolvedColor = ContextCompat.getColor(binding.root.context, R.color.secondaryContainer)
                 binding.root.setBackgroundColor(resolvedColor)
                 val textColor = ContextCompat.getColor(binding.root.context, R.color.black)
                 binding.exerciseNameInDialog.setTextColor(textColor)

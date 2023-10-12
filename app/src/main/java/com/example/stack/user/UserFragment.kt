@@ -20,6 +20,7 @@ import com.example.stack.data.dataclass.Workout
 import com.example.stack.databinding.DialogExerciseStatsBinding
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.example.stack.databinding.FragmentUserBinding
+import com.example.stack.util.capitalizeFirstLetterOfWords
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -56,7 +57,6 @@ class UserFragment : Fragment() {
         viewModel.getUserWorkoutData()
 
 
-        val dataList = listOf(Entry(1f, 2f), Entry(3f, 4f), Entry(5f, 6f))
 //        setLineChartData(dataList)
 
         viewModel.userExerciseRecords.observe(viewLifecycleOwner) { it ->
@@ -64,7 +64,7 @@ class UserFragment : Fragment() {
                 val entryList = viewModel.getExerciseEntry()
                 entryList?.let { setBarChartData(it.sortedBy { it.x }) }
                 viewModel.sumUpExerciseRecords()
-                setExerciseLineChartData(viewModel.maximumWeightExerciseData("barbell bench press"))
+//                setExerciseLineChartData(viewModel.maximumWeightExerciseData("barbell bench press"))
                 binding.exerciseLineChart.invalidate()
             }
         }
@@ -89,8 +89,8 @@ class UserFragment : Fragment() {
 
         val barDataSet = BarDataSet(entries, "Label for Bars") // Set a label for your dataset
         val dataSets = listOf(barDataSet)
-        barDataSet.barBorderWidth =15f
-        barDataSet.barBorderColor = ContextCompat.getColor(requireContext(), R.color.onTertiaryContainer)
+        barDataSet.barBorderWidth =5f
+        barDataSet.barBorderColor = ContextCompat.getColor(requireContext(), R.color.primaryColor)
         val barChart = binding.lineChart
         barChart.data = BarData(dataSets)
 
@@ -249,8 +249,8 @@ class UserFragment : Fragment() {
                 }
                 setExerciseLineChartData(filteredData)
                 binding.exerciseLineChart.invalidate()
-                val titleString = "$selectedExerciseName (${selectedStatsName})"
-                binding.exerciseTitle.text = titleString
+                val titleString = "$selectedExerciseName $selectedStatsName"
+                binding.exerciseTitle.text = titleString.capitalizeFirstLetterOfWords()
                 dialog.dismiss()
             }
         }

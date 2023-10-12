@@ -47,7 +47,7 @@ class WorkoutDetailAdapter(
             val black = ContextCompat.getColor(binding.root.context, R.color.black)
 
             if(isChecked){
-                binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.lightGreen))
+                binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.secondaryContainer))
 //                binding.repsCount.setText(repsAndWeights.reps.toString())
 //                binding.kgCount.setText(repsAndWeights.weight.toString())
                 binding.yesButton.setColorFilter(blue)
@@ -68,6 +68,7 @@ class WorkoutDetailAdapter(
                     Log.i("workout", "yes")
                     val reps = binding.repsCount.text.toString().toInt()
                     val kg = binding.kgCount.text.toString().toInt()
+
 
                     yesOnClick(exercisePosition, absoluteAdapterPosition, RepsAndWeightsWithCheck(reps, kg, true))
                     notifyItemChanged(absoluteAdapterPosition)

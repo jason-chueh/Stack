@@ -9,18 +9,18 @@
         android:icon="@drawable/chart_histogram"
         android:title="Stats"/>
 
+<!--    <item-->
+<!--        android:id="@+id/navigation_plan"-->
+<!--        android:icon="@drawable/gym_selector"-->
+<!--        android:title=""/>-->
     <item
-        android:id="@+id/navigation_plan"
-        android:icon="@drawable/gym_selector"
-        android:title=""/>
+        android:id="@+id/navigation_find_bro"
+        android:icon="@drawable/find_bro_selector"
+        android:title="GymBro"/>
 
     <item
         android:id="@+id/navigation_position"
         android:icon="@drawable/messages"
         android:title="Chatroom"/>
 
-    <item
-        android:id="@+id/navigation_find_bro"
-        android:icon="@drawable/find_bro_selector"
-        android:title="GymBro"/>
 </menu>

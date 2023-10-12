@@ -78,7 +78,7 @@
                 android:src="@drawable/clock_three"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view7"
-                app:tint="@color/lightBlue" />
+                app:tint="@color/primaryColor" />
 
             <TextView
                 android:id="@+id/timerText"
@@ -86,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/rubik_medium"
-                android:text="TIMER"
-                android:textColor="@color/lightBlue"
+                android:text="Rest Timer"
+                android:textColor="@color/primaryColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/timerIcon"
                 app:layout_constraintStart_toEndOf="@+id/timerIcon"

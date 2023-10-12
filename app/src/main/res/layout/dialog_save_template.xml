@@ -67,10 +67,11 @@
 
             <TextView
                 android:id="@+id/rejectText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_medium"
                 android:text="No"
+                android:textAlignment="center"
                 android:textColor="@color/primaryColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -91,10 +92,11 @@
 
             <TextView
                 android:id="@+id/continueText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_medium"
                 android:text="Yes"
+                android:textAlignment="center"
                 android:textColor="@color/primaryColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
