@@ -42,8 +42,14 @@
     <fragment
         android:id="@+id/exerciseDetailFragment"
         android:name="com.example.stack.home.exercisedetail.ExerciseDetailFragment"
-        android:label="ExerciseDetailFragment" />
-
+        android:label="ExerciseDetailFragment">
+        <argument
+            android:name="exerciseId"
+            app:argType="string" />
+        <argument
+            android:name="exerciseName"
+            app:argType="string" />
+    </fragment>
 
     <action
         android:id="@+id/navigate_to_home_fragment"
@@ -119,14 +125,19 @@
     <fragment
         android:id="@+id/workoutFragment"
         android:name="com.example.stack.home.workout.WorkoutFragment"
-        android:label="WorkoutFragment" />
+        android:label="WorkoutFragment" >
+        <argument
+            android:name="templateExercises"
+            app:argType="com.example.stack.data.dataclass.TemplateExerciseRecord[]"
+            app:nullable="true" />
+    </fragment>
     <action
         android:id="@+id/navigate_to_workout_fragment"
         app:destination="@+id/workoutFragment"
         app:launchSingleTop="true" />
     <fragment
         android:id="@+id/timerFragment"
-        android:name="com.example.stack.home.workout.timer.TimerFragment"
+        android:name="com.example.stack.home.workout.timer.TimerDialogFragment"
         android:label="TimerFragment" />
 
     <action
@@ -176,5 +187,17 @@
     <action
         android:id="@+id/navigate_to_template_fragment"
         app:destination="@+id/templateFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.stack.chatroom.ChatFragment"
+        android:label="ChatFragment" >
+        <argument
+            android:name="chatroom"
+            app:argType="com.example.stack.data.dataclass.Chatroom" />
+    </fragment>
+
+    <action
+        android:id="@+id/navigate_to_chat_fragment"
+        app:destination="@+id/chatFragment" />
 
 </navigation>

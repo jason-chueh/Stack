@@ -13,8 +13,8 @@ data class DistanceMatrixResponse(
     )
 
     data class Element(
-        val distance: TextValue,
-        val duration: TextValue,
+        val distance: TextValue?,
+        val duration: TextValue?,
         @Json(name = "duration_in_traffic") val durationInTraffic: TextValue?,
         val status: String
     )

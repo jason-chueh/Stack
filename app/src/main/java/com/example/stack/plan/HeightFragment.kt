@@ -36,7 +36,7 @@ class HeightFragment : Fragment() {
         monthPicker.minValue = 140
         monthPicker.maxValue = 200
         monthPicker.value = 160
-        binding.nextButton.setOnClickListener {
+        binding.continueButton.setOnClickListener {
             findNavController().navigate(NavigationDirections.navigateToPlanTinderFragment())
         }
 

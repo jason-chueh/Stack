@@ -2,12 +2,17 @@
 <resources>
     <!-- Bottom Navigation -->
     <dimen name="height_bottom_nav_view_main">60dp</dimen>
-    <dimen name="size_bottom_nav_icon">36dp</dimen>
+    <dimen name="size_bottom_nav_icon">15dp</dimen>
     <dimen name="elevation_all">4dp</dimen>
     <!-- Login Dialog -->
     <dimen name="height_login">400dp</dimen>
     <dimen name="height_payment_editor">56dp</dimen>
     <dimen name="size_payment_progress">24dp</dimen>
+    <dimen name="dimen_16">16dp</dimen>
+    <dimen name="dimen_1">1dp</dimen>
+    <dimen name="chip_spacing">4dp</dimen>
 
-
+    <!-- cardView -->
+    <dimen name="cornerRadius">12dp</dimen>
+    <dimen name="elevationCard">1dp</dimen>
 </resources>

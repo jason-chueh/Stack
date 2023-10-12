@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import kotlinx.parcelize.Parcelize
 
-@Entity(primaryKeys = ["user_id","start_time"])
+@Entity(primaryKeys = ["user_id","start_time"], tableName = "workout_table")
 @Parcelize
 data class Workout(
     @ColumnInfo(name = "user_id")
@@ -17,3 +17,9 @@ data class Workout(
     @ColumnInfo(name = "end_time")
     val endTime: Long
 ): Parcelable
+
+fun Workout.WorkoutToTemplate(templateId: String) = Template(
+    templateId = templateId,
+    templateName = workoutName,
+    userId = userId,
+)

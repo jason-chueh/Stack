@@ -3,24 +3,24 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_selector"
-        android:title=""/>
+        android:title="DashBoard"/>
     <item
         android:id="@+id/navigation_user"
-        android:icon="@drawable/user_selector"
-        android:title=""/>
+        android:icon="@drawable/chart_histogram"
+        android:title="Stats"/>
 
-    <item
-        android:id="@+id/navigation_plan"
-        android:icon="@drawable/gym_selector"
-        android:title=""/>
-
-    <item
-        android:id="@+id/navigation_position"
-        android:icon="@drawable/position_selector"
-        android:title=""/>
-
+<!--    <item-->
+<!--        android:id="@+id/navigation_plan"-->
+<!--        android:icon="@drawable/gym_selector"-->
+<!--        android:title=""/>-->
     <item
         android:id="@+id/navigation_find_bro"
         android:icon="@drawable/find_bro_selector"
-        android:title=""/>
+        android:title="GymBro"/>
+
+    <item
+        android:id="@+id/navigation_position"
+        android:icon="@drawable/messages"
+        android:title="Chatroom"/>
+
 </menu>

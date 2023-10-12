@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Button pressed state -->
+    <item android:state_checked="true" android:drawable="@color/mediumBlue" />
+
+    <!-- Default button state -->
+    <item android:drawable="@color/white" />
+</selector>

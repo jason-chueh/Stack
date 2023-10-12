@@ -21,6 +21,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
@@ -34,17 +35,19 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 private const val RESULT_SEPARATOR = "\n---\n\t"
 
 private const val FIELD_SEPARATOR = "\n\t"
+@AndroidEntryPoint
 class FindLocationFragment() : Fragment(), OnMapReadyCallback {
     lateinit var binding: FragmentFindLocationBinding
     lateinit var mMap: GoogleMap
     private lateinit var placesClient: PlacesClient
-
+    private val viewModel: FindLocationViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +64,10 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        var userLat: String = ""
+        var userLong: String = ""
+
         binding = FragmentFindLocationBinding.inflate(inflater, container, false)
         // Create a new PlacesClient instance
         placesClient = Places.createClient(this.requireContext())
@@ -70,6 +77,9 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
 
 
         binding.complete.setOnClickListener {
+            if(userLat != "" && userLong != ""){
+                viewModel.upsertUser(userLat,userLong)
+            }
             findNavController().navigate(NavigationDirections.navigateToMapsFragment())
         }
 
@@ -93,6 +103,8 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
                 Log.i("googleMap", "${place}")
+                userLat = place.latLng.latitude.toString()
+                userLong = place.latLng.longitude.toString()
 
             }
         })
@@ -101,6 +113,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
     }
 
     private fun checkPermissionThenFindCurrentPlace() {

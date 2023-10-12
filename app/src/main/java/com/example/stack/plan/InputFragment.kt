@@ -54,7 +54,7 @@ class InputFragment : Fragment() {
             }
         }
 
-        binding.nextButton.setOnClickListener {
+        binding.continueButton.setOnClickListener {
             findNavController().navigate(NavigationDirections.navigateToHeightFragment())
         }
         return binding.root

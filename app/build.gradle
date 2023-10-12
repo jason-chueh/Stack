@@ -177,6 +177,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+
 
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
     implementation ("com.google.android.libraries.places:places:3.1.0")
@@ -192,6 +194,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
     implementation "io.coil-kt:coil-compose:2.2.2"
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
 }
 kapt {

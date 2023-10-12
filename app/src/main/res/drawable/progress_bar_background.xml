@@ -7,9 +7,9 @@
             android:thicknessRatio="30.0"
             android:useLevel="true">
             <gradient
-                android:startColor="@color/Orange"
-                android:centerColor="@color/Orange"
-                android:endColor="@color/lightOrange"/>
+                android:startColor="#22bccf"
+                android:centerColor="#008391"
+                android:endColor="#008391"/>
         </shape>
     </item>
 </layer-list>

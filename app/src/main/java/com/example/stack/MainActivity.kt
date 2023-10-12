@@ -1,11 +1,13 @@
 package com.example.stack
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -24,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
+        }
 
 
         PythonManager.initialize(this)
@@ -96,35 +102,39 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 R.id.navigation_find_bro -> {
+                    if(UserManager.user?.gymLongitude != null){
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToMapsFragment())
+                    }
+                    else{
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
+                    }
+//                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
 
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
                     return@setOnItemSelectedListener true
                 }
 
-                R.id.navigation_plan -> {
-
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
-                    return@setOnItemSelectedListener true
-                }
+//                R.id.navigation_plan -> {
+//
+//                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
+//                    return@setOnItemSelectedListener true
+//                }
 
                 R.id.navigation_position -> {
 
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToPositionCorrectionFragment())
+                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToChatroomFragment())
                     return@setOnItemSelectedListener true
                 }
 
                 else -> {
                     return@setOnItemSelectedListener false
                 }
-
             }
         }
     }
     private fun navigateToWorkoutFragmentWithIntent(intent: Intent?){
         if(intent?.action == ACTION_SHOW_WORKOUT_FRAGMENT){
-            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment())
+            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
         }
     }
 }

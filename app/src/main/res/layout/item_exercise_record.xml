@@ -1,88 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardElevation="1dp"
+    app:cardCornerRadius="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corner_with_white_bg"
+    android:layout_marginBottom="16dp">
 
     <TextView
         android:id="@+id/exerciseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="3dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/Orange"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
-
-    <TextView
-        android:id="@+id/set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="SET"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toStartOf="@+id/kg"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
-
-    <TextView
-        android:id="@+id/kg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="KG"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toStartOf="@+id/reps"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/set"
-        app:layout_constraintTop_toTopOf="@+id/set" />
-
-    <TextView
-        android:id="@+id/reps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="REPS"
-        android:textColor="@color/lightgrey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/kg"
-        app:layout_constraintTop_toTopOf="@+id/kg" />
-
-    <TextView
-        android:id="@+id/addSet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="+New set"
-        android:textColor="@color/Orange"
+        android:fontFamily="@font/rubik_medium"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp"
+        android:textSize="20sp"
+        android:paddingTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/infoImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="barbell squat" />
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/arrowDown"-->
+    <!--        android:layout_width="25dp"-->
+    <!--        android:layout_height="25dp"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:src="@drawable/angle_left"-->
+    <!--        android:rotation="270"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/addSet"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:fontFamily="@font/rubik_medium"-->
+    <!--        android:text="+New set"-->
+    <!--        android:textColor="@color/mediumBlue"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <ImageView
+        android:id="@+id/infoImage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/info"
+        app:layout_constraintBottom_toBottomOf="@+id/exerciseName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/exerciseName" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:src="@drawable/angle_left"
+        app:layout_constraintBottom_toBottomOf="@+id/exerciseName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/exerciseName" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/repsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="14dp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set" />
+        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
+
+
+    <ImageView
+        android:id="@+id/addSetButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/add_with_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repsRecyclerView"
+        app:tint="@color/primaryColor" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

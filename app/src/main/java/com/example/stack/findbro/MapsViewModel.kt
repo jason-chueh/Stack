@@ -10,8 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.stack.BuildConfig
 import com.example.stack.R
 import com.example.stack.data.StackRepository
+import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.User
+import com.example.stack.login.UserManager
 import com.google.android.gms.common.api.Api
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,17 +46,17 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
     val sortedUserList: LiveData<List<User>>
         get() = _sortedUserList
 
-    init{
+    init {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 users.forEach {
-                    Log.i("db","user")
+                    Log.i("db", "user")
                     stackRepository.upsertUser(it)
                 }
-//                stackRepository.upsertUser()
             }
         }
     }
+
     @SuppressLint("MissingPermission")
     fun findCurrentPlace(
         placesClient: PlacesClient,
@@ -82,26 +85,12 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.i("googleMap", "$e")
-//                    binding.responseView.text = e.message
             }
         }
     }
 
 
     fun calculateDistanceAndSort() {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO){
-//                stackRepository.upsertUser(User(
-//                    id = "1",
-//                    name = "John Doe",
-//                    email = "johndoe@example.com",
-//                    picture = "https://media.wired.com/photos/598e35fb99d76447c4eb1f28/master/pass/phonepicutres-TA.jpg",
-//                    gymLatitude = "25.038658708007013",
-//                    gymLongitude = "121.5767419197247437.7749"
-//                ))
-//            }
-//            Log.i("googleMap","${allUsers.value}")
-//        }
         viewModelScope.launch {
             if (allUsers.value?.isNotEmpty() == true) {
 
@@ -122,17 +111,21 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
                             BuildConfig.MAPS_API_KEY
                         )
                     }
-                    distanceMatrixList?.rows?.get(0)?.elements?.mapIndexed { index, item ->
-                        ElementWithIndex(
-                            index,
-                            item.distance,
-                            item.duration
-                        )
-                    }?.sortedBy { it.duration.value }
+                    Log.i("googleMap", "$distanceMatrixList")
 
-                    if (filteredUser != null) {
-                        for (i in filteredUser) {
-                            resultList.add(i)
+                    val result2 =
+                        distanceMatrixList?.rows?.get(0)?.elements?.mapIndexed { index, item ->
+                            ElementWithIndex(
+                                index,
+//                            item.distance,
+                                item.duration
+                            )
+                        }?.sortedBy { it.duration?.value }
+                    Log.i("google map", "result2 $result2")
+                    Log.i("google map", "filteredUser: $filteredUser")
+                    if (filteredUser != null && result2 != null) {
+                        for (i in result2) {
+                            resultList.add(filteredUser[i.index])
                             //                    stackRepository.upsertUser(i)
                         }
                     }
@@ -145,6 +138,21 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
             }
 //            stackRepository.getDistanceMatrix()
         }
+    }
+
+    fun createChatroom(user: User) {
+        if (UserManager.user != null) {
+            stackRepository.createChatroomAtFireStore(
+                Chatroom(
+                    userId1 = user.id,
+                    userId2 = UserManager.user!!.id,
+                    userName = listOf(user.name, UserManager.user!!.name),
+                    userPic = listOf(user.picture, UserManager.user!!.picture),
+                    lastMessageTime = Calendar.getInstance().timeInMillis
+                )
+            )
+        }
+
     }
 }
 
@@ -192,8 +200,8 @@ fun <T, K, R> LiveData<T>.combineWith(
 
 data class ElementWithIndex(
     val index: Int,
-    val distance: DistanceMatrixResponse.TextValue,
-    val duration: DistanceMatrixResponse.TextValue
+//    val distance: DistanceMatrixResponse.TextValue,
+    val duration: DistanceMatrixResponse.TextValue?
 )
 
 //mock data
@@ -204,7 +212,7 @@ val users = listOf(
         email = "johndoe@example.com",
         picture = "https://media.wired.com/photos/598e35fb99d76447c4eb1f28/master/pass/phonepicutres-TA.jpg",
         gymLatitude = "25.038658708007013",
-        gymLongitude = "121.5767419197247437.7749"
+        gymLongitude = "121.5767419197247437"
     ),
     User(
         id = "2",

@@ -22,3 +22,5 @@ data class User(
     @ColumnInfo(name = "user_gym_longitude")
     val gymLongitude: String? = null
 ) : Parcelable
+
+

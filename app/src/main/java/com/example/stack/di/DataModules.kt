@@ -11,6 +11,8 @@ import com.example.stack.data.local.StackDatabase
 import com.example.stack.data.local.TemplateDao
 import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
+import com.example.stack.data.local.UserInfoDao
+import com.example.stack.data.local.WorkoutDao
 import com.example.stack.data.network.NetworkDataSource
 import com.example.stack.data.network.StackNetworkDataSource
 import dagger.Binds
@@ -67,5 +69,9 @@ object DatabaseModule {
 
     @Provides
     fun provideTemplateExerciseRecordDao(database: StackDatabase): TemplateExerciseRecordDao = database.templateExerciseRecordDao
+    @Provides
+    fun provideWorkoutDao(database: StackDatabase): WorkoutDao = database.workoutDao
 
+    @Provides
+    fun provideUserInfoDao(database: StackDatabase): UserInfoDao = database.userInfoDao
 }

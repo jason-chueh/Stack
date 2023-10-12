@@ -8,11 +8,15 @@
     <!-- Other views in your layout -->
 
     <!-- Container for the Map Fragment -->
+
     <FrameLayout
         android:id="@+id/mapContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/shimmer_layout"
+        android:layout_marginBottom="16dp"
+        android:elevation="10dp"
+        android:background="@drawable/bg_stroke_normal"
+        app:layout_constraintBottom_toTopOf="@+id/textView32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,6 +28,44 @@
             android:layout_height="match_parent" />
 
     </FrameLayout>
+
+    <View
+        android:id="@+id/view19"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/medium_blue_gradient"
+        android:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView31"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:elevation="20dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="Find gym bro"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:paddingBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="Gym bro nearby"
+        android:textColor="@color/blackBlue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/shimmer_layout"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_layout"

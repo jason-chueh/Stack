@@ -15,4 +15,7 @@ interface TemplateExerciseRecordDao {
 
     @Query("SELECT * FROM template_exercise_records WHERE template_id = :templateId")
     fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
+
+    @Query("DELETE FROM template_exercise_records")
+    fun deleteAllTemplateExerciseRecords()
 }

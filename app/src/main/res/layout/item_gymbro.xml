@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:imageUrl="@{user.picture}"
-            tools:src="@drawable/lean"/>
+            tools:src="@drawable/lean" />
 
 
 <!--        <com.google.android.material.imageview.ShapeableImageView-->
@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/rubik_medium"
             android:text="@{user.name}"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,8 +55,10 @@
             android:id="@+id/email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/rubik_medium"
             android:text="@{user.email}"
-            android:textSize="16sp"
+            android:textColor="@color/darkGrey"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/name" />

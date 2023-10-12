@@ -9,54 +9,115 @@
         android:id="@+id/yesButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginStart="16dp"
         android:src="@drawable/check_circle"
-        app:layout_constraintBottom_toBottomOf="@+id/setCount"
-        app:layout_constraintEnd_toStartOf="@+id/setCount"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/setCount" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/setCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:gravity="center"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/kgCount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/yesButton"
+        app:layout_constraintStart_toEndOf="@id/yesButton"
+        app:layout_constraintTop_toTopOf="@+id/yesButton" />
 
     <EditText
         android:id="@+id/kgCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:fontFamily="@font/questrial"
         android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/repsCount"
+        android:maxLength="3"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/setCount"
+        app:layout_constraintEnd_toStartOf="@id/kgText"
+        app:layout_constraintTop_toTopOf="@id/setCount"
+        app:layout_constraintWidth_max="60dp" />
+
+    <TextView
+        android:id="@+id/kgText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="kg"
+        android:textColor="@color/lightgrey"
+        app:layout_constraintBottom_toBottomOf="@+id/kgCount"
+        app:layout_constraintEnd_toStartOf="@id/star"
+        app:layout_constraintTop_toTopOf="@id/kgCount"
+        app:layout_constraintVertical_bias="0.8" />
+
+
+    <TextView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="x"
+        android:textColor="#bdbcc7"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/kgCount"
+        app:layout_constraintEnd_toStartOf="@id/noButton"
         app:layout_constraintStart_toEndOf="@+id/setCount"
-        app:layout_constraintTop_toTopOf="@+id/setCount" />
+        app:layout_constraintTop_toTopOf="@+id/kgCount" />
+
 
     <EditText
         android:id="@+id/repsCount"
         style="@style/recordText"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:fontFamily="@font/questrial"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/kgCount"
-        app:layout_constraintTop_toTopOf="@+id/setCount" />
+        android:maxLength="2"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/kgCount"
+        app:layout_constraintEnd_toStartOf="@id/repsText"
+        app:layout_constraintTop_toTopOf="@id/kgCount"
+        app:layout_constraintWidth_max="50dp" />
+
+
+    <TextView
+        android:id="@+id/repsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="@dimen/dimen_16"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="reps"
+        android:textColor="@color/lightgrey"
+        app:layout_constraintBottom_toBottomOf="@+id/repsCount"
+        app:layout_constraintEnd_toStartOf="@+id/noButton"
+        app:layout_constraintTop_toTopOf="@id/repsCount"
+        app:layout_constraintVertical_bias="0.8" />
 
     <ImageView
         android:id="@+id/noButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/cross_circle"
-        app:layout_constraintBottom_toBottomOf="@+id/repsCount"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/minus_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/yesButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/repsCount"
-        app:layout_constraintTop_toTopOf="@+id/repsCount" />
+        app:layout_constraintTop_toTopOf="@+id/yesButton"
+        app:tint="#D80032" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

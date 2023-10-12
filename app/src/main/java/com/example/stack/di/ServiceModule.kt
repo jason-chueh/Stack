@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import androidx.core.app.NotificationCompat
 import com.example.stack.MainActivity
 import com.example.stack.R
@@ -28,6 +29,7 @@ object ServiceModule{
     0,
     Intent(app, MainActivity::class.java).also {
         it.action = ACTION_SHOW_WORKOUT_FRAGMENT
+//        it.flags = FLAG_ACTIVITY_SINGLE_INSTANCE
     },
     FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )

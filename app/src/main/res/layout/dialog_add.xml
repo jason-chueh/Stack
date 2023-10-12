@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@drawable/round_corner_with_blue_gradient"
     android:layout_height="wrap_content"
     >
 
@@ -10,10 +11,11 @@
         android:layout_width="342dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:fontFamily="@font/questrial"
         android:hint="00"
         android:inputType="numberDecimal"
-        android:textColor="@color/Orange"
-        android:textColorHint="@color/lightOrange"
+        android:textColor="@color/blackBlue"
+        android:textColorHint="@color/darkGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,15 +25,14 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:background="@drawable/blue_gradient"
+        android:fontFamily="@font/rubik_medium"
         android:text="ok"
         android:textColor="@color/white"
-        android:background="@drawable/button_bg"
         android:textSize="22sp"
-        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etGetTime"
-        />
+        app:layout_constraintTop_toBottomOf="@id/etGetTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

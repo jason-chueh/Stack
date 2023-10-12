@@ -34,7 +34,8 @@ interface ExerciseApiService{
     suspend fun getExerciseByEquipment(
         @Path("equipment") equipment: String,
         @Header("X-RapidAPI-Key") key: String,
-        @Header("X-RapidAPI-Host") host: String): List<Exercise>
+        @Header("X-RapidAPI-Host") host: String,
+        @Query("limit")limit: Int ): List<Exercise>
 }
 
 

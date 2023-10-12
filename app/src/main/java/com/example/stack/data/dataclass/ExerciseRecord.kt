@@ -1,6 +1,7 @@
 package com.example.stack.data.dataclass
 
 import android.os.Parcelable
+import androidx.compose.ui.Modifier
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverter
@@ -25,11 +26,20 @@ data class ExerciseRecord(
     var repsAndWeights: MutableList<RepsAndWeights>
 ): Parcelable
 
+fun ExerciseRecord.toTemplateExerciseRecord(templateId: String) = TemplateExerciseRecord(
+    templateId = templateId,
+    exerciseName = exerciseName,
+    exerciseId = exerciseId,
+    repsAndWeights = repsAndWeights
+)
+
+
 data class ExerciseRecordWithCheck(
     val userId: String,
     val startTime: Long,
     val exerciseId: String,
     val exerciseName: String,
+    var expand: Boolean = false,
     var repsAndWeights: MutableList<RepsAndWeightsWithCheck>
 )
 
@@ -53,6 +63,12 @@ fun RepsAndWeights.toRepsAndWeightsWithCheck()=
         check = false
     )
 
+fun RepsAndWeightsWithCheck.toRepsAndWeight()=
+    RepsAndWeights(
+        reps = reps,
+        weight = weight
+    )
+
 fun ExerciseRecord.toExerciseRecordWithCheck()=
     ExerciseRecordWithCheck(
         userId = userId,
@@ -60,6 +76,15 @@ fun ExerciseRecord.toExerciseRecordWithCheck()=
         exerciseId = exerciseId,
         exerciseName = exerciseName,
         repsAndWeights = repsAndWeights.map{it.toRepsAndWeightsWithCheck()}.toMutableList()
+    )
+
+fun ExerciseRecordWithCheck.toExerciseRecord()=
+    ExerciseRecord(
+        userId = userId,
+        startTime = startTime,
+        exerciseId = exerciseId,
+        exerciseName = exerciseName,
+        repsAndWeights = repsAndWeights.map{it.toRepsAndWeight()}.toMutableList()
     )
 
 
