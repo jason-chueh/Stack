@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.addCallback
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,9 +21,11 @@ import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
+import com.example.stack.databinding.DialogCancelWorkoutBinding
 import com.example.stack.databinding.DialogSaveTemplateBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
 import com.example.stack.home.workout.timer.TimerDialogFragment
+import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,6 +45,13 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             viewModel.setDataListFromBundle(templateExerciseList)
         }
         Log.i("template", "$templateExerciseList")
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            showCancelDialog()
+        }
+
+        UserManager.isTraining = true
+
         super.onCreate(savedInstanceState)
     }
 
@@ -154,15 +164,14 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         binding.finishWorkoutText.setOnClickListener {
             showSaveAsTemplateDialog()
         }
-
         binding.cancel.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToHomeFragment())
-            viewModel.cancelWorkout()
+            showCancelDialog()
         }
 
 
         return binding.root
     }
+
 
     private fun showSaveAsTemplateDialog() {
         val dialog = Dialog(this.requireContext())
@@ -174,17 +183,13 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         )
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(dialogBinding.root)
-
         dialog.show()
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
         dialogBinding.lifecycleOwner = viewLifecycleOwner
-
         dialogBinding.continueText.setOnClickListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithSaveTemplate(binding.workoutTitleText.text.toString())
@@ -192,7 +197,6 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
                 findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
-
         dialogBinding.rejectText.setOnClickListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithoutSaveTemplate(binding.workoutTitleText.text.toString())
@@ -200,11 +204,41 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
                 findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
-
         dialogBinding.root.setOnClickListener {
             dialog.dismiss()
         }
+    }
 
+    private fun showCancelDialog() {
+        val dialog = Dialog(this.requireContext())
+        val dialogBinding: DialogCancelWorkoutBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_cancel_workout,
+            null,
+            false
+        )
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.lifecycleOwner = viewLifecycleOwner
+
+        dialogBinding.rejectText.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.continueText.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToHomeFragment())
+            viewModel.cancelWorkout()
+            dialog.dismiss()
+        }
+        dialogBinding.root.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     private val updateSetToTrue: (exercisePosition: Int, setPosition: Int, repsAndWeights: RepsAndWeightsWithCheck) -> Unit =
@@ -217,47 +251,3 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         Log.i("terry", "$position")
     }
 }
-
-val exerciseList = listOf(
-    Exercise(
-        id = "0026",
-        name = "barbell bench squat",
-        target = "pectorals",
-        gifUrl = "https://example.com/push-up.gif",
-        bodyPart = "Upper Body",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "2",
-        name = "Squat",
-        target = "glutes",
-        gifUrl = "https://example.com/squat.gif",
-        bodyPart = "Lower Body",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "3",
-        name = "Pull-up",
-        target = "upper back",
-        gifUrl = "https://example.com/pull-up.gif",
-        bodyPart = "Upper Body",
-        equipment = "Pull-up bar"
-    ),
-    Exercise(
-        id = "4",
-        name = "Plank",
-        target = "abs",
-        gifUrl = "https://example.com/plank.gif",
-        bodyPart = "core",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "5",
-        name = "Dumbbell Curl",
-        target = "biceps",
-        gifUrl = "https://example.com/dumbbell-curl.gif",
-        bodyPart = "Upper Body",
-        equipment = "Dumbbells"
-    )
-    // Add more exercise entries as needed
-)

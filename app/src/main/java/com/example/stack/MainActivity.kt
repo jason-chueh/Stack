@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    if(UserManager.isTraining){
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
+                        return@setOnItemSelectedListener true
+                    }
                     findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToHomeFragment())
                     return@setOnItemSelectedListener true
                 }

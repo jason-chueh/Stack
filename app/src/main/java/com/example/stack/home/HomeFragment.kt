@@ -63,6 +63,10 @@ class HomeFragment: Fragment() {
         viewModel.getUserWorkoutData()
         viewModel.getUserExerciseData()
 
+        binding.constraintLayout3.setOnClickListener {
+            viewModel.animateIcon(binding.imageView6)
+        }
+
         binding.url = UserManager.user?.picture
 
         viewModel.userWorkoutRecords.observe(viewLifecycleOwner){

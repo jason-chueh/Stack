@@ -14,6 +14,8 @@ object UserManager {
     private const val USER_DATA = "user_data"
     private const val USER_TOKEN = "user_token"
 
+    var isTraining: Boolean = false
+
     var user: User?
         get() {
             val sharedPreferences = StackApplication.instance.getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)

@@ -23,6 +23,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.R
@@ -44,6 +45,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -161,7 +163,8 @@ class MapsFragment : Fragment() ,OnMapReadyCallback, GoogleMap.OnMyLocationButto
         }
         dialogBinding.chatButton.setOnClickListener {
             viewModel.createChatroom(user)
-            findNavController().navigate(NavigationDirections.navigateToChatroomFragment())
+            val bottomNavigation = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView)
+            bottomNavigation.selectedItemId = R.id.navigation_position
             dialog.dismiss()
         }
         dialogBinding.user = user

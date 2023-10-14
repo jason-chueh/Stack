@@ -103,11 +103,12 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
     fun cancelWorkout() {
-
+        UserManager.isTraining = false
     }
 
 
     fun finishWorkoutWithSaveTemplate(workoutName: String) {
+        UserManager.isTraining = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (UserManager.user?.id != null) {
@@ -145,6 +146,7 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
     fun finishWorkoutWithoutSaveTemplate(workoutName: String) {
+        UserManager.isTraining = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (UserManager.user?.id != null) {

@@ -54,8 +54,9 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="8dp"
                 android:src="@drawable/pencil"
+                android:layout_marginEnd="32dp"
                 app:layout_constraintBottom_toBottomOf="@+id/workoutTitleText"
-                app:layout_constraintStart_toEndOf="@+id/workoutTitleText"
+                app:layout_constraintEnd_toEndOf="@+id/workoutTitleText"
                 app:layout_constraintTop_toTopOf="@+id/workoutTitleText" />
 
             <ImageView
@@ -95,13 +96,16 @@
 
             <EditText
                 android:id="@+id/workoutTitleText"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:paddingEnd="60dp"
                 android:fontFamily="@font/rubik_medium"
                 android:text="Daily Workout"
                 android:textColor="@color/white"
                 android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="@+id/view7"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/cancel"
                 app:layout_constraintTop_toBottomOf="@+id/cancel" />
 
