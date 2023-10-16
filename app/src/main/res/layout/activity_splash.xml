@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/splash2" />
+        app:lottie_rawRes="@raw/splash3" />
 
     <ImageView
         android:id="@+id/imageView"
