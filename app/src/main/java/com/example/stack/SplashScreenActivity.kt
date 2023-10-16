@@ -96,7 +96,7 @@ import java.time.temporal.ChronoUnit
 //}
 
 class SplashScreenActivity : AppCompatActivity() {
-    private val delayMillis: Long = 3000 // 3 seconds (adjust as needed)
+    private val delayMillis: Long = 1000 // 3 seconds (adjust as needed)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,13 +106,30 @@ class SplashScreenActivity : AppCompatActivity() {
         lottieView.enableMergePathsForKitKatAndAbove(true)
         lottieView.playAnimation()
 
-        Handler().postDelayed({
-            val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
-            startActivity(intent)
-            lottieView.cancelAnimation()
-            finish()
-            overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_fade_out) // Custom animation
-        }, delayMillis)
+
+        lottieView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator) {
+            }
+
+            override fun onAnimationCancel(p0: Animator) {
+            }
+
+            override fun onAnimationRepeat(p0: Animator) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                // Animation finished
+                // Open another activity here
+                Handler().postDelayed({
+                    val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    lottieView.cancelAnimation()
+                    finish()
+                    overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_fade_out) // Custom animation
+                }, delayMillis)
+            }
+        })
     }
 
     override fun onResume() {

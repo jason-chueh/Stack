@@ -30,6 +30,7 @@ abstract class DataSourceModule {
     @Binds
     abstract fun bindNetworkDataSource(dataSource: StackNetworkDataSource): NetworkDataSource
 }
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {

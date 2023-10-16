@@ -109,8 +109,6 @@ class WorkoutDetailAdapter(
             }
             binding.noButton.setOnClickListener {
                 deleteOnClick(exercisePosition, absoluteAdapterPosition)
-                notifyDataSetChanged()
-//                notifyItemRemoved(absoluteAdapterPosition)
             }
         }
     }

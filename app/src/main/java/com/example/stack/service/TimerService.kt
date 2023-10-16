@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.stack.MainActivity
 import com.example.stack.R
+import com.example.stack.data.StackRepository
 import dagger.hilt.android.AndroidEntryPoint
 
 import javax.inject.Inject

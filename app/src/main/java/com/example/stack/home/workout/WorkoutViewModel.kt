@@ -18,6 +18,7 @@ import com.example.stack.data.dataclass.toExerciseWithCheck
 import com.example.stack.data.dataclass.toTemplateExerciseRecord
 import com.example.stack.data.dataclass.toTemplateExerciseWithCheck
 import com.example.stack.login.UserManager
+import com.example.stack.util.swap
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -43,6 +44,8 @@ class WorkoutViewModel @AssistedInject constructor(
 
     val scrollToInnerPosition = MutableLiveData<IntPair>()
 
+    val smoothScrollTarget = MutableLiveData<IntPair>()
+
     val filteredExerciseList = MutableLiveData<List<ExerciseWithCheck>>()
 
     val notifyItemChangePosition = MutableLiveData<Int>()
@@ -60,8 +63,7 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
-    val updateExerciseListCheck: (Int)-> Unit = {
-        position ->
+    val updateExerciseListCheck: (Int) -> Unit = { position ->
         val updateList = mutableListOf<ExerciseWithCheck>()
         filteredExerciseList.value?.let { updateList.addAll(it) }
         updateList[position] = updateList[position].copy(check = !updateList[position].check)
@@ -73,22 +75,22 @@ class WorkoutViewModel @AssistedInject constructor(
         fun create(test: String): WorkoutViewModel
     }
 
-    fun findFirstUncheckedPosition() {
-        dataList.value?.let {
-            for ((position, exerciseRecord) in it.withIndex()) {
-                for ((subPosition, repsAndWeights) in exerciseRecord.repsAndWeights.withIndex()) {
-                    if (!repsAndWeights.check) {
-
-                        Log.i("scroll", "viewModel ${IntPair(position, subPosition)}")
-                        scrollToInnerPosition.postValue(IntPair(position, subPosition))
-
-                        return@let
-                    }
+    fun calculateScroll(exercisePosition: Int, setPosition: Int){
+        dataList.value?.let{
+            // if it is the last set being checked, the screen should scroll to position of next exercise
+            if(it[exercisePosition].repsAndWeights.size == setPosition + 1) {
+                //if the exercise is not the last one
+                if(exercisePosition != it.size - 1){
+                    scrollToPosition.value = exercisePosition + 1
                 }
             }
+            // else, scroll by the height of a viewHolder
+            else{
+                smoothScrollTarget.value = IntPair(exercisePosition,setPosition + 1)
+            }
         }
-    }
 
+    }
 
     fun setDataListFromBundle(templateExerciseList: List<TemplateExerciseRecord>) {
         if (UserManager.user?.id != null) {
@@ -185,23 +187,22 @@ class WorkoutViewModel @AssistedInject constructor(
                 try {
                     val resultList = stackRepository.getAllExercise()
                     exerciseList.postValue(resultList)
-                    filteredExerciseList.postValue(resultList.map{it.toExerciseWithCheck()})
+                    filteredExerciseList.postValue(resultList.map { it.toExerciseWithCheck() })
                 } catch (e: Exception) {
                     Log.i("workout", "$e")
                 }
             }
         }
     }
-    fun addAllExercise(){
-        filteredExerciseList.value?.let{
-            filterListValue ->
-            val exerciseToAddList = filterListValue.filter{it.check}
-            for(i in exerciseToAddList){
+
+    fun addAllExercise() {
+        filteredExerciseList.value?.let { filterListValue ->
+            val exerciseToAddList = filterListValue.filter { it.check }
+            for (i in exerciseToAddList) {
                 addExerciseRecord(i.id, i.name)
             }
         }
     }
-
 
 
     fun addExerciseRecord(exerciseId: String, exerciseName: String) {
@@ -226,14 +227,37 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
+    fun deleteExercise(exercisePosition: Int){
+        Log.i("swipe","delete position: $exercisePosition")
+
+        val updatedList = mutableListOf<ExerciseRecordWithCheck>()
+        dataList.value?.let{
+            updatedList.addAll(it)
+            updatedList.removeAt(exercisePosition)
+            dataList.value = updatedList
+        }
+    }
+
+    fun swapPosition(draggedItemIndex: Int, targetIndex: Int){
+        val updatedList = mutableListOf<ExerciseRecordWithCheck>()
+        dataList.value?.let{
+            updatedList.addAll(it)
+            updatedList.swap(draggedItemIndex, targetIndex)
+            dataList.value = updatedList
+        }
+    }
+
     val deleteExerciseRecord: (exercisePosition: Int, setPosition: Int) -> Unit =
         { exercisePosition, setPosition ->
-            dataList.value?.let { oldList ->
-                val newList = oldList.toMutableList()
-                newList[exercisePosition].repsAndWeights.removeAt(setPosition)
-                dataList.value = newList.toList()
-            }
+            val updatedList = mutableListOf<ExerciseRecordWithCheck>()
+            dataList.value?.let { updatedList.addAll(it) }
+            val newList = mutableListOf<RepsAndWeightsWithCheck>()
+            newList.addAll(updatedList[exercisePosition].repsAndWeights)
+            newList.removeAt(setPosition)
+            updatedList[exercisePosition] = updatedList[exercisePosition].copy(repsAndWeights = newList)
+            dataList.value = updatedList
         }
+
 
     val expandExercise: (exercisePosition: Int) -> Unit = { exercisePosition ->
         val updatedList = mutableListOf<ExerciseRecordWithCheck>()
@@ -248,10 +272,14 @@ class WorkoutViewModel @AssistedInject constructor(
         val updatedList = mutableListOf<ExerciseRecordWithCheck>()
 
         dataList.value?.let { updatedList.addAll(it) }
-
-        updatedList[exercisePosition].repsAndWeights.add(RepsAndWeightsWithCheck(0, 0))
-        scrollToInnerPosition.postValue(IntPair(exercisePosition, updatedList[exercisePosition].repsAndWeights.size-1))
+        val newList = mutableListOf<RepsAndWeightsWithCheck>()
+        newList.addAll(updatedList[exercisePosition].repsAndWeights)
+        newList.add(RepsAndWeightsWithCheck(0, 0))
+        updatedList[exercisePosition] = updatedList[exercisePosition].copy(repsAndWeights = newList)
+//        Log.i("workout",${})
+//        scrollToInnerPosition.postValue(IntPair(exercisePosition, updatedList[exercisePosition].repsAndWeights.size-1))
         dataList.value = updatedList
+        smoothScrollTarget.value = IntPair(exercisePosition, 0)
     }
 
     fun updateSetToTrue(

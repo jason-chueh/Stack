@@ -19,11 +19,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.databinding.FragmentHomeBinding
 import com.example.stack.home.template.ChooseTemplateDialog
 import com.example.stack.login.UserManager
+import com.google.android.material.carousel.CarouselLayoutManager
+import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.FullScreenCarouselStrategy
+import com.google.android.material.carousel.HeroCarouselStrategy
+import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,7 +66,19 @@ class HomeFragment: Fragment() {
         val adapter = HomeWorkoutHistoryAdapter()
         binding.homeWorkoutRecyclerView.layoutManager = layoutManager
         binding.homeWorkoutRecyclerView.adapter = adapter
+
+        val carouselAdapter = HomeCarouselAdapter()
+
+        binding.carouselRecyclerView.adapter = carouselAdapter
+
+        val carouselLayoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy(), RecyclerView.HORIZONTAL)
+        binding.carouselRecyclerView.layoutManager = carouselLayoutManager
+
+        val snapHelper = CarouselSnapHelper()
+        snapHelper.attachToRecyclerView(binding.carouselRecyclerView)
+
         viewModel.getUserWorkoutData()
+
         viewModel.getUserExerciseData()
 
         binding.constraintLayout3.setOnClickListener {
@@ -84,6 +102,8 @@ class HomeFragment: Fragment() {
                     binding.daysAgo.text = "?"
                 }
                 adapter.submitList(it.sortedByDescending { it.startTime })
+                carouselAdapter.submitList(it.sortedByDescending { it.startTime })
+
             }
         }
         viewModel.userExerciseRecords.observe(viewLifecycleOwner){
@@ -92,8 +112,6 @@ class HomeFragment: Fragment() {
                 binding.totalWeightNum.text = totalWeight.toString()
             }
         }
-
-
 
         binding.personalImage.setOnClickListener {
             checkImagePermission()

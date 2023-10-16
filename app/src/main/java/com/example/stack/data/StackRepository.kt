@@ -81,4 +81,6 @@ interface StackRepository {
     suspend fun deleteAllTemplate()
 
     suspend fun deleteYoutubeById(id: String)
+
+    suspend fun deleteTemplateByTemplateId(templateId: String)
 }

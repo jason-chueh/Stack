@@ -364,4 +364,9 @@ class DefaultRepository @Inject constructor(
         exerciseYoutubeDao.deleteYoutubeById(id)
     }
 
+    override suspend fun deleteTemplateByTemplateId(templateId: String){
+        templateDao.deleteTemplateByTemplateId(templateId = templateId)
+    }
+
+
 }
