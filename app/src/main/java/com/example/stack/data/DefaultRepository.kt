@@ -118,6 +118,33 @@ class DefaultRepository @Inject constructor(
         }
     }
 
+    override suspend fun exerciseApiToDatabase() {
+        withContext(Dispatchers.IO) {
+            try {
+                for (k in listOf<String>(
+                    "barbell",
+                    "body weight",
+                    "cable",
+                    "dumbbell",
+                    "hammer",
+                    "leverage machine",
+                    "smith machine"
+                )) {
+                    val result = StackApi.retrofitService.getExerciseByEquipment(
+                        k, BuildConfig.EXERCISE_KEY,
+                        "exercisedb.p.rapidapi.com",
+                        200
+                    )
+                    Log.i("api", "$result")
+                    Log.i("api", "${result.size}")
+                    exerciseDao.upsertExerciseList(result)
+                }
+            } catch (e: java.lang.Exception) {
+                Log.i("api", "$e")
+            }
+        }
+    }
+
     //Get all the exercise from API, and send it to fireStore
     override suspend fun exerciseApiToFireStore() {
         try {
@@ -167,7 +194,8 @@ class DefaultRepository @Inject constructor(
     ): List<VideoItem> {
         var videoList = listOf<VideoItem>()
         try {
-            val result_json = moduleYoutubeSearch.callAttr("youtubeSearch",
+            val result_json = moduleYoutubeSearch.callAttr(
+                "youtubeSearch",
                 "$exerciseName tutorial"
             )
                 .toJava(String::class.java)
@@ -315,18 +343,18 @@ class DefaultRepository @Inject constructor(
     override fun updateChatroom(chatroom: Chatroom) {
         val ref = db.collection("chatroom").document(chatroom.roomId)
         ref.set(chatroom).addOnSuccessListener {
-            Log.i("chatroom","update chatroom success!")
+            Log.i("chatroom", "update chatroom success!")
         }.addOnFailureListener {
-            Log.i("chatroom","$it")
+            Log.i("chatroom", "$it")
         }
     }
 
     override fun sendChatMessageToFireStore(chat: Chat) {
         val docRef = db.collection("chat").document()
         docRef.set(chat.copy(chatId = docRef.id)).addOnSuccessListener {
-            Log.i("chat","chat written! $chat")
+            Log.i("chat", "chat written! $chat")
         }.addOnFailureListener {
-            Log.i("chat","$it")
+            Log.i("chat", "$it")
         }
     }
 
@@ -348,10 +376,10 @@ class DefaultRepository @Inject constructor(
 
     override fun uploadUserToFireStore(user: User) {
         db.collection("user").document(user.id).set(user).addOnSuccessListener {
-            Log.i("user","$user")
-            Log.i("user","upload fireStore success!")
+            Log.i("user", "$user")
+            Log.i("user", "upload fireStore success!")
         }.addOnFailureListener {
-            Log.i("user","$it")
+            Log.i("user", "$it")
         }
     }
 
@@ -364,7 +392,7 @@ class DefaultRepository @Inject constructor(
         exerciseYoutubeDao.deleteYoutubeById(id)
     }
 
-    override suspend fun deleteTemplateByTemplateId(templateId: String){
+    override suspend fun deleteTemplateByTemplateId(templateId: String) {
         templateDao.deleteTemplateByTemplateId(templateId = templateId)
     }
 

@@ -227,16 +227,16 @@
                     app:layout_constraintTop_toTopOf="@+id/seeAllText"
                     app:tint="@color/darkGrey" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/homeWorkoutRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView25" />
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/homeWorkoutRecyclerView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginEnd="16dp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/textView25" />-->
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView2"
@@ -381,7 +381,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/homeWorkoutRecyclerView"
+                    app:layout_constraintTop_toBottomOf="@id/textView25"
                     app:layout_constraintVertical_bias="1.0"
                     tools:listitem="@layout/item_carousel_odd" />
 

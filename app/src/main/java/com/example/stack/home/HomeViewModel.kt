@@ -116,6 +116,12 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         }
     }
 
+    fun exerciseApiToDatabase(){
+        viewModelScope.launch {
+            stackRepository.exerciseApiToDatabase()
+        }
+    }
+
     fun exerciseApiRe() {
         viewModelScope.launch {
             stackRepository.exerciseApiToFireStore()

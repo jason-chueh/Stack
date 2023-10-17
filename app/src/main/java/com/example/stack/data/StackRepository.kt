@@ -27,6 +27,7 @@ interface StackRepository {
     suspend fun refreshExerciseDb()
 
     suspend fun exerciseApiToFireStore()
+    suspend fun exerciseApiToDatabase()
 
     suspend fun getAllExercise(): List<Exercise>
 

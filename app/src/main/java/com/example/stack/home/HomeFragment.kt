@@ -54,6 +54,7 @@ class HomeFragment: Fragment() {
             val chooseTemplateDialog = ChooseTemplateDialog()
             chooseTemplateDialog.show(childFragmentManager, "")
         }
+        viewModel.exerciseApiToDatabase()
 //        viewModel.deleteYoutube()
 //        viewModel.deleteAllTemplate()
 //        viewModel.upsertTemplate()
@@ -62,11 +63,10 @@ class HomeFragment: Fragment() {
 //        viewModel.exerciseApi()
 //        viewModel.createChatroom()
 //        viewModel.exerciseApiRe()
-        val layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val adapter = HomeWorkoutHistoryAdapter()
-        binding.homeWorkoutRecyclerView.layoutManager = layoutManager
-        binding.homeWorkoutRecyclerView.adapter = adapter
-
+//        val layoutManager = LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//        val adapter = HomeWorkoutHistoryAdapter()
+//        binding.homeWorkoutRecyclerView.layoutManager = layoutManager
+//        binding.homeWorkoutRecyclerView.adapter = adapter
         val carouselAdapter = HomeCarouselAdapter()
 
         binding.carouselRecyclerView.adapter = carouselAdapter
@@ -101,7 +101,7 @@ class HomeFragment: Fragment() {
                     binding.datePreviousWorkout.text = "?"
                     binding.daysAgo.text = "?"
                 }
-                adapter.submitList(it.sortedByDescending { it.startTime })
+//                adapter.submitList(it.sortedByDescending { it.startTime })
                 carouselAdapter.submitList(it.sortedByDescending { it.startTime })
 
             }
