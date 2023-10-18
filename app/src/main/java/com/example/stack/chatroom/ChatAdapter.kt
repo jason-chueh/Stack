@@ -14,7 +14,7 @@ import com.example.stack.databinding.ItemSendMessageBinding
 
 private const val VIEW_TYPE_SENDER = 1
 private const val VIEW_TYPE_RECEIVER = 2
-class ChatAdapter(private val currentUserId: String) :
+class ChatAdapter(private val currentUserId: String, private val picture: String?) :
     ListAdapter<Chat, RecyclerView.ViewHolder>(ChatDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {
@@ -69,6 +69,7 @@ class ChatAdapter(private val currentUserId: String) :
         fun bindReceiverMessage(chat: Chat) {
             binding.receiveMessage.text = chat.message
             binding.time = chat.sendTime
+            binding.pictureUrl = picture
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.bumptech.glide.Glide
 import com.example.stack.NavigationDirections
 import com.example.stack.R
@@ -52,6 +53,8 @@ class ExerciseDetailFragment : Fragment() {
         }
         binding.youtubeListRecyclerView.adapter = adapter
         binding.youtubeListRecyclerView.layoutManager = layoutManager
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(binding.youtubeListRecyclerView)
 
         viewModel.videoResultList.observe(viewLifecycleOwner){
             Log.i("python","fragment observe: $it")

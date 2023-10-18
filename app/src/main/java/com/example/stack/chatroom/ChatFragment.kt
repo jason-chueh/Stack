@@ -32,7 +32,7 @@ class ChatFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val adapter = UserManager.user?.id?.let { ChatAdapter(it) }
+
         var sender: String
         var receiver: String
         var picture: String?
@@ -56,8 +56,9 @@ class ChatFragment : Fragment() {
         binding.imageBack.setOnClickListener {
             findNavController().navigateUp()
         }
-        binding.chatName.text = receiver
 
+        val adapter = UserManager.user?.id?.let { ChatAdapter(it, picture) }
+        binding.chatName.text = receiver
         binding.chatRecyclerView.adapter = adapter
         binding.sendFrameLayout.setOnClickListener {
             val input = binding.input.text
@@ -78,7 +79,7 @@ class ChatFragment : Fragment() {
             adapter?.submitList(it)
             val itemCount = adapter?.itemCount
             if (itemCount != null) {
-                if(itemCount > 0){
+                if(itemCount > 1){
 //                    binding.chatRecyclerView.scrollToPosition(itemCount - 1)
 //                    val totalContentHeight = binding.chatRecyclerView.computeVerticalScrollRange()
 //                    val recyclerViewHeight = binding.chatRecyclerView.height
@@ -87,7 +88,6 @@ class ChatFragment : Fragment() {
 //                    val layoutManager = binding.chatRecyclerView.layoutManager as LinearLayoutManager
 //                    layoutManager.scrollToPositionWithOffset(itemCount - 1, 0)
                 }
-
             }
         }
 

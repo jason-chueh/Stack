@@ -50,6 +50,8 @@ class WorkoutViewModel @AssistedInject constructor(
 
     val notifyItemChangePosition = MutableLiveData<Int>()
 
+    val navigateToHomeFragment = MutableLiveData<Boolean>(false)
+
     companion object {
         fun provideWorkoutViewModelFactory(
             factory: Factory,
@@ -75,18 +77,18 @@ class WorkoutViewModel @AssistedInject constructor(
         fun create(test: String): WorkoutViewModel
     }
 
-    fun calculateScroll(exercisePosition: Int, setPosition: Int){
-        dataList.value?.let{
+    fun calculateScroll(exercisePosition: Int, setPosition: Int) {
+        dataList.value?.let {
             // if it is the last set being checked, the screen should scroll to position of next exercise
-            if(it[exercisePosition].repsAndWeights.size == setPosition + 1) {
+            if (it[exercisePosition].repsAndWeights.size == setPosition + 1) {
                 //if the exercise is not the last one
-                if(exercisePosition != it.size - 1){
+                if (exercisePosition != it.size - 1) {
                     scrollToPosition.value = exercisePosition + 1
                 }
             }
             // else, scroll by the height of a viewHolder
-            else{
-                smoothScrollTarget.value = IntPair(exercisePosition,setPosition + 1)
+            else {
+                smoothScrollTarget.value = IntPair(exercisePosition, setPosition + 1)
             }
         }
 
@@ -142,7 +144,9 @@ class WorkoutViewModel @AssistedInject constructor(
                         )
                     }
                         ?.let { stackRepository.upsertTemplateExerciseRecord(it) }
+                    navigateToHomeFragment.postValue(true)
                 }
+
             }
         }
     }
@@ -174,7 +178,7 @@ class WorkoutViewModel @AssistedInject constructor(
                         filteredExerciseRecords?.map { it.toExerciseRecord() }
                     exerciseRecordsListToUpload?.let { stackRepository.upsertExerciseRecordList(it) }
 
-
+                    navigateToHomeFragment.postValue(true)
                 }
             }
         }
@@ -227,20 +231,20 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
-    fun deleteExercise(exercisePosition: Int){
-        Log.i("swipe","delete position: $exercisePosition")
+    fun deleteExercise(exercisePosition: Int) {
+        Log.i("swipe", "delete position: $exercisePosition")
 
         val updatedList = mutableListOf<ExerciseRecordWithCheck>()
-        dataList.value?.let{
+        dataList.value?.let {
             updatedList.addAll(it)
             updatedList.removeAt(exercisePosition)
             dataList.value = updatedList
         }
     }
 
-    fun swapPosition(draggedItemIndex: Int, targetIndex: Int){
+    fun swapPosition(draggedItemIndex: Int, targetIndex: Int) {
         val updatedList = mutableListOf<ExerciseRecordWithCheck>()
-        dataList.value?.let{
+        dataList.value?.let {
             updatedList.addAll(it)
             updatedList.swap(draggedItemIndex, targetIndex)
             dataList.value = updatedList
@@ -254,7 +258,8 @@ class WorkoutViewModel @AssistedInject constructor(
             val newList = mutableListOf<RepsAndWeightsWithCheck>()
             newList.addAll(updatedList[exercisePosition].repsAndWeights)
             newList.removeAt(setPosition)
-            updatedList[exercisePosition] = updatedList[exercisePosition].copy(repsAndWeights = newList)
+            updatedList[exercisePosition] =
+                updatedList[exercisePosition].copy(repsAndWeights = newList)
             dataList.value = updatedList
         }
 

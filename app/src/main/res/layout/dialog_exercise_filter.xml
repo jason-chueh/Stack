@@ -229,68 +229,76 @@
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
+            android:text="barbell"
 
-            android:text="barbell" />
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_cable"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
+            android:text="cable"
 
-            android:text="cable" />
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_dumbbell"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
-
             android:layout_height="wrap_content"
-            android:text="dumbbell" />
+
+            android:text="dumbbell"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_leverage_machine"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
+            android:text="leverage machine"
 
-            android:text="leverage machine" />
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_smith_machine"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
-
             android:layout_height="wrap_content"
-            android:text="smith machine" />
+
+            android:text="smith machine"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_body_weight"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/chip_background_color"
+            android:text="body weight"
 
-            android:text="body weight" />
+            app:chipBackgroundColor="@color/chip_background_color" />
 
     </com.google.android.material.chip.ChipGroup>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/textCard"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        app:cardCornerRadius="@dimen/cornerRadius">-->
 
     <TextView
         android:id="@+id/applyButton"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
-        android:background="@color/onPrimary"
+        android:background="@drawable/round_corner_with_blue_gradient"
         android:fontFamily="@font/rubik_medium"
         android:gravity="center"
         android:text="Apply"
         android:textColor="@color/primaryColor"
         android:textSize="25sp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+<!--</androidx.cardview.widget.CardView>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>

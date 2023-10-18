@@ -70,6 +70,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
                 UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                 viewModelScope.launch {
                     UserManager.user?.let { stackRepository.upsertUser(it) }
+                    UserManager.user?.let{ stackRepository.uploadUserToFireStore(it)}
                 }
 //                uploadProfileToFirebase(currentUri)
                 Log.i("personal image", "upload successfully, url is $uri")
@@ -190,27 +191,27 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         }
     }
 
-    fun createChatroom() {
-        viewModelScope.launch {
-            if (UserManager.user?.id != null) {
-                stackRepository.createChatroomAtFireStore(
-                    Chatroom(
-                        userId1 = UserManager.user!!.id,
-                        userId2 = "23426",
-                        userName = listOf("ww", "232"),
-                        userPic = listOf("", ""),
-                        lastMessage = "hi",
-                        lastMessageTime = Calendar.getInstance().timeInMillis
-                    )
-                )
-            }
-        }
-    }
+//    fun createChatroom() {
+//        viewModelScope.launch {
+//            if (UserManager.user?.id != null) {
+//                stackRepository.createChatroomAtFireStore(
+//                    Chatroom(
+//                        userId1 = UserManager.user!!.id,
+//                        userId2 = "23426",
+//                        userName = listOf("ww", "232"),
+//                        userPic = listOf("", ""),
+//                        lastMessage = "hi",
+//                        lastMessageTime = Calendar.getInstance().timeInMillis
+//                    )
+//                )
+//            }
+//        }
+//    }
 
     fun deleteYoutube() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                stackRepository.deleteYoutubeById("4Y2ZdHCOXok")
+                stackRepository.deleteYoutubeById("tlfahNdNPPI")
             }
         }
     }

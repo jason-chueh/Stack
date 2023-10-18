@@ -2,9 +2,12 @@ package com.example.stack
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.widget.ImageView
@@ -96,23 +99,25 @@ import java.time.temporal.ChronoUnit
 //}
 
 class SplashScreenActivity : AppCompatActivity() {
-    private val delayMillis: Long = 5000 // 3 seconds (adjust as needed)
+    private val delayMillis: Long = 1000 // 3 seconds (adjust as needed)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
         val lottieView = findViewById<LottieAnimationView>(R.id.animationView)
-        lottieView.enableMergePathsForKitKatAndAbove(true)
-        lottieView.playAnimation()
-
-        Handler().postDelayed({
-            val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
-            startActivity(intent)
-            lottieView.cancelAnimation()
+        fun navigateToMainActivity() {
+            val i = Intent(
+                this,
+                MainActivity::class.java
+            )
+            startActivity (i)
+            overridePendingTransition (android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-            overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_fade_out) // Custom animation
-        }, delayMillis)
+        }
+
+
+//        lottieView.enableMergePathsForKitKatAndAbove(true)
 
         lottieView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator) {
@@ -127,14 +132,26 @@ class SplashScreenActivity : AppCompatActivity() {
             override fun onAnimationEnd(animation: Animator) {
                 // Animation finished
                 // Open another activity here
+                Log.i("lottie", "onAnimationEnd")
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navigateToMainActivity()
 
+//                    val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
+//                    startActivity(intent)
+//                    overridePendingTransition(
+//                        R.anim.anim_fade_in,
+//                        R.anim.anim_fade_out
+//                    ) // Custom animation
+//                    finish()
+                }, delayMillis)
             }
         })
+//        lottieView.playAnimation()
     }
 
     override fun onResume() {
         super.onResume()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     override fun onStop() {

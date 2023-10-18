@@ -190,9 +190,7 @@ private fun getImageResourceForText(inputText: String): Int {
 
 fun formatMessageTimestamp(timestamp: Long): String {
     val now = Calendar.getInstance().timeInMillis
-    Log.i("chatroom","now: $now")
     val diffMillis = abs(now - timestamp)
-    Log.i("chatroom","diff: $diffMillis")
     val minuteMillis: Long = 60 * 1000
     val hourMillis: Long = 60 * minuteMillis
     val dayMillis: Long = 24 * hourMillis

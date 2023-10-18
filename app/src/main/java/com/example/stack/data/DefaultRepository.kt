@@ -291,7 +291,7 @@ class DefaultRepository @Inject constructor(
         return templateExerciseRecordDao.getTemplateExerciseRecordListByTemplateId(templateId)
     }
 
-    override fun createChatroomAtFireStore(chatroom: Chatroom) {
+    override fun createChatroomAtFireStore(chatroom: Chatroom, callBack: (Chatroom)->Unit) {
         val ref = db.collection("chatroom")
         val query = ref.where(
             Filter.or(
@@ -309,14 +309,27 @@ class DefaultRepository @Inject constructor(
         query.get().addOnSuccessListener { querySnapshot ->
 
             if (querySnapshot.isEmpty) {
+                Log.i("chatroom","isEmpty")
                 //the chatroom is not existed, create one for it
                 val docRef = ref.document()
-                docRef.set(chatroom.copy(roomId = docRef.id))
+                val newChatroom = chatroom.copy(roomId = docRef.id)
+                docRef.set(newChatroom)
+                callBack(newChatroom)
+            }
+            else{
+
+                val searchedChatroom =  querySnapshot.documents[0].toObject<ChatroomFromFireStore>()
+                Log.i("chatroom","$searchedChatroom")
+                searchedChatroom?.toChatroom()?.let { callBack(it) }
             }
 
         }.addOnFailureListener { exception ->
             Log.i("chatroom", "$exception")
         }
+    }
+
+    override fun searchChatroomByUserId(userId1: String, userId2: String) {
+
     }
 
     override suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit) {
@@ -375,6 +388,7 @@ class DefaultRepository @Inject constructor(
     }
 
     override fun uploadUserToFireStore(user: User) {
+        Log.i("login","uploadUserToFireStore Called")
         db.collection("user").document(user.id).set(user).addOnSuccessListener {
             Log.i("user", "$user")
             Log.i("user", "upload fireStore success!")

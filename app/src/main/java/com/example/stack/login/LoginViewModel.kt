@@ -119,6 +119,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                         UserManager.user = User(user!!.uid, displayName , email)
                     }
                     coroutineScope.launch {
+                        Log.i("login", "${UserManager.user}")
                         UserManager.user?.let { stackRepository.upsertUser(it) }
                         UserManager.user?.let{stackRepository.uploadUserToFireStore(it)}
                     }

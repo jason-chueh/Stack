@@ -268,11 +268,17 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
                 findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
+        viewModel.navigateToHomeFragment.observe(viewLifecycleOwner){
+            if(it == true){
+                dialog.dismiss()
+                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
+            }
+        }
         dialogBinding.rejectText.setOnClickListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithoutSaveTemplate(binding.workoutTitleText.text.toString())
-                dialog.dismiss()
-                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
+//                dialog.dismiss()
+//                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
         dialogBinding.root.setOnClickListener {
