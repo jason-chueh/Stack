@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.data.dataclass.Template
+import com.example.stack.databinding.DialogDiscardTemplateBinding
 import com.example.stack.databinding.DialogTemplateBinding
 import com.example.stack.databinding.FragmentTemplateBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +42,11 @@ class TemplateFragment() : Fragment() {
             showDialog(it)
         }
 
-        val adapter = TemplateListAdapter(templateOnClick)
+        val templateOnLongClick: (Int, Template) -> Unit = { templatePosition, template ->
+            showDiscardTemplateDialog(templatePosition, template)
+        }
+
+        val adapter = TemplateListAdapter(templateOnClick, templateOnLongClick)
         binding.templateRecyclerView.adapter = adapter
 
         viewModel.searchTemplateByUserId()
@@ -98,6 +103,41 @@ class TemplateFragment() : Fragment() {
         }
 
         dialogBinding.cancelButtonDialog.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+    private fun showDiscardTemplateDialog(templatePosition: Int, template: Template) {
+
+        val dialog = Dialog(this.requireContext())
+
+        val dialogBinding: DialogDiscardTemplateBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_discard_template,
+            null,
+            false
+        )
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.show()
+
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogBinding.lifecycleOwner = viewLifecycleOwner
+
+        dialogBinding.root.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.templateTitle = template.templateName
+        dialogBinding.continueText.setOnClickListener {
+            viewModel.deleteTemplate(template, templatePosition)
             dialog.dismiss()
         }
     }

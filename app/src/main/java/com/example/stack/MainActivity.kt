@@ -1,24 +1,28 @@
 package com.example.stack
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-
 import androidx.navigation.findNavController
 import com.example.stack.data.network.PythonManager
 import com.example.stack.databinding.ActivityMainBinding
-import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.login.UserManager
+import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.util.CurrentFragmentType
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -84,6 +88,10 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    if(UserManager.isTraining){
+                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
+                        return@setOnItemSelectedListener true
+                    }
                     findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToHomeFragment())
                     return@setOnItemSelectedListener true
                 }
@@ -137,4 +145,21 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
         }
     }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
 }

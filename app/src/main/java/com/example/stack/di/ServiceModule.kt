@@ -10,6 +10,7 @@ import com.example.stack.MainActivity
 import com.example.stack.R
 import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.service.NOTIFICATION_CHANNEL_ID
+import com.example.stack.service.NOTIFICATION_CHANNEL_ID_FINISH
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,17 +35,17 @@ object ServiceModule{
     FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
+
     @Provides
     @ServiceScoped
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
         pendingIntent: PendingIntent
     ) = NotificationCompat.Builder(app, NOTIFICATION_CHANNEL_ID)
-    .setAutoCancel(false)
-    .setOngoing(true)
+    .setAutoCancel(true)
+    .setOngoing(false)
     .setSmallIcon(R.drawable.gym)
     .setContentTitle("Stack")
     .setContentText("00:00:00")
     .setContentIntent(pendingIntent)
-
 }

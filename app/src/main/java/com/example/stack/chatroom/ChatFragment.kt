@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import co.yml.charts.common.extensions.isNotNull
 import com.example.stack.data.dataclass.Chat
 import com.example.stack.data.dataclass.Chatroom
@@ -31,7 +32,7 @@ class ChatFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val adapter = UserManager.user?.id?.let { ChatAdapter(it) }
+
         var sender: String
         var receiver: String
         var picture: String?
@@ -55,8 +56,9 @@ class ChatFragment : Fragment() {
         binding.imageBack.setOnClickListener {
             findNavController().navigateUp()
         }
-        binding.chatName.text = receiver
 
+        val adapter = UserManager.user?.id?.let { ChatAdapter(it, picture) }
+        binding.chatName.text = receiver
         binding.chatRecyclerView.adapter = adapter
         binding.sendFrameLayout.setOnClickListener {
             val input = binding.input.text
@@ -77,10 +79,15 @@ class ChatFragment : Fragment() {
             adapter?.submitList(it)
             val itemCount = adapter?.itemCount
             if (itemCount != null) {
-                if(itemCount > 0){
-                    binding.chatRecyclerView.scrollToPosition(itemCount - 1)
+                if(itemCount > 1){
+//                    binding.chatRecyclerView.scrollToPosition(itemCount - 1)
+//                    val totalContentHeight = binding.chatRecyclerView.computeVerticalScrollRange()
+//                    val recyclerViewHeight = binding.chatRecyclerView.height
+//                    val bottomPosition = totalContentHeight - recyclerViewHeight
+                     binding.chatRecyclerView.smoothScrollToPosition(it.size-1)
+//                    val layoutManager = binding.chatRecyclerView.layoutManager as LinearLayoutManager
+//                    layoutManager.scrollToPositionWithOffset(itemCount - 1, 0)
                 }
-
             }
         }
 

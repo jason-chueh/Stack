@@ -152,6 +152,15 @@ fun capitalize(textView: TextView, inputText: String){
 }
 
 
+@BindingAdapter("discardTemplateTitle")
+fun discardTemplateTitle(textView: TextView, inputText: String?){
+    inputText?.let{
+        val outputText = "Discard " + it.capitalizeFirstLetterOfWords() + "?"
+        textView.text = outputText
+    }
+}
+
+
 // Define a function to map input text to image resources (customize this as needed)
 private fun getImageResourceForText(inputText: String): Int {
     // Example logic: Map inputText to corresponding image resource IDs
@@ -181,9 +190,7 @@ private fun getImageResourceForText(inputText: String): Int {
 
 fun formatMessageTimestamp(timestamp: Long): String {
     val now = Calendar.getInstance().timeInMillis
-    Log.i("chatroom","now: $now")
     val diffMillis = abs(now - timestamp)
-    Log.i("chatroom","diff: $diffMillis")
     val minuteMillis: Long = 60 * 1000
     val hourMillis: Long = 60 * minuteMillis
     val dayMillis: Long = 24 * hourMillis

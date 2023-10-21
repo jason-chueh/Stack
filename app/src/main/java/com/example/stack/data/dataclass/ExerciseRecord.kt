@@ -33,14 +33,19 @@ fun ExerciseRecord.toTemplateExerciseRecord(templateId: String) = TemplateExerci
     repsAndWeights = repsAndWeights
 )
 
-
 data class ExerciseRecordWithCheck(
     val userId: String,
     val startTime: Long,
     val exerciseId: String,
     val exerciseName: String,
-    var expand: Boolean = false,
-    var repsAndWeights: MutableList<RepsAndWeightsWithCheck>
+    val expand: Boolean = false,
+    val repsAndWeights: MutableList<RepsAndWeightsWithCheck>
+)
+
+
+data class Test(
+    val exerciseRecord: ExerciseRecord,
+    val list: Int
 )
 
 @Parcelize
@@ -69,7 +74,7 @@ fun RepsAndWeightsWithCheck.toRepsAndWeight()=
         weight = weight
     )
 
-fun ExerciseRecord.toExerciseRecordWithCheck()=
+fun ExerciseRecord.toExerciseRecordWithCheck() =
     ExerciseRecordWithCheck(
         userId = userId,
         startTime = startTime,

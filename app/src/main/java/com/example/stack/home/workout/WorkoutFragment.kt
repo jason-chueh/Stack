@@ -9,20 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.addCallback
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.NavigationDirections
 import com.example.stack.R
-import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
+import com.example.stack.databinding.DialogCancelWorkoutBinding
 import com.example.stack.databinding.DialogSaveTemplateBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
 import com.example.stack.home.workout.timer.TimerDialogFragment
+import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -30,6 +33,8 @@ import javax.inject.Inject
 class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
     @Inject
     lateinit var factory: WorkoutViewModel.Factory
+
+    lateinit var binding: FragmentWorkoutBinding
 
     private val viewModel: WorkoutViewModel by activityViewModels {
         WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
@@ -42,10 +47,14 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             viewModel.setDataListFromBundle(templateExerciseList)
         }
         Log.i("template", "$templateExerciseList")
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            showCancelDialog()
+        }
+
         super.onCreate(savedInstanceState)
     }
 
-    lateinit var binding: FragmentWorkoutBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,27 +66,15 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         binding.viewModel = viewModel
 
         val adapter = WorkoutAdapter(
-            { exerciseName, exerciseId ->
-                findNavController().navigate(
-                    NavigationDirections.navigateToExerciseDetailFragment(
-                        exerciseId,
-                        exerciseName
-                    )
-                )
-            },
-            { exercisePosition, setPosition, repsAndWeights ->
-                updateSetToTrue(exercisePosition, setPosition, repsAndWeights)
-//                val layoutManager = binding.workoutRecyclerView.layoutManager as LinearLayoutManager
-//                layoutManager.scrollToPositionWithOffset(2, 0) // 滚动到第二个项目
-//                val innerRecyclerView = layoutManager.findViewByPosition(2) as RecyclerView
-//                val innerLayoutManager = innerRecyclerView.layoutManager as LinearLayoutManager
-//                innerLayoutManager.scrollToPositionWithOffset(1, 0)
-            },
-            viewModel.updateSetToFalse,
-            viewModel.addSet,
-            viewModel.expandExercise,
-            viewModel.deleteExerciseRecord
+            detailInfoClickListener = navigateToExerciseDetailFragment,
+            completeSet = updateSetToTrue,
+            cancelCompleteSet = viewModel.updateSetToFalse,
+            addSetOnClick = viewModel.addSet,
+            expandListener = viewModel.expandExercise,
+            deleteOnClick = viewModel.deleteExerciseRecord
         )
+
+        enableSwipeToDelete()
 
         viewModel.notifyItemChangePosition.observe(viewLifecycleOwner) {
             adapter.notifyItemChanged(it)
@@ -86,46 +83,37 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         binding.workoutRecyclerView.adapter = adapter
 
 
-//        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
-//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-//                binding.workoutRecyclerView.scrollToPosition(itemCount)
-//            }
-//        })
-
         viewModel.getAllExerciseFromDb()
 
         viewModel.dataList.observe(viewLifecycleOwner) {
-            Log.i("workout", "$it")
             adapter.submitList(it)
         }
 
         viewModel.scrollToPosition.observe(viewLifecycleOwner) {
-//            binding.workoutRecyclerView.scrollToPosition(adapter.itemCount - 1)
-            Log.i("scroll", "$it")
             binding.workoutRecyclerView.scrollToPosition(it)
         }
 
-        viewModel.scrollToInnerPosition.observe(viewLifecycleOwner) {
-            Log.i("scroll", "$it")
-
+        viewModel.smoothScrollTarget.observe(viewLifecycleOwner) {
             if (it != null) {
-                Log.i("scroll", "$it")
                 val layoutManager = binding.workoutRecyclerView.layoutManager as LinearLayoutManager
-                layoutManager.scrollToPositionWithOffset(it.first, 0)
-                val cardView = layoutManager.findViewByPosition(it.first) as? CardView
+                val cardView =
+                    layoutManager.findViewByPosition(it.outerRecyclerViewPosition) as? CardView
                 if (cardView != null) {
                     val innerRecyclerView =
                         cardView.findViewById<RecyclerView>(R.id.repsRecyclerView)
                     if (innerRecyclerView != null) {
                         val innerLayoutManager =
                             innerRecyclerView.layoutManager as LinearLayoutManager
-                        innerLayoutManager.scrollToPositionWithOffset(it.second, 0)
+                        val height =
+                            innerLayoutManager.findViewByPosition(it.innerRecyclerViewPosition)?.height
+                        if (height != null) {
+                            binding.workoutRecyclerView.smoothScrollBy(0, height)
+                        }
                     } else {
                         Log.i("scroll", "innerRecyclerView not found")
-                        // Handle the case where the innerRecyclerView is not found
                     }
                 } else {
-                    Log.i("scroll", "error! cardView not found")
+                    Log.i("scroll", "cardView not found")
                 }
             }
         }
@@ -134,7 +122,6 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             val dialog = ExerciseDialog()
             dialog.setExerciseDialogListener(this)
             dialog.show(childFragmentManager, "EXERCISE_DIALOG_TAG")
-//            showExerciseDialog()
         }
 
         binding.timerIcon.setOnClickListener {
@@ -156,12 +143,47 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         }
 
         binding.cancel.setOnClickListener {
-            findNavController().navigate(NavigationDirections.navigateToHomeFragment())
-            viewModel.cancelWorkout()
+            showCancelDialog()
         }
 
-
         return binding.root
+    }
+
+    val navigateToExerciseDetailFragment: (String, String) -> Unit = { exerciseName, exerciseId ->
+        findNavController().navigate(
+            NavigationDirections.navigateToExerciseDetailFragment(
+                exerciseId,
+                exerciseName
+            )
+        )
+    }
+
+    private val updateSetToTrue: (exercisePosition: Int, setPosition: Int, repsAndWeights: RepsAndWeightsWithCheck) -> Unit =
+        { exercisePosition, setPosition, repsAndWeights ->
+            viewModel.updateSetToTrue(exercisePosition, setPosition, repsAndWeights)
+            viewModel.calculateScroll(exercisePosition, setPosition)
+        }
+    
+    private fun enableSwipeToDelete() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback =
+            object : SwipeToDeleteCallback(this.requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                    val position = viewHolder.absoluteAdapterPosition
+                    viewModel.deleteExercise(position)
+                }
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val draggedItemIndex = viewHolder.absoluteAdapterPosition
+                    val targetIndex: Int = target.absoluteAdapterPosition
+                    viewModel.swapPosition(draggedItemIndex, targetIndex)
+                    return false
+                }
+            }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.workoutRecyclerView)
     }
 
     private fun showSaveAsTemplateDialog() {
@@ -174,17 +196,13 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         )
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(dialogBinding.root)
-
         dialog.show()
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
         dialogBinding.lifecycleOwner = viewLifecycleOwner
-
         dialogBinding.continueText.setOnClickListener {
             if (!binding.workoutTitleText.text.isNullOrBlank()) {
                 viewModel.finishWorkoutWithSaveTemplate(binding.workoutTitleText.text.toString())
@@ -192,72 +210,55 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
                 findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
-
-        dialogBinding.rejectText.setOnClickListener {
-            if (!binding.workoutTitleText.text.isNullOrBlank()) {
-                viewModel.finishWorkoutWithoutSaveTemplate(binding.workoutTitleText.text.toString())
+        viewModel.navigateToHomeFragment.observe(viewLifecycleOwner) {
+            if (it == true) {
                 dialog.dismiss()
                 findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
         }
-
+        dialogBinding.rejectText.setOnClickListener {
+            if (!binding.workoutTitleText.text.isNullOrBlank()) {
+                viewModel.finishWorkoutWithoutSaveTemplate(binding.workoutTitleText.text.toString())
+            }
+        }
         dialogBinding.root.setOnClickListener {
             dialog.dismiss()
         }
-
     }
 
-    private val updateSetToTrue: (exercisePosition: Int, setPosition: Int, repsAndWeights: RepsAndWeightsWithCheck) -> Unit =
-        { exercisePosition, setPosition, repsAndWeights ->
-            viewModel.updateSetToTrue(exercisePosition, setPosition, repsAndWeights)
-            viewModel.findFirstUncheckedPosition()
+    private fun showCancelDialog() {
+        val dialog = Dialog(this.requireContext())
+        val dialogBinding: DialogCancelWorkoutBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_cancel_workout,
+            null,
+            false
+        )
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.show()
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.lifecycleOwner = viewLifecycleOwner
+
+        dialogBinding.rejectText.setOnClickListener {
+            dialog.dismiss()
         }
+
+        dialogBinding.continueText.setOnClickListener {
+            findNavController().navigate(NavigationDirections.navigateToHomeFragment())
+            viewModel.cancelWorkout()
+            dialog.dismiss()
+        }
+        dialogBinding.root.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
 
     override fun onExerciseSelected(position: Int) {
         Log.i("terry", "$position")
     }
 }
-
-val exerciseList = listOf(
-    Exercise(
-        id = "0026",
-        name = "barbell bench squat",
-        target = "pectorals",
-        gifUrl = "https://example.com/push-up.gif",
-        bodyPart = "Upper Body",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "2",
-        name = "Squat",
-        target = "glutes",
-        gifUrl = "https://example.com/squat.gif",
-        bodyPart = "Lower Body",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "3",
-        name = "Pull-up",
-        target = "upper back",
-        gifUrl = "https://example.com/pull-up.gif",
-        bodyPart = "Upper Body",
-        equipment = "Pull-up bar"
-    ),
-    Exercise(
-        id = "4",
-        name = "Plank",
-        target = "abs",
-        gifUrl = "https://example.com/plank.gif",
-        bodyPart = "core",
-        equipment = "None"
-    ),
-    Exercise(
-        id = "5",
-        name = "Dumbbell Curl",
-        target = "biceps",
-        gifUrl = "https://example.com/dumbbell-curl.gif",
-        bodyPart = "Upper Body",
-        equipment = "Dumbbells"
-    )
-    // Add more exercise entries as needed
-)

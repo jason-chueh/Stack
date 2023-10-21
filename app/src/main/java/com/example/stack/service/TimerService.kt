@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
+import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -21,16 +22,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.stack.MainActivity
 import com.example.stack.R
+import com.example.stack.data.StackRepository
 import dagger.hilt.android.AndroidEntryPoint
 
 import javax.inject.Inject
 
 const val NOTIFICATION_CHANNEL_ID = "timer_channel"
+const val NOTIFICATION_CHANNEL_ID_FINISH = "timer_channel_finish"
+
 const val NOTIFICATION_CHANNEL_NAME = "Timer"
+const val NOTIFICATION_CHANNEL_NAME_FINISH = "Finish"
+
 const val NOTIFICATION_ID = 1 //at least 1, 0 does not work
+const val NOTIFICATION_ID_FINISH = 2
 const val ACTION_SHOW_WORKOUT_FRAGMENT = "showWorkoutFragment"
 
+
 const val ACTION_START_SERVICE = "ACTION_START_SERVICE"
+const val ACTION_PAUSE_OR_RESUME_SERVICE = "ACTION_PAUSE_OR_RESUME_SERVICE"
 const val ACTION_ADD_TIME = "ACTION_ADD_TIME"
 const val ACTION_RESET = "ACTION_RESET"
 
@@ -44,6 +53,9 @@ class TimerService : LifecycleService() {
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
 
+    @Inject
+    lateinit var pendingIntent: PendingIntent
+
     lateinit var curNotificationBuilder: NotificationCompat.Builder
 
     init {
@@ -54,7 +66,7 @@ class TimerService : LifecycleService() {
     val timeProgress = MutableLiveData(0)
 
 
-    val isStart = MutableLiveData(true)
+    private val isStart = MutableLiveData(true)
     var timeCountDown: CountDownTimer? = null
     private var pauseOffSet: Long = 0
 
@@ -76,14 +88,17 @@ class TimerService : LifecycleService() {
         // ... rest of the onUnbind logic
         return super.onUnbind(intent)
     }
+
     override fun onCreate(){
         super.onCreate()
         curNotificationBuilder = baseNotificationBuilder
 
         isStart.observe(this, Observer {
+            Log.i("timer","isStart: $it")
             updateNotificationTrackingState(it)
         })
     }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent.let {
             Log.i("timer", "${it?.action}")
@@ -94,6 +109,9 @@ class TimerService : LifecycleService() {
                         timeProgress.value = 0
                     }
 //                    startTimerSetup()
+                }
+                ACTION_PAUSE_OR_RESUME_SERVICE->{
+                    startTimerSetup()
                 }
                 else -> {}
             }
@@ -121,17 +139,21 @@ class TimerService : LifecycleService() {
 
             override fun onFinish() {
                 resetTime()
-
-                val notification = curNotificationBuilder.setContentText("Times up! Keep grinding in Stack by click")
-
-
+                val notification =
+                    NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID_FINISH)
+                        .setAutoCancel(false)
+                        .setOngoing(true)
+                        .setSmallIcon(R.drawable.gym)
+                        .setContentTitle("Stack")
+                        .setContentIntent(pendingIntent)
+                        .setContentText("Times up! Keep grinding in Stack by click")
                 val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.notify(NOTIFICATION_ID, notification.build())
-
+                notificationManager.notify(NOTIFICATION_ID_FINISH, notification.build()) //
                 stopSelf()
             }
         }
     }
+
     private fun startTimer() {
         timeCountDown?.start()
     }
@@ -188,8 +210,8 @@ class TimerService : LifecycleService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
+            createNotificationImportantChannel(notificationManager)
         }
-
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
     }
 
@@ -203,11 +225,23 @@ class TimerService : LifecycleService() {
         notificationManager.createNotificationChannel(channel)
     }
 
+    private fun createNotificationImportantChannel(notificationManager: NotificationManager) {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID_FINISH,
+            NOTIFICATION_CHANNEL_NAME_FINISH,
+            IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
+
+
     @SuppressLint("RestrictedApi")
     private fun updateNotificationTrackingState(isStart: Boolean){
         val notificationActionText = if(!isStart) "Pause" else "Resume"
         val pauseIntent = Intent(this, TimerService::class.java).apply{
-            action = ACTION_START_SERVICE
+            action = ACTION_PAUSE_OR_RESUME_SERVICE
         }
         val pendingIntent = PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
 
@@ -234,13 +268,7 @@ class TimerService : LifecycleService() {
     }
     private fun stopService(){
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-// Stop the service from running in the foreground
         stopForeground(STOP_FOREGROUND_REMOVE)
-
-// Remove the notification
         notificationManager.cancel(NOTIFICATION_ID)
-
-// Stop the service
     }
 }

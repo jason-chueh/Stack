@@ -20,4 +20,8 @@ interface TemplateDao {
     @Query("DELETE FROM template")
     fun deleteAllTemplate()
 
+    @Query("DELETE FROM template WHERE template_id = :templateId")
+    fun deleteTemplateByTemplateId(templateId: String)
+
+
 }

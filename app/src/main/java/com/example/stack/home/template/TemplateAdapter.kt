@@ -13,7 +13,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class TemplateListAdapter(val onClick: (Template)->Unit) : ListAdapter<Template, RecyclerView.ViewHolder>(TemplateDiffCallback()) {
+class TemplateListAdapter(val onClick: (Template)->Unit, val onLongClick: (Int, Template)->Unit) : ListAdapter<Template, RecyclerView.ViewHolder>(TemplateDiffCallback()) {
 
     companion object {
         private const val VIEW_TYPE_ODD = 1
@@ -59,6 +59,10 @@ class TemplateListAdapter(val onClick: (Template)->Unit) : ListAdapter<Template,
             binding.root.setOnClickListener {
                 onClick(template)
             }
+            binding.root.setOnLongClickListener{
+                onLongClick(absoluteAdapterPosition, template)
+                true
+            }
         }
     }
 
@@ -68,6 +72,10 @@ class TemplateListAdapter(val onClick: (Template)->Unit) : ListAdapter<Template,
             binding.dateText.text = formatTimestampToMonthDay(Calendar.getInstance().timeInMillis)
             binding.root.setOnClickListener {
                 onClick(template)
+            }
+            binding.root.setOnLongClickListener{
+                onLongClick(absoluteAdapterPosition, template)
+                true
             }
         }
     }

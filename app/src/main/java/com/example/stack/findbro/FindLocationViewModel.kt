@@ -14,7 +14,7 @@ class FindLocationViewModel @Inject constructor(private val stackRepository: Sta
     ViewModel() {
     fun upsertUser(lat: String, long: String) {
         viewModelScope.launch {
-            UserManager.user = UserManager.user?.copy(gymLatitude = lat, gymLongitude = long)
+            UserManager.updateUser(UserManager.user?.copy(gymLatitude = lat, gymLongitude = long))
             UserManager.user?.let { stackRepository.upsertUser(it) }
             UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
         }

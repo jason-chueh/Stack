@@ -27,7 +27,6 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
     val userWorkoutRecords = MutableLiveData<List<Workout>?>()
     val weightSum = MutableLiveData<Int?>()
 
-
     fun maximumWeightExerciseData(exerciseName: String): List<Entry>{
 
         val entryList = userExerciseRecords.value
