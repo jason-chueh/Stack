@@ -87,7 +87,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
                         if(UserManager.user == null && name.value != null){
-                            UserManager.user = User(user!!.uid, name.value!!, user!!.email!!)
+                            UserManager.updateUser(User(user!!.uid, name.value!!, user!!.email!!))
                             UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                         }
                         coroutineScope.launch {
@@ -116,7 +116,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                     Log.i("login", "${auth.currentUser?.uid}")
                     val user = auth.currentUser
                     if(UserManager.user == null){
-                        UserManager.user = User(user!!.uid, displayName , email)
+                        UserManager.updateUser(User(user!!.uid, displayName , email))
                     }
                     coroutineScope.launch {
                         Log.i("login", "${UserManager.user}")

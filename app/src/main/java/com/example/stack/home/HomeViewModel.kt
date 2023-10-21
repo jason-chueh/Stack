@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         uploadTask.addOnSuccessListener { uri ->
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 currentUri = uri.toString()
-                UserManager.user = UserManager.user?.copy(picture = currentUri)
+                UserManager.updateUser(UserManager.user?.copy(picture = currentUri))
                 UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                 viewModelScope.launch {
                     UserManager.user?.let { stackRepository.upsertUser(it) }

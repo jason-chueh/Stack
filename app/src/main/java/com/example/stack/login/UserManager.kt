@@ -1,6 +1,7 @@
 package com.example.stack.login
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -15,21 +16,34 @@ object UserManager {
     private const val USER_TOKEN = "user_token"
 
     var isTraining: Boolean = false
+        private set
+    private val sharedPreferences: SharedPreferences = StackApplication.instance.getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
 
-    var user: User?
+    var user: User? = null
         get() {
-            val sharedPreferences = StackApplication.instance.getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
-            val userJson = sharedPreferences.getString(USER_TOKEN, null)
-            return userJson?.toUserObject()
+            if (field == null) {
+                // Initialize user from SharedPreferences during the first access
+                val userJson = sharedPreferences.getString(USER_TOKEN, null)
+                field = userJson?.toUserObject()
+                Log.i("login", "init user")
+            }
+            Log.i("login", "get user")
+            return field
         }
-        set(value) {
-            Log.i("login","set user: $value")
-            val sharedPreferences = StackApplication.instance.getSharedPreferences(USER_DATA, Context.MODE_PRIVATE)
+        private set(value) {
+            Log.i("login", "set user: $value")
             val editor = sharedPreferences.edit()
             editor.putString(USER_TOKEN, value?.toJsonString())
             editor.apply()
+            field = value
         }
+    fun updateUser(updatedUser: User?){
+        user = updatedUser
+    }
 
+    fun updateIsTraining(boolean: Boolean){
+        isTraining = boolean
+    }
     val isLoggedIn: Boolean
         get() = user != null
 

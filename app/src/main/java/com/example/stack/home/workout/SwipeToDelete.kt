@@ -19,16 +19,13 @@ import com.example.stack.R
 
 abstract class SwipeToDeleteCallback internal constructor(var mContext: Context) :
     ItemTouchHelper.Callback() {
-    private val mClearPaint: Paint
-    private val mBackground: ColorDrawable
-    private val backgroundColor: Int
+    private val mClearPaint: Paint = Paint()
+    private val mBackground: ColorDrawable = ColorDrawable()
+    private val backgroundColor: Int = Color.parseColor("#006874")
     private val deleteDrawable: Drawable?
 
 
     init {
-        mBackground = ColorDrawable()
-        backgroundColor = Color.parseColor("#006874")
-        mClearPaint = Paint()
         mClearPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         deleteDrawable = ContextCompat.getDrawable(mContext, R.drawable.trash)
     }
@@ -37,7 +34,7 @@ abstract class SwipeToDeleteCallback internal constructor(var mContext: Context)
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        return makeMovementFlags(0, ItemTouchHelper.LEFT)
+        return makeMovementFlags( ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT)
     }
 
 //    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

@@ -33,14 +33,13 @@ import javax.inject.Inject
 class MapsViewModel @Inject constructor(private val stackRepository: StackRepository) :
     ViewModel() {
 
-    var allUsers: LiveData<List<User>> = stackRepository.getUsers()
+    private var allUsers: LiveData<List<User>> = stackRepository.getUsers()
 
     var currentLatLng = MutableLiveData<String>()
 
     val mediatorLiveData = allUsers.combineWith(currentLatLng) { allUsers, currentLatLng ->
         allUsers
     }
-
     var _sortedUserList = MutableLiveData<List<User>>()
 
     var chatroomToGo = MutableLiveData<Chatroom>()

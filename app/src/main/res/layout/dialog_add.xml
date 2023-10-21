@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:fontFamily="@font/questrial"
-        android:hint="00"
         android:inputType="numberDecimal"
         android:textColor="@color/blackBlue"
         android:textColorHint="@color/darkGrey"

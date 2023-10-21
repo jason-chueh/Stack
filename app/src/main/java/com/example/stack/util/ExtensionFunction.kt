@@ -12,8 +12,6 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
         this[index2] = temp
     }
 }
-
-
 fun String.capitalizeFirstLetterOfWords(): String {
     return this.split(" ").joinToString(" ") { word ->
         word.replaceFirstChar {

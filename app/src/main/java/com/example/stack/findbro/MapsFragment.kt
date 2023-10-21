@@ -85,7 +85,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         binding.broRecycleView.adapter = adapter
         binding.shimmerLayout.startShimmer()
 
-
         placesClient = Places.createClient(this.requireContext())
 //        viewModel.testApi()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?

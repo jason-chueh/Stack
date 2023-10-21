@@ -7,18 +7,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.ExerciseRecordWithCheck
-import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.databinding.ItemExerciseRecordBinding
 import com.example.stack.util.capitalizeFirstLetterOfWords
 
 //adapter for workout main page
 class WorkoutAdapter(
-    val clickListener: (name: String, id: String) -> Unit,
-    val yesOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
-    val noOnClick: (exercisePosition: Int, setPosition: Int, repsAndweights: RepsAndWeightsWithCheck) -> Unit,
+    val detailInfoClickListener: (name: String, id: String) -> Unit,
+    val completeSet: (exercisePosition: Int, setPosition: Int, repsAndWeight: RepsAndWeightsWithCheck) -> Unit,
+    val cancelCompleteSet: (exercisePosition: Int, setPosition: Int, repsAndWeight: RepsAndWeightsWithCheck) -> Unit,
     val addSetOnClick: (exercisePosition: Int) -> Unit,
     val expandListener: (exercisePosition: Int)->Unit,
     val deleteOnClick: (exercisePosition: Int, setPosition: Int) -> Unit
@@ -46,13 +44,13 @@ class WorkoutAdapter(
                 expandListener(absoluteAdapterPosition)
             }
             binding.infoImage.setOnClickListener {
-                clickListener(exerciseRecord.exerciseName, exerciseRecord.exerciseId)
+                detailInfoClickListener(exerciseRecord.exerciseName, exerciseRecord.exerciseId)
             }
             binding.addSetButton.setOnClickListener {
                 addSetOnClick(absoluteAdapterPosition)
 //                notifyItemChanged(absoluteAdapterPosition)
             }
-            val adapter = WorkoutDetailAdapter(absoluteAdapterPosition, yesOnClick, noOnClick, deleteOnClick)
+            val adapter = WorkoutDetailAdapter(absoluteAdapterPosition, completeSet, cancelCompleteSet, deleteOnClick)
             binding.repsRecyclerView.adapter = adapter
             adapter.submitList(exerciseRecord.repsAndWeights)
 

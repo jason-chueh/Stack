@@ -95,6 +95,7 @@ class HomeFragment: Fragment() {
                     val lastTime = it.sortedByDescending{ it.startTime }[0].startTime
                     binding.datePreviousWorkout.text = formatTimestamp(lastTime)
                     binding.daysAgo.text = getTimeAgo(lastTime)
+
                 }
                 else{
                     binding.previousWorkoutName.text = "No workout history"
@@ -133,14 +134,13 @@ class HomeFragment: Fragment() {
             }
         }
     }
+
     private fun pickImageFromGallery() {
         val intent = Intent()
-
         intent.setType("image/*")
         intent.setAction(Intent.ACTION_GET_CONTENT)
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE)
     }
-
     private fun showPermissionRationaleDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Album Permission Required")
@@ -155,8 +155,6 @@ class HomeFragment: Fragment() {
             }
             .show()
     }
-
-
     private fun requestReadImagesPermission(dialogShown: Boolean = false) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
                 requireActivity(), READ_IMAGE_PERMISSION
@@ -204,14 +202,12 @@ class HomeFragment: Fragment() {
     fun getTimeAgo(timestamp: Long): String {
         val currentTimeMillis = System.currentTimeMillis()
         val timeDifferenceMillis = currentTimeMillis - timestamp
-
         val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifferenceMillis)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
         val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
         val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)
         val months = days / 30
         val years = days / 365
-
         return when {
             years > 1 -> "$years years"
             months > 1 -> "$months months"

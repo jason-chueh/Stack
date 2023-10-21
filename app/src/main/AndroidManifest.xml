@@ -30,7 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
