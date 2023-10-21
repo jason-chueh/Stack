@@ -66,4 +66,28 @@
     <color name="mediumBlack">#2B2E47</color>
     <color name="lightBlack">#484A67</color>
     <color name="darkGrey">#99999B</color>
+
+    <color name = "lightbrightBlue"> #bebdff</color>
+    <color name = "brightBlue"> #4a47ff</color>
+    <color name = "DarkbrightBlue"> #4a47ff</color>
+    <color name = "lightGreen">#d8ff3d</color>
+
+
+    <color name = "primaryColor">#006874</color>
+    <color name = "onPrimary">#ffffff</color>
+    <color name = "primaryContainer">#97f0ff</color>
+    <color name = "onPrimaryContainer">#001f24</color>
+
+    <color name = "secondaryColor">#4a6267</color>
+    <color name = "onSecondary">#ffffff</color>
+    <color name = "secondaryContainer">#cde7ec</color>
+    <color name = "onSecondaryContainer">#051f23</color>
+
+
+    <color name = "tertiary">#525e7d</color>
+    <color name = "tertiaryContainer">#dae2ff</color>
+    <color name = "onTertiaryContainer">#0e1b37</color>
+
+    <color name = "surfaceVariant">#dbe4e6</color>
+    <color name = "onSurfaceVariant">#3f484a</color>
 </resources>

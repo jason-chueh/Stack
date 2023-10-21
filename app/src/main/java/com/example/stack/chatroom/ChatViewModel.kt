@@ -58,6 +58,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun removeListener(){
+        Log.i("listener","ListenerRemoved!")
         registration?.remove()
     }
     fun updateChatroom(chatroom: Chatroom){

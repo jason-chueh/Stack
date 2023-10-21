@@ -10,6 +10,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.stack.R
 import com.example.stack.data.dataclass.Exercise
+import com.example.stack.data.dataclass.ExerciseWithCheck
+import com.example.stack.data.dataclass.toExerciseWithCheck
 import com.example.stack.databinding.DialogExerciseListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,7 +25,6 @@ class ExerciseDialog : AppCompatDialogFragment() {
     private val viewModel: WorkoutViewModel by activityViewModels {
         WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.LoginDialog)
@@ -40,23 +41,17 @@ class ExerciseDialog : AppCompatDialogFragment() {
         binding = DialogExerciseListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        var name: String = ""
-        var id: String = ""
 
-        val adapter = ExerciseAdapter(fun(exerciseId: String, exerciseName: String) {
-            name = exerciseName
-            id = exerciseId
-        })
+        val adapter = ExerciseAdapter(viewModel.updateExerciseListCheck)
         binding.next.setOnClickListener {
-            if (name != "" && id != "") {
-                viewModel.addExerciseRecord(id, name)
+                viewModel.addAllExercise()
+
                 dismiss()
-            }
         }
 
         binding.cancelAction.setOnClickListener {
-            var tempList = mutableListOf<Exercise>()
-            viewModel.exerciseList.value?.let { it1 -> tempList.addAll(it1) }
+            var tempList = mutableListOf<ExerciseWithCheck>()
+            viewModel.exerciseList.value?.let { it1 -> tempList.addAll(it1.map{exercise -> exercise.toExerciseWithCheck() }) }
             viewModel.filteredExerciseList.value = tempList
             dismiss()
         }

@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_medium"
         android:text="Chatroom"
         android:textColor="@color/white"

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+    </data>
+
+    <com.google.android.material.carousel.MaskableFrameLayout
+        android:id="@+id/carousel_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        android:foreground="?attr/selectableItemBackground"
+        app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/template_gradient">
+
+            <TextView
+                android:id="@+id/templateTitleText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/rubik_medium"
+                android:text="template title"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="30dp"
+                android:rotation="180"
+                android:src="@drawable/angle_left"
+                app:layout_constraintBottom_toBottomOf="@+id/templateTitleText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/templateTitleText"
+                app:tint="@color/primaryColor" />
+
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/rubik_medium"
+                android:text="TextView"
+                android:textColor="@color/mediumBlack"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView9"
+                app:layout_constraintTop_toBottomOf="@+id/templateTitleText" />
+
+
+            <TextView
+                android:id="@+id/workoutDuration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/rubik_medium"
+                android:text="TextView"
+                android:textColor="@color/mediumBlack"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView8"
+                app:layout_constraintTop_toBottomOf="@+id/dateText" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/hourglass_start"
+                app:layout_constraintBottom_toBottomOf="@+id/workoutDuration"
+                app:layout_constraintStart_toStartOf="@+id/imageView9"
+                app:layout_constraintTop_toTopOf="@+id/workoutDuration" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/calendar_lines"
+                app:layout_constraintBottom_toBottomOf="@+id/dateText"
+                app:layout_constraintStart_toStartOf="@+id/templateTitleText"
+                app:layout_constraintTop_toTopOf="@+id/dateText" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/crown"
+                app:layout_constraintBottom_toBottomOf="@+id/prNum"
+                app:layout_constraintStart_toStartOf="@+id/imageView8"
+                app:layout_constraintTop_toTopOf="@+id/prNum" />
+
+            <TextView
+                android:id="@+id/prNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/rubik_medium"
+                android:text="1"
+                android:textColor="@color/mediumBlack"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintTop_toBottomOf="@+id/workoutDuration" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/rubik_medium"
+                android:text="PR"
+                android:textColor="@color/mediumBlack"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/prNum"
+                app:layout_constraintTop_toTopOf="@+id/prNum" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.carousel.MaskableFrameLayout>
+</layout>

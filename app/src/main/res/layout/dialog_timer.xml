@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#80000000"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/round_corner_with_white_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,10 +24,11 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/grey_progressbar"
             android:indeterminate="false"
             android:max="0"
             android:progress="0"
-            android:background="@drawable/grey_progressbar"
             android:progressDrawable="@drawable/progress_bar_background"
             android:rotation="-90"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +53,7 @@
                 android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
                 android:text="0"
-                android:textColor="@color/blackBlue"
+                android:textColor="@color/primaryColor"
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
@@ -58,7 +63,7 @@
                 android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
                 android:text="sec time left"
-                android:textColor="@color/darkestBlue"
+                android:textColor="@color/primaryColor"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -70,10 +75,10 @@
             android:background="@color/white"
             android:scaleType="fitXY"
             android:src="@drawable/time"
-            app:tint="@color/darkestBlue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbTimer" />
+            app:layout_constraintTop_toBottomOf="@id/pbTimer"
+            app:tint="@color/primaryColor" />
 
         <!-- TextView for adding time -->
         <TextView
@@ -82,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="+15s"
-            android:textColor="@color/darkestBlue"
+            android:textColor="@color/primaryColor"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/pbTimer"
@@ -98,10 +103,10 @@
             android:background="@color/white"
             android:scaleType="fitXY"
             android:src="@drawable/refresh"
-            app:tint="@color/darkestBlue"
             app:layout_constraintBottom_toBottomOf="@+id/pbTimer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pbTimer" />
+            app:layout_constraintTop_toTopOf="@+id/pbTimer"
+            app:tint="@color/primaryColor" />
 
         <!-- Button for Play/Pause -->
         <androidx.appcompat.widget.AppCompatButton
@@ -109,12 +114,13 @@
             android:layout_width="284dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/blue_gradient"
             android:fontFamily="@font/rubik_medium"
             android:text="Start"
             android:textColor="@color/white"
             android:textSize="22sp"
-            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"

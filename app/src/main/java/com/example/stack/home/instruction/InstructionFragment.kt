@@ -1,7 +1,6 @@
 package com.example.stack.home.instruction
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,11 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.stack.data.dataclass.ExerciseYoutube
-import com.example.stack.databinding.FragmentHomeBinding
 import com.example.stack.databinding.FragmentInstructionBinding
-import com.example.stack.home.HomeViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import dagger.assisted.AssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class InstructionFragment : Fragment() {
@@ -68,7 +63,7 @@ class InstructionFragment : Fragment() {
         })
 
         viewModel.instruction.observe(viewLifecycleOwner){
-            binding.instruction.text = it
+            binding.instruction = it
         }
 
         return binding.root

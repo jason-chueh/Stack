@@ -26,7 +26,9 @@ interface StackRepository {
 
     suspend fun refreshExerciseDb()
 
-    suspend fun exerciseApiToDb()
+    suspend fun exerciseApiToFireStore()
+
+    suspend fun exerciseApiToDatabase()
 
     suspend fun getAllExercise(): List<Exercise>
 
@@ -44,9 +46,13 @@ interface StackRepository {
 
     suspend fun updateYoutubeData(exerciseYoutube: ExerciseYoutube)
 
-    suspend fun getInstruction(chatGptRequest: ChatGptRequest):ChatGptResponse?
+    suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse?
 
-    suspend fun getDistanceMatrix(origins: String, destinations: String, apiKey: String): DistanceMatrixResponse?
+    suspend fun getDistanceMatrix(
+        origins: String,
+        destinations: String,
+        apiKey: String
+    ): DistanceMatrixResponse?
 
     suspend fun upsertTemplate(template: Template)
 
@@ -60,7 +66,9 @@ interface StackRepository {
 
     suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
 
-    fun createChatroomAtFireStore(chatroom: Chatroom)
+    fun createChatroomAtFireStore(chatroom: Chatroom, callBack: (Chatroom)->Unit)
+
+    fun searchChatroomByUserId(userId1: String, userId2: String)
 
     suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit)
 
@@ -78,4 +86,9 @@ interface StackRepository {
 
     fun uploadUserToFireStore(user: User)
 
+    suspend fun deleteAllTemplate()
+
+    suspend fun deleteYoutubeById(id: String)
+
+    suspend fun deleteTemplateByTemplateId(templateId: String)
 }

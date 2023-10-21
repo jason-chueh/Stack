@@ -20,4 +20,7 @@ interface ExerciseYoutubeDao {
 
     @Query("SELECT * FROM exercise_youtube_table WHERE youtube_id = :youtubeId")
     suspend fun getYoutubeByYoutubeId(youtubeId: String): ExerciseYoutube
+
+    @Query("DELETE FROM exercise_youtube_table WHERE youtube_id = :youtubeId")
+    suspend fun deleteYoutubeById(youtubeId: String)
 }

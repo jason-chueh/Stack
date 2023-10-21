@@ -7,6 +7,9 @@
         <variable
             name="time"
             type="Long" />
+        <variable
+            name="pictureUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,13 +20,14 @@
             android:id="@+id/pic"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
             android:src="@drawable/lean"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/circular" />
+            app:shapeAppearanceOverlay="@style/circular"
+            app:imageUrl="@{pictureUrl}"/>
 
         <TextView
             android:id="@+id/receiveMessage"

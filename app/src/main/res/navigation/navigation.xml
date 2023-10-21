@@ -137,7 +137,7 @@
         app:launchSingleTop="true" />
     <fragment
         android:id="@+id/timerFragment"
-        android:name="com.example.stack.home.workout.timer.TimerFragment"
+        android:name="com.example.stack.home.workout.timer.TimerDialogFragment"
         android:label="TimerFragment" />
 
     <action

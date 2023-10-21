@@ -54,6 +54,32 @@ data class ExerciseFromFireStore(
 
 ): Parcelable
 
+
+data class ExerciseWithCheck(
+    val id: String,
+    val name: String,
+    val target: String,
+    val gifUrl: String,
+    val bodyPart: String,
+    val equipment: String,
+    val secondaryMuscles: List<String> = listOf(),
+    val instructions: List<String> = listOf(),
+    val check: Boolean = false
+)
+
+fun Exercise.toExerciseWithCheck()=ExerciseWithCheck(
+    id = id,
+    name = name,
+    target = target,
+    gifUrl = gifUrl,
+    bodyPart = bodyPart,
+    equipment = equipment,
+    secondaryMuscles = secondaryMuscles,
+    instructions = instructions,
+    check = false
+)
+
+
 fun ExerciseFromFireStore.toExercise()=Exercise(
     id = id,
     name = name,

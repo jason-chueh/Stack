@@ -33,15 +33,16 @@ import javax.inject.Inject
 class MapsViewModel @Inject constructor(private val stackRepository: StackRepository) :
     ViewModel() {
 
-    var allUsers: LiveData<List<User>> = stackRepository.getUsers()
+    private var allUsers: LiveData<List<User>> = stackRepository.getUsers()
 
     var currentLatLng = MutableLiveData<String>()
 
     val mediatorLiveData = allUsers.combineWith(currentLatLng) { allUsers, currentLatLng ->
         allUsers
     }
-
     var _sortedUserList = MutableLiveData<List<User>>()
+
+    var chatroomToGo = MutableLiveData<Chatroom>()
 
     val sortedUserList: LiveData<List<User>>
         get() = _sortedUserList
@@ -142,17 +143,21 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
 
     fun createChatroom(user: User) {
         if (UserManager.user != null) {
+            val chatroom = Chatroom(
+                userId1 = user.id,
+                userId2 = UserManager.user!!.id,
+                userName = listOf(user.name, UserManager.user!!.name),
+                userPic = listOf(user.picture, UserManager.user!!.picture),
+                lastMessageTime = Calendar.getInstance().timeInMillis
+            )
             stackRepository.createChatroomAtFireStore(
-                Chatroom(
-                    userId1 = user.id,
-                    userId2 = UserManager.user!!.id,
-                    userName = listOf(user.name, UserManager.user!!.name),
-                    userPic = listOf(user.picture, UserManager.user!!.picture),
-                    lastMessageTime = Calendar.getInstance().timeInMillis
-                )
+                chatroom, chatroomCallBack
             )
         }
+    }
 
+    private val chatroomCallBack: (chatroom: Chatroom) -> Unit = { chatroom ->
+        chatroomToGo.value = chatroom
     }
 }
 

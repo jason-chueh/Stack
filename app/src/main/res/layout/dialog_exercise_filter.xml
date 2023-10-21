@@ -29,7 +29,8 @@
         android:layout_marginEnd="16dp"
         android:src="@drawable/cross"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/muscleGroupText"
@@ -38,8 +39,8 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/rubik_medium"
         android:letterSpacing="0.1"
-        android:text="MUSCLE GROUP"
-        android:textColor="@color/lightBlue"
+        android:text="Muscle Group"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/filterText"
         app:layout_constraintTop_toBottomOf="@+id/filterText" />
@@ -60,113 +61,141 @@
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/abductors" />
+            android:text="@string/abductors"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_abs"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/abs" />
+            android:text="@string/abs"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_adductors"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/adductors" />
+            android:text="@string/adductors"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_biceps"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/biceps" />
+            android:text="@string/biceps"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_calves"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/calves" />
+            android:text="@string/calves"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_delts"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
-            android:text="@string/delts" />
+            android:text="@string/delts"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_forearms"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="forearms" />
+            android:text="forearms"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_glutes"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:fontFamily="@font/rubik_medium"
-            android:text="glutes" />
+            android:text="glutes"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_hamstrings"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="hamstrings" />
+            android:text="hamstrings"
+
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_lats"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="lats" />
+
+            android:text="lats"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_scapulae"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="scapulae" />
+
+            android:text="scapulae"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_pectorals"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="pectorals" />
+
+            android:text="pectorals"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_quads"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="quads" />
+
+            android:text="quads"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_traps"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="traps" />
+
+            android:text="traps"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_triceps"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="triceps" />
+
+            android:text="triceps"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_upper_back"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="upper back" />
+
+            android:text="upper back"
+            app:chipBackgroundColor="@color/chip_background_color" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -178,8 +207,8 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/rubik_medium"
         android:letterSpacing="0.1"
-        android:text="EQUIPMENT TYPE"
-        android:textColor="@color/lightBlue"
+        android:text="Equipment Type"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/muscleGroup" />
@@ -194,56 +223,82 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/equipmentTypeText">
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_barbell"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="barbell" />
+            android:text="barbell"
+
+            app:chipBackgroundColor="@color/chip_background_color" />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_cable"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cable" />
+            android:text="cable"
+
+            app:chipBackgroundColor="@color/chip_background_color" />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_dumbbell"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dumbbell" />
+
+            android:text="dumbbell"
+            app:chipBackgroundColor="@color/chip_background_color" />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_leverage_machine"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="leverage machine" />
+            android:text="leverage machine"
+
+            app:chipBackgroundColor="@color/chip_background_color" />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_smith_machine"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="smith machine" />
+
+            android:text="smith machine"
+            app:chipBackgroundColor="@color/chip_background_color" />
+
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_body_weight"
             style="@style/Widget.Material3.Chip.Filter.Elevated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="body weight" />
+            android:text="body weight"
+
+            app:chipBackgroundColor="@color/chip_background_color" />
 
     </com.google.android.material.chip.ChipGroup>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/textCard"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        app:cardCornerRadius="@dimen/cornerRadius">-->
 
     <TextView
         android:id="@+id/applyButton"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
+        android:background="@drawable/round_corner_with_blue_gradient"
         android:fontFamily="@font/rubik_medium"
         android:gravity="center"
-        android:text="APPLY"
-        android:background="@drawable/blue_gradient"
-        android:textColor="@color/white"
+        android:text="Apply"
+        android:textColor="@color/primaryColor"
         android:textSize="25sp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+<!--</androidx.cardview.widget.CardView>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>

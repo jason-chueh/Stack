@@ -17,7 +17,6 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,7 +28,7 @@ import com.example.stack.service.ACTION_START_SERVICE
 import com.example.stack.service.TimerService
 
 
-class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
+class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
     lateinit var binding: DialogTimerBinding
 //    private var timeSelected: Int = 0
 //    private var timeCountDown: CountDownTimer? = null
@@ -62,7 +61,10 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.LoginDialog)
-
+        dialog?.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT, // Set the desired width
+        ViewGroup.LayoutParams.WRAP_CONTENT // Set the desired height
+        )
 
         super.onCreate(savedInstanceState)
     }
@@ -109,7 +111,9 @@ class TimerFragment : AppCompatDialogFragment(), ServiceConnection {
 
         binding = DialogTimerBinding.inflate(inflater, container, false)
 //        sendCommandToService(ACTION_START_SERVICE)
-
+        binding.root.setOnClickListener{
+            dialog?.dismiss()
+        }
         binding.btnAdd.setOnClickListener {
             setTimeFunction()
         }

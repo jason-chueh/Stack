@@ -183,7 +183,6 @@
                 android:textSize="16sp"
                 android:text='@{viewModel.status != LoadApiStatus.LOADING ? @string/login_native_text : ""}'
                 android:clickable="@{viewModel.status == LoadApiStatus.LOADING ? false : true}"
-                android:onClick="@{() -> viewModel.nativeLogin()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

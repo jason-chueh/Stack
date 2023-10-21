@@ -28,4 +28,9 @@
     <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorControlNormal">@color/mediumBlue</item>
     </style>
+
+<!--    <style name="MyCustomChipStyle" parent="Widget.Material3.Chip.Filter.Elevated">-->
+<!--        &lt;!&ndash; Customize other chip properties as needed &ndash;&gt;-->
+<!--        <item name="android:background">@color/onPrimary</item>-->
+<!--    </style>-->
 </resources>

@@ -1,5 +1,6 @@
 package com.example.stack.home.template
 
+import android.icu.text.Transliterator.Position
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,19 @@ class TemplateViewModel @Inject constructor(private val stackRepository: StackRe
                     stackRepository.getTemplateExerciseRecordListByTemplateId(templateId)
 
                 templateExerciseList.postValue(exerciserList)
+            }
+        }
+    }
+    fun deleteTemplate(template: Template, templatePosition: Int){
+        val updatedList = mutableListOf<Template>()
+        templateList.value?.let{
+            updatedList.addAll(it)
+            updatedList.removeAt(templatePosition)
+            templateList.value = updatedList
+        }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                stackRepository.deleteTemplateByTemplateId(templateId = template.templateId)
             }
         }
     }
