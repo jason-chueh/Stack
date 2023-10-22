@@ -28,15 +28,11 @@ import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
 import com.example.stack.data.local.UserInfoDao
 import com.example.stack.data.local.WorkoutDao
-import com.example.stack.data.network.StackApi
 import com.example.stack.data.network.NetworkDataSource
-import com.example.stack.data.network.PythonManager
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -55,9 +51,7 @@ class DefaultRepository @Inject constructor(
 ) : StackRepository {
 
     val db = Firebase.firestore
-    val py = PythonManager.getInstance()
-    private val moduleTranscript = py.getModule("Transcript")
-    private val moduleYoutubeSearch = py.getModule("YoutubeSearch")
+
     override suspend fun test2(): List<ExerciseRecord> {
         var result = listOf<ExerciseRecord>()
         try {
@@ -130,7 +124,7 @@ class DefaultRepository @Inject constructor(
                     "leverage machine",
                     "smith machine"
                 )) {
-                    val result = StackApi.retrofitService.getExerciseByEquipment(
+                    val result = networkDataSource.getExerciseByEquipment(
                         k, BuildConfig.EXERCISE_KEY,
                         "exercisedb.p.rapidapi.com",
                         200
@@ -157,7 +151,7 @@ class DefaultRepository @Inject constructor(
                 "leverage machine",
                 "smith machine"
             )) {
-                val result = StackApi.retrofitService.getExerciseByEquipment(
+                val result = networkDataSource.getExerciseByEquipment(
                     k, BuildConfig.EXERCISE_KEY,
                     "exercisedb.p.rapidapi.com",
                     100
@@ -192,37 +186,12 @@ class DefaultRepository @Inject constructor(
         exerciseId: String,
         exerciseName: String
     ): List<VideoItem> {
-        var videoList = listOf<VideoItem>()
-        try {
-            val result_json = moduleYoutubeSearch.callAttr(
-                "youtubeSearch",
-                "$exerciseName tutorial"
-            )
-                .toJava(String::class.java)
-            val moshi = Moshi.Builder().build()
-            val listType = Types.newParameterizedType(List::class.java, VideoItem::class.java)
-            val adapter = moshi.adapter<List<VideoItem>>(listType)
-            videoList = adapter.fromJson(result_json)!!
-            Log.i("python", "$videoList")
 
-            Log.i("python", "${videoList.size}")
-        } catch (e: Exception) {
-            Log.e("python", "$e")
-        }
-        return videoList
+        return networkDataSource.getYoutubeVideo(exerciseId, exerciseName)
     }
 
-
     override suspend fun getTranscript(youtubeId: String): String {
-        val result: String
-        try {
-            result =
-                moduleTranscript.callAttr("getTranscript", youtubeId).toJava(String::class.java)
-        } catch (e: Exception) {
-            Log.i("python", "$e")
-            return ""
-        }
-        return result
+        return networkDataSource.getTranscript(youtubeId)
     }
 
     override suspend fun searchYoutubeByExercise(exerciseId: String): List<ExerciseYoutube> {
@@ -242,11 +211,11 @@ class DefaultRepository @Inject constructor(
     }
 
     override suspend fun getInstruction(chatGptRequest: ChatGptRequest): ChatGptResponse? {
-        try {
-            return StackApi.retrofitGptService.generateChatResponse(chatGptRequest)
+        return try {
+            networkDataSource.generateChatResponse(chatGptRequest)
         } catch (e: Exception) {
             Log.i("chatgpt", "$e")
-            return null
+            null
         }
     }
 
@@ -255,11 +224,11 @@ class DefaultRepository @Inject constructor(
         destinations: String,
         apiKey: String
     ): DistanceMatrixResponse? {
-        try {
-            return StackApi.distanceMatrixService.getDistanceMatrix(origins, destinations, apiKey)
+        return try {
+            networkDataSource.getDistanceMatrix(origins, destinations, apiKey)
         } catch (e: Exception) {
             Log.i("googleMap", "$e")
-            return null
+            null
         }
     }
 
@@ -283,8 +252,8 @@ class DefaultRepository @Inject constructor(
         return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecordsList)
     }
 
-    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecord: TemplateExerciseRecord) {
-        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecord)
+    override suspend fun upsertTemplateExerciseRecord(templateExerciseRecords: TemplateExerciseRecord) {
+        return templateExerciseRecordDao.upsertTemplateExerciseRecord(templateExerciseRecords)
     }
 
     override suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord> {

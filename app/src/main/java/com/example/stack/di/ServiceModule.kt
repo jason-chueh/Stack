@@ -4,13 +4,11 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import androidx.core.app.NotificationCompat
 import com.example.stack.MainActivity
 import com.example.stack.R
 import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.service.NOTIFICATION_CHANNEL_ID
-import com.example.stack.service.NOTIFICATION_CHANNEL_ID_FINISH
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

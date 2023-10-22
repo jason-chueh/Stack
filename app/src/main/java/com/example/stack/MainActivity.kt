@@ -16,7 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import com.example.stack.data.network.PythonManager
 import com.example.stack.databinding.ActivityMainBinding
 import com.example.stack.login.UserManager
 import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        PythonManager.initialize(this)
+//        PythonManager.initialize(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

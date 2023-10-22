@@ -54,7 +54,7 @@ class HomeFragment: Fragment() {
             val chooseTemplateDialog = ChooseTemplateDialog()
             chooseTemplateDialog.show(childFragmentManager, "")
         }
-//        viewModel.exerciseApiToDatabase()
+        viewModel.exerciseApiToDatabase()
 //        viewModel.deleteYoutube()
 //        viewModel.deleteAllTemplate()
 //        viewModel.upsertTemplate()

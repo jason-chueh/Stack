@@ -25,8 +25,8 @@ class ChatViewModel @Inject constructor(
     ViewModel() {
 
     val db = Firebase.firestore
-    val ref = db.collection("chat")
-    var registration: ListenerRegistration? = null
+    private val ref = db.collection("chat")
+    private var registration: ListenerRegistration? = null
     var chatList = MutableLiveData<List<Chat>>()
 
 
