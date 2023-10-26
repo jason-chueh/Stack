@@ -74,18 +74,6 @@ class LoginDialog : AppCompatDialogFragment() {
             }
         )
 
-        viewModel.loginErrorToast.observe(
-            viewLifecycleOwner
-        ) {
-            if (it) {
-                Toast.makeText(
-                    this.context,
-                    "Authentication failed.",
-                    Toast.LENGTH_SHORT,
-                ).show()
-                viewModel.onLoginErrorToastCompleted()
-            }
-        }
 
         viewModel.registerErrorToast.observe(
             viewLifecycleOwner

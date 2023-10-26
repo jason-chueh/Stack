@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,9 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-private const val RESULT_SEPARATOR = "\n---\n\t"
 
-private const val FIELD_SEPARATOR = "\n\t"
 @AndroidEntryPoint
 class FindLocationFragment() : Fragment(), OnMapReadyCallback {
     lateinit var binding: FragmentFindLocationBinding
@@ -75,12 +74,18 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
         binding.complete.setOnClickListener {
             if(userLat != "" && userLong != ""){
                 viewModel.upsertUser(userLat,userLong)
+                findNavController().navigate(NavigationDirections.navigateToMapsFragment())
             }
-            findNavController().navigate(NavigationDirections.navigateToMapsFragment())
+            else{
+                Toast.makeText(
+                    this.context,
+                    "Register your gym to connect with other users",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
         }
 
         val autocompleteFragment =
@@ -98,7 +103,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
             }
 
             override fun onPlaceSelected(place: Place) {
-                val address = place.address.toString()
+                place.address.toString()
                 mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name))
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
@@ -218,42 +223,6 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         } else {
             Log.d(TAG, "LOCATION permission not granted")
             checkPermissionThenFindCurrentPlace()
-
-        }
-    }
-    private fun FindCurrentPlaceResponse.prettyPrint(): String {
-        return stringify(this, false)
-    }
-    private fun stringify(place: Place): String {
-        return "${place.name?.plus(" (") ?: ""}${place.address?.plus(")") ?: ""}"
-    }
-    private fun stringify(response: FindCurrentPlaceResponse, raw: Boolean): String {
-        val builder = StringBuilder()
-        builder.append(response.placeLikelihoods.size).append(" Current Place Results:")
-        if (raw) {
-            builder.append(RESULT_SEPARATOR)
-            appendListToStringBuilder(builder, response.placeLikelihoods)
-        } else {
-            for (placeLikelihood in response.placeLikelihoods) {
-                builder
-                    .append(RESULT_SEPARATOR)
-                    .append("Likelihood: ")
-                    .append(placeLikelihood.likelihood)
-                    .append(FIELD_SEPARATOR)
-                    .append("Place: ")
-                    .append(stringify(placeLikelihood.place))
-            }
-        }
-        return builder.toString()
-    }
-    private fun <T> appendListToStringBuilder(builder: StringBuilder, items: List<T>) {
-        if (items.isEmpty()) {
-            return
-        }
-        builder.append(items[0])
-        for (i in 1 until items.size) {
-            builder.append(RESULT_SEPARATOR)
-            builder.append(items[i])
         }
     }
 }

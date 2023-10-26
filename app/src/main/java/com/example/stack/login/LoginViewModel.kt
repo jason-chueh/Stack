@@ -19,7 +19,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val stackRepository: StackRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     private var auth: FirebaseAuth = Firebase.auth
@@ -57,10 +59,6 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
 
     val name = MutableLiveData<String>()
 
-    private val _loginErrorToast = MutableLiveData<Boolean>(false)
-
-    val loginErrorToast: LiveData<Boolean>
-        get() = _loginErrorToast
 
     private val _registerErrorToast = MutableLiveData<Boolean>(false)
 
@@ -86,17 +84,15 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        if(UserManager.user == null && name.value != null){
-                            UserManager.updateUser(User(user!!.uid, name.value!!, user!!.email!!))
-                            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+                        if(userManager.user == null && name.value != null){
+                            userManager.updateUser(User(user!!.uid, name.value!!, user!!.email!!))
+                            userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
                         }
-                        coroutineScope.launch {
-                            UserManager.user?.let { stackRepository.upsertUser(it) }
-                            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+                        viewModelScope.launch(Dispatchers.IO){
+                            userManager.user?.let { stackRepository.upsertUser(it) }
                         }
                         leave()
                     } else {
-                        _loginErrorToast.value = true
                         createAccount(email.value!!, password.value!!, displayName)
                         // If sign in fails, display a message to the user.
                         Log.i("signin", "createUserWithEmail:failure")
@@ -115,13 +111,11 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
                     Log.i("login", "createUserWithEmail:success")
                     Log.i("login", "${auth.currentUser?.uid}")
                     val user = auth.currentUser
-                    if(UserManager.user == null){
-                        UserManager.updateUser(User(user!!.uid, displayName , email))
-                    }
-                    coroutineScope.launch {
-                        Log.i("login", "${UserManager.user}")
-                        UserManager.user?.let { stackRepository.upsertUser(it) }
-                        UserManager.user?.let{stackRepository.uploadUserToFireStore(it)}
+                    userManager.updateUser(User(user!!.uid, displayName , email))
+                    userManager.user?.let{stackRepository.uploadUserToFireStore(it)}
+                    viewModelScope.launch(Dispatchers.IO) {
+                        Log.i("login", "${userManager.user}")
+                        userManager.user?.let { stackRepository.upsertUser(it) }
                     }
                     leave()
                 } else {
@@ -170,9 +164,7 @@ class LoginViewModel @Inject constructor(private val stackRepository: StackRepos
         _leave.value = null
     }
 
-    fun onLoginErrorToastCompleted(){
-        _loginErrorToast.value = false
-    }
+
 
     fun onRegisterErrorToastCompleted(){
         _registerErrorToast.value = false

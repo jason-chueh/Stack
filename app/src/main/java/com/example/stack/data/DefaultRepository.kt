@@ -75,9 +75,7 @@ class DefaultRepository @Inject constructor(
     }
 
     override suspend fun upsertUser(user: User) {
-        withContext(Dispatchers.IO) {
             userDao.upsertUser(user)
-        }
     }
 
     override fun getUsers(): LiveData<List<User>> {

@@ -30,7 +30,9 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class MapsViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class MapsViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
 
     private var allUsers: LiveData<List<User>> = stackRepository.getUsers()
@@ -142,12 +144,12 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
     }
 
     fun createChatroom(user: User) {
-        if (UserManager.user != null) {
+        if (userManager.user != null) {
             val chatroom = Chatroom(
                 userId1 = user.id,
-                userId2 = UserManager.user!!.id,
-                userName = listOf(user.name, UserManager.user!!.name),
-                userPic = listOf(user.picture, UserManager.user!!.picture),
+                userId2 = userManager.user!!.id,
+                userName = listOf(user.name, userManager.user!!.name),
+                userPic = listOf(user.picture, userManager.user!!.picture),
                 lastMessageTime = Calendar.getInstance().timeInMillis
             )
             stackRepository.createChatroomAtFireStore(

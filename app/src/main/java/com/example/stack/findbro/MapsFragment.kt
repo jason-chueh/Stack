@@ -4,12 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,22 +20,15 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.DialogBroChattingBinding
-import com.example.stack.databinding.DialogTemplateBinding
-import com.example.stack.databinding.FragmentFindLocationBinding
 import com.example.stack.databinding.FragmentMapsBinding
-import com.example.stack.home.instruction.InstructionViewModel
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
@@ -47,8 +38,6 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 private const val RESULT_SEPARATOR = "\n---\n\t"
 private const val FIELD_SEPARATOR = "\n\t"
@@ -137,7 +126,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             Log.i("chatroom", "$it")
             val bottomNavigation =
                 requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView)
-            bottomNavigation.selectedItemId = R.id.navigation_position
+            bottomNavigation.selectedItemId = R.id.navigation_chatroom
             it?.let { findNavController().navigate(NavigationDirections.navigateToChatFragment(it)) }
 
         }

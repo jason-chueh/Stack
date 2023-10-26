@@ -27,7 +27,9 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class HomeViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    val userManager: UserManager) :
     ViewModel() {
 
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
@@ -66,11 +68,10 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         uploadTask.addOnSuccessListener { uri ->
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 currentUri = uri.toString()
-                UserManager.updateUser(UserManager.user?.copy(picture = currentUri))
-                UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
-                viewModelScope.launch {
-                    UserManager.user?.let { stackRepository.upsertUser(it) }
-                    UserManager.user?.let{ stackRepository.uploadUserToFireStore(it)}
+                userManager.updateUser(userManager.user?.copy(picture = currentUri))
+                userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+                viewModelScope.launch(Dispatchers.IO) {
+                    userManager.user?.let { stackRepository.upsertUser(it) }
                 }
 //                uploadProfileToFirebase(currentUri)
                 Log.i("personal image", "upload successfully, url is $uri")
@@ -86,7 +87,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val exerciseRecordList =
-                    UserManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
+                    userManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
 
                 userExerciseRecords.postValue(exerciseRecordList)
             }
@@ -97,7 +98,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val workoutList =
-                    UserManager.user?.id?.let { stackRepository.findAllWorkoutById(it) }
+                    userManager.user?.id?.let { stackRepository.findAllWorkoutById(it) }
                 userWorkoutRecords.postValue(workoutList)
             }
         }
@@ -142,7 +143,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var resultList =
-                    UserManager.user?.id?.let { stackRepository.searchTemplateIdListByUserId(it) }
+                    userManager.user?.id?.let { stackRepository.searchTemplateIdListByUserId(it) }
                 Log.i("template", "$resultList")
             }
         }
@@ -179,7 +180,7 @@ class HomeViewModel @Inject constructor(private val stackRepository: StackReposi
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val resultList =
-                    UserManager.user?.let { stackRepository.searchTemplateIdListByUserId(it.id) }
+                    userManager.user?.let { stackRepository.searchTemplateIdListByUserId(it.id) }
                 if (resultList != null) {
                     for (i in resultList) {
                         var exerciserList =

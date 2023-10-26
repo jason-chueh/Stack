@@ -6,17 +6,20 @@ import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.User
 import com.example.stack.login.UserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FindLocationViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class FindLocationViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
     fun upsertUser(lat: String, long: String) {
-        viewModelScope.launch {
-            UserManager.updateUser(UserManager.user?.copy(gymLatitude = lat, gymLongitude = long))
-            UserManager.user?.let { stackRepository.upsertUser(it) }
-            UserManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+        viewModelScope.launch(Dispatchers.IO) {
+            userManager.updateUser(userManager.user?.copy(gymLatitude = lat, gymLongitude = long))
+            userManager.user?.let { stackRepository.upsertUser(it) }
+            userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
         }
     }
 }

@@ -9,7 +9,7 @@ import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.databinding.ItemChatroomBinding
 import com.example.stack.login.UserManager
 
-class ChatRoomAdapter(val onClick: (Chatroom)->Unit) :
+class ChatRoomAdapter(val onClick: (Chatroom)->Unit, val userManager: UserManager) :
     ListAdapter<Chatroom, ChatRoomAdapter.ChatroomViewHolder>(DiffCallback) {
 
 
@@ -28,7 +28,7 @@ class ChatRoomAdapter(val onClick: (Chatroom)->Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(chatroom: Chatroom) {
             binding.chatroom = chatroom
-            if(UserManager.user?.id == chatroom.userId1){
+            if(userManager.user?.id == chatroom.userId1){
                 binding.chatroomName.text = chatroom.userName[1]
                 binding.url = chatroom.userPic[1]
             }

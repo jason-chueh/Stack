@@ -23,6 +23,7 @@ import com.example.stack.data.network.StackNetworkDataSource
 import com.example.stack.data.network.retrofitExercise
 import com.example.stack.data.network.retrofitGoogleMap
 import com.example.stack.data.network.retrofitGpt
+import com.example.stack.login.UserManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -60,6 +61,16 @@ object ApiModule {
     }
 }
 
+@Module
+@InstallIn(SingletonComponent::class)
+object UserManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideUserManager(): UserManager {
+        return UserManager()
+    }
+}
 @Module
 @InstallIn(SingletonComponent::class)
 object PythonModule {

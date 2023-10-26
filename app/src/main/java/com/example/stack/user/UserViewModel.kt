@@ -18,9 +18,10 @@ import java.util.Calendar
 import javax.inject.Inject
 
 
-
 @HiltViewModel
-class UserViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class UserViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
 
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
@@ -93,7 +94,7 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
     fun getUserExerciseData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                val exerciseRecordList = UserManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
+                val exerciseRecordList = userManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
                 userExerciseRecords.postValue(exerciseRecordList)
             }
         }
@@ -101,9 +102,9 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
 
     fun getUserWorkoutData(){
         viewModelScope.launch{
+            Log.i("userManagerDi","${userManager.isTraining}")
             withContext(Dispatchers.IO){
-                val workoutList = UserManager.user?.id?.let{ stackRepository.findAllWorkoutById(it)}
-
+                val workoutList = userManager.user?.id?.let{ stackRepository.findAllWorkoutById(it)}
                 userWorkoutRecords.postValue(workoutList)
             }
         }
