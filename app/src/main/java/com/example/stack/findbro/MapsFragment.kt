@@ -73,7 +73,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         binding.broRecycleView.visibility = View.GONE
         binding.broRecycleView.adapter = adapter
         binding.shimmerLayout.startShimmer()
-
+        viewModel.getUserFromFireStore()
+        viewModel.allUsersFromFireStore.observe(viewLifecycleOwner){
+            Log.i("googleMaps","$it")
+        }
         placesClient = Places.createClient(this.requireContext())
 //        viewModel.testApi()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
@@ -284,45 +287,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             Log.i("Jason", "called!")
             checkPermissionThenFindCurrentPlace()
 
-        }
-    }
-
-    private fun FindCurrentPlaceResponse.prettyPrint(): String {
-        return stringify(this, false)
-    }
-
-    private fun stringify(place: Place): String {
-        return "${place.name?.plus(" (") ?: ""}${place.address?.plus(")") ?: ""}"
-    }
-
-    private fun stringify(response: FindCurrentPlaceResponse, raw: Boolean): String {
-        val builder = StringBuilder()
-        builder.append(response.placeLikelihoods.size).append(" Current Place Results:")
-        if (raw) {
-            builder.append(RESULT_SEPARATOR)
-            appendListToStringBuilder(builder, response.placeLikelihoods)
-        } else {
-            for (placeLikelihood in response.placeLikelihoods) {
-                builder
-                    .append(RESULT_SEPARATOR)
-                    .append("Likelihood: ")
-                    .append(placeLikelihood.likelihood)
-                    .append(FIELD_SEPARATOR)
-                    .append("Place: ")
-                    .append(stringify(placeLikelihood.place))
-            }
-        }
-        return builder.toString()
-    }
-
-    private fun <T> appendListToStringBuilder(builder: StringBuilder, items: List<T>) {
-        if (items.isEmpty()) {
-            return
-        }
-        builder.append(items[0])
-        for (i in 1 until items.size) {
-            builder.append(RESULT_SEPARATOR)
-            builder.append(items[i])
         }
     }
 }

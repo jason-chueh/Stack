@@ -2,7 +2,6 @@ package com.example.stack.user
 
 
 import android.app.Dialog
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.fragment.app.viewModels
 import com.example.stack.R
 import com.example.stack.data.dataclass.Workout
 import com.example.stack.databinding.DialogExerciseStatsBinding
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.example.stack.databinding.FragmentUserBinding
 import com.example.stack.util.capitalizeFirstLetterOfWords
 import com.github.mikephil.charting.components.AxisBase
@@ -28,15 +26,14 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 const val MAXIMUM_WEIGHT = "maximum weight"
-const val TRAINING_VOLUME = "training volume"
 
 
 @AndroidEntryPoint
@@ -77,7 +74,6 @@ class UserFragment : Fragment() {
                 binding.avgWorkoutTime.text = calculateAverageWorkoutTime(it)
             }
         }
-
         binding.filterImage.setOnClickListener {
             showFilterDialog(viewModel.getUniqueExerciseList())
         }
@@ -142,11 +138,11 @@ class UserFragment : Fragment() {
 
     }
 
-    fun calculateAverageWorkoutTime(workouts: List<Workout>): String {
+    private fun calculateAverageWorkoutTime(workouts: List<Workout>): String {
         if (workouts.isEmpty()) {
-            return "No data"
+            return "0"
         }
-        val totalDurationMillis = workouts.sumBy { it.endTime.toInt() - it.startTime.toInt() }
+        val totalDurationMillis = workouts.sumOf { it.endTime.toInt() - it.startTime.toInt() }
 
         val averageDurationMillis = totalDurationMillis / workouts.size
 
@@ -155,7 +151,7 @@ class UserFragment : Fragment() {
         return "$averageDurationMinutes"
     }
 
-    fun showFilterDialog(exerciseNameList: List<String>?) {
+    private fun showFilterDialog(exerciseNameList: List<String>?) {
         Log.i("filter", "$exerciseNameList")
         val dialog = Dialog(this.requireContext())
         val dialogBinding: DialogExerciseStatsBinding = DataBindingUtil.inflate(
@@ -180,8 +176,6 @@ class UserFragment : Fragment() {
         dialogBinding.cancelImage.setOnClickListener {
             dialog.dismiss()
         }
-//        dialogBinding.exerciseGroup.chipSpacingHorizontal = resources.getDimensionPixelSize(R.dimen.chip_spacing)
-        val backgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_background_color))
         if (exerciseNameList != null) {
             val sortedList = exerciseNameList.sortedBy { it.length }
             for (exerciseName in sortedList) {
@@ -210,21 +204,6 @@ class UserFragment : Fragment() {
 
 //        dialogBinding.statsTypeGroup.setChipSpacingHorizontal(resources.getDimensionPixelSize(R.dimen.chip_spacing))
         for (statsTypeName in listOf("maximum weight", "training volume")) {
-//            val chip = Chip(this.requireContext()) // "this" should be your activity or context
-//            // Set Chip attributes
-//            chip.id = View.generateViewId() // Assign a unique ID to each Chip
-//            chip.text = statsTypeName
-//            chip.isCheckable = true
-//            chip.setChipDrawable(
-//                ChipDrawable.createFromAttributes(
-//                    this.requireContext(),
-//                    null,
-//                    0,
-//                    R.style.Widget_Material3_Chip_Filter_Elevated
-//                )
-//            )
-//            chip.chipBackgroundColor = backgroundColor
-//            dialogBinding.statsTypeGroup.addView(chip)
             val chip = layoutInflater.inflate(R.layout.customize_chip_layout, null) as Chip
             chip.id = View.generateViewId()
             chip.text = statsTypeName

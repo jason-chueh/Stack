@@ -377,5 +377,16 @@ class DefaultRepository @Inject constructor(
         templateDao.deleteTemplateByTemplateId(templateId = templateId)
     }
 
-
+    override fun getUsersFromFireStore(callback: (MutableList<User>) -> Unit) {
+        db.collection("user").get().addOnSuccessListener {
+            Log.i("googleMaps","success")
+            val resultList = mutableListOf<User>()
+            for(doc in it){
+                resultList.add(doc.toObject<User>())
+            }
+            callback(resultList)
+        }.addOnFailureListener {
+            Log.i("googleMaps","$it")
+        }
+    }
 }

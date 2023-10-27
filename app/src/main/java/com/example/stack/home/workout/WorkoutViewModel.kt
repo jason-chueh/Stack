@@ -37,7 +37,7 @@ class WorkoutViewModel @AssistedInject constructor(
     private val userId: String
 ) :
     ViewModel() {
-    val _dataList = MutableLiveData<List<ExerciseRecordWithCheck>>()
+    private val _dataList = MutableLiveData<List<ExerciseRecordWithCheck>>()
     val dataList: LiveData<List<ExerciseRecordWithCheck>> = _dataList
 
     private var startTime = System.currentTimeMillis()

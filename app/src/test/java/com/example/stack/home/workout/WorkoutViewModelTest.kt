@@ -82,7 +82,7 @@ class WorkoutViewModelTest{
 
         viewModel.setDataListFromBundle(templateExerciseList)
 
-        val value = viewModel._dataList.getOrAwaitValue()
+        val value = viewModel.dataList.getOrAwaitValue()
 
         assertEquals(value.size, expectedList.size)
     }

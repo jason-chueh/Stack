@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
 //        viewModel.deleteAllTemplate()
         viewModel.upsertTemplate()
 //        viewModel.searchTemplateByUserId()
-//        viewModel.upsertTemplateExerciseRecordList()
+        viewModel.upsertTemplateExerciseRecordList()
 //        viewModel.exerciseApi()
 //        viewModel.createChatroom()
 //        viewModel.exerciseApiRe()
@@ -261,7 +261,6 @@ class HomeFragment : Fragment() {
     private fun getTimeAgo(timestamp: Long): String {
         val currentTimeMillis = System.currentTimeMillis()
         val timeDifferenceMillis = currentTimeMillis - timestamp
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifferenceMillis)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
         val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
         val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)

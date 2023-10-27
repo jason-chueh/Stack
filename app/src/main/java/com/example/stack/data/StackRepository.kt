@@ -91,4 +91,6 @@ interface StackRepository {
     suspend fun deleteYoutubeById(id: String)
 
     suspend fun deleteTemplateByTemplateId(templateId: String)
+
+    fun getUsersFromFireStore(callback:(MutableList<User>) -> Unit)
 }

@@ -247,7 +247,7 @@ class HrSpan : ReplacementSpan() {
         paint.color = Color.rgb(205,231,236)
 
         val interval = 20f
-        val phase = 0f // Start with zero phase to ensure dots start from the beginning
+        val phase = 0f
 
         val pathEffect = DashPathEffect(floatArrayOf(interval, interval), phase)
         paint.pathEffect = pathEffect

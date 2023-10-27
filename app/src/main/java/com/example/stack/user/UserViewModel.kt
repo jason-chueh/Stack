@@ -29,7 +29,6 @@ class UserViewModel @Inject constructor(
     val weightSum = MutableLiveData<Int?>()
 
     fun maximumWeightExerciseData(exerciseName: String): List<Entry>{
-
         val entryList = userExerciseRecords.value
             ?.filter { it.exerciseName == exerciseName }
             ?.mapNotNull { exerciseRecord ->
@@ -48,8 +47,8 @@ class UserViewModel @Inject constructor(
     fun trainingVolumeExerciseData(exerciseName: String): List<Entry>{
         val entryList = userExerciseRecords.value
             ?.filter { it.exerciseName == exerciseName }
-            ?.mapNotNull { exerciseRecord ->
-                val volume = exerciseRecord.repsAndWeights.map{it.reps * it.weight}.sum()
+            ?.map { exerciseRecord ->
+                val volume = exerciseRecord.repsAndWeights.sumOf { it.reps * it.weight }
                 Entry(
                     (exerciseRecord.startTime).toFloat(),
                     volume.toFloat()
@@ -66,7 +65,7 @@ class UserViewModel @Inject constructor(
             val groupedRecords: Map<Long, List<ExerciseRecord>> = exerciseRecords.groupBy { it.startTime }
             val summedRecords: List<Pair<Long, Int>> = groupedRecords.map { (startTime, records) ->
                 val sum = records.flatMap { it.repsAndWeights }
-                    .sumBy { repsAndWeight -> repsAndWeight.reps * repsAndWeight.weight }
+                    .sumOf { repsAndWeight -> repsAndWeight.reps * repsAndWeight.weight }
                 Pair(startTime, sum)
             }
             val resultEntries: List<BarEntry> = summedRecords.map { (startTime, sum) ->

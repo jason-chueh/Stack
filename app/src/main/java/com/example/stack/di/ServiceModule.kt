@@ -18,32 +18,29 @@ import dagger.hilt.android.scopes.ServiceScoped
 
 @Module
 @InstallIn(ServiceComponent::class)
-object ServiceModule{
+object ServiceModule {
     @Provides
     @ServiceScoped
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context
-    ) = PendingIntent.getActivity(
-    app,
-    0,
-    Intent(app, MainActivity::class.java).also {
-        it.action = ACTION_SHOW_WORKOUT_FRAGMENT
-//        it.flags = FLAG_ACTIVITY_SINGLE_INSTANCE
-    },
-    FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    ): PendingIntent = PendingIntent.getActivity(
+        app,
+        0,
+        Intent(app, MainActivity::class.java).also {
+            it.action = ACTION_SHOW_WORKOUT_FRAGMENT
+        },
+        FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
-
-
     @Provides
     @ServiceScoped
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
         pendingIntent: PendingIntent
     ) = NotificationCompat.Builder(app, NOTIFICATION_CHANNEL_ID)
-    .setAutoCancel(true)
-    .setOngoing(false)
-    .setSmallIcon(R.drawable.gym)
-    .setContentTitle("Stack")
-    .setContentText("00:00:00")
-    .setContentIntent(pendingIntent)
+        .setAutoCancel(true)
+        .setOngoing(false)
+        .setSmallIcon(R.drawable.gym)
+        .setContentTitle("Stack")
+        .setContentText("00:00:00")
+        .setContentIntent(pendingIntent)
 }

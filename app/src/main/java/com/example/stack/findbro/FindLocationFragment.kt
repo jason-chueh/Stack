@@ -48,7 +48,6 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
     private lateinit var placesClient: PlacesClient
     private val viewModel: FindLocationViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!Places.isInitialized()) {
             // Places SDK is not initialized, so initialize it
@@ -106,7 +105,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
                 place.address.toString()
                 mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name))
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
                 Log.i("googleMap", "${place}")
                 userLat = place.latLng.latitude.toString()
                 userLong = place.latLng.longitude.toString()
