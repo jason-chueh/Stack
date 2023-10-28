@@ -42,7 +42,6 @@ data class ExerciseRecordWithCheck(
     val repsAndWeights: MutableList<RepsAndWeightsWithCheck>
 )
 
-
 data class Test(
     val exerciseRecord: ExerciseRecord,
     val list: Int

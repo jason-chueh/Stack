@@ -11,9 +11,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val stackRepository: StackRepository): ViewModel() {
+class MainViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    val userManager: UserManager): ViewModel() {
     val isLoggedIn
-        get() = UserManager.isLoggedIn
+        get() = userManager.isLoggedIn
 
     private val _user = MutableLiveData<User>()
 

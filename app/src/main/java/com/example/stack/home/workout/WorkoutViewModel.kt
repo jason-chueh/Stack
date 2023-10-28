@@ -31,8 +31,9 @@ import java.util.Calendar
 
 class WorkoutViewModel @AssistedInject constructor(
     private val stackRepository: StackRepository,
-    @Assisted
+    private val userManager: UserManager,
 
+    @Assisted
     private val userId: String
 ) :
     ViewModel() {
@@ -67,7 +68,7 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
     init {
-        UserManager.updateIsTraining(true)
+        userManager.updateIsTraining(true)
     }
 
     val updateExerciseListCheck: (Int) -> Unit = { position ->
@@ -99,11 +100,11 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
     fun setDataListFromBundle(templateExerciseList: List<TemplateExerciseRecord>) {
-        if (UserManager.user?.id != null) {
+        if (userManager.user?.id != null) {
             startTime = System.currentTimeMillis()
             _dataList.value = templateExerciseList.map {
                 it.toTemplateExerciseWithCheck(
-                    UserManager.user!!.id,
+                    userManager.user!!.id,
                     startTime
                 )
             }
@@ -111,18 +112,18 @@ class WorkoutViewModel @AssistedInject constructor(
     }
 
     fun cancelWorkout() {
-        UserManager.updateIsTraining(false)
+        userManager.updateIsTraining(false)
     }
 
 //TODO rewrite the logic
     fun finishWorkoutWithSaveTemplate(workoutName: String) {
-        UserManager.updateIsTraining(false)
+        userManager.updateIsTraining(false)
         viewModelScope.launch(Dispatchers.IO) {
 
-            if (UserManager.user?.id != null) {
+            if (userManager.user?.id != null) {
 
                 val workoutToUpload = Workout(
-                    userId = UserManager.user!!.id,
+                    userId = userManager.user!!.id,
                     workoutName = workoutName,
                     startTime = startTime,
                     endTime = Calendar.getInstance().timeInMillis
@@ -131,18 +132,18 @@ class WorkoutViewModel @AssistedInject constructor(
                 stackRepository.upsertWorkout(
                     workoutToUpload
                 )
-
                 stackRepository.upsertTemplate(workoutToUpload.WorkoutToTemplate(workoutToUpload.startTime.toString()))
+
                 val filteredExerciseRecords = _dataList.value?.map { exerciseRecord ->
                     exerciseRecord.copy(
-                        repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }
-                            .toMutableList()
+                        repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }.toMutableList()
                     )
                 }?.filter { it.repsAndWeights.isNotEmpty() }
 
                 Log.i("finishWorkout", "$filteredExerciseRecords")
                 val exerciseRecordsListToUpload =
                     filteredExerciseRecords?.map { it.toExerciseRecord() }
+
                 exerciseRecordsListToUpload?.let { stackRepository.upsertExerciseRecordList(it) }
                 exerciseRecordsListToUpload?.map { exerciseRecord ->
                     exerciseRecord.toTemplateExerciseRecord(
@@ -155,14 +156,14 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
-    fun finishWorkoutWithoutSaveTemplate(workoutName: String) { //TODO fix logic
-        UserManager.updateIsTraining(false)
+    fun finishWorkoutWithoutSaveTemplate(workoutName: String) {
+        userManager.updateIsTraining(false)
         viewModelScope.launch(Dispatchers.IO) {
 
-                if (UserManager.user?.id != null) {
+                if (userManager.user?.id != null) {
 
                     val workoutToUpload = Workout(
-                        userId = UserManager.user!!.id,
+                        userId = userManager.user!!.id,
                         workoutName = workoutName,
                         startTime = startTime,
                         endTime = Calendar.getInstance().timeInMillis
@@ -188,10 +189,8 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
-
     fun getAllExerciseFromDb() {
         viewModelScope.launch(Dispatchers.IO) {
-
                 try {
                     val resultList = stackRepository.getAllExercise()
                     exerciseList.postValue(resultList)
@@ -220,7 +219,7 @@ class WorkoutViewModel @AssistedInject constructor(
                 addAll(oldList)
                 add(
                     ExerciseRecordWithCheck(
-                        UserManager.user!!.id,
+                        userManager.user!!.id,
                         startTime,
                         exerciseId,
                         exerciseName,
@@ -311,6 +310,22 @@ class WorkoutViewModel @AssistedInject constructor(
                 )
             _dataList.value = updatedList
         }
+
+    fun cancelExerciseDialog(){
+        var tempList = mutableListOf<ExerciseWithCheck>()
+        exerciseList.value?.let { it1 -> tempList.addAll(it1.map{exercise -> exercise.toExerciseWithCheck() }) }
+        filteredExerciseList.value = tempList
+    }
+    fun applyFilter(selectedMuscleChipsSet: MutableSet<String>, selectedEquipmentChipsSet: MutableSet<String>){
+        val filteredList = exerciseList.value?.filter { exercise ->
+            (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag ->
+                selectedMuscleChipsSet.contains(
+                    tag
+                )
+            }) && exercise.equipment in selectedEquipmentChipsSet
+        }
+        filteredExerciseList.value = filteredList?.map { it.toExerciseWithCheck() }
+    }
 }
 
 

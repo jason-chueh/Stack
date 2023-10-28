@@ -13,11 +13,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="200dp"
             android:layout_marginStart="70dp"
-            android:layout_marginTop="260dp"
             android:layout_marginEnd="70dp"
-            android:layout_marginBottom="260dp"
             android:background="@drawable/round_corner_with_white_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

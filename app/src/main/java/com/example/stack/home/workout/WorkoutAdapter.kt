@@ -37,7 +37,7 @@ class WorkoutAdapter(
                 binding.repsRecyclerView.visibility = View.GONE
                 binding.arrow.rotation = 270.0f
                 binding.addSetButton.visibility = View.GONE
-                binding.infoImage.visibility = View.GONE
+                binding.infoImage.visibility = View.INVISIBLE
 
             }
             binding.arrow.setOnClickListener {

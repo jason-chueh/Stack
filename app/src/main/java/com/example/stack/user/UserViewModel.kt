@@ -18,9 +18,10 @@ import java.util.Calendar
 import javax.inject.Inject
 
 
-
 @HiltViewModel
-class UserViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class UserViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
 
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
@@ -28,7 +29,6 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
     val weightSum = MutableLiveData<Int?>()
 
     fun maximumWeightExerciseData(exerciseName: String): List<Entry>{
-
         val entryList = userExerciseRecords.value
             ?.filter { it.exerciseName == exerciseName }
             ?.mapNotNull { exerciseRecord ->
@@ -47,8 +47,8 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
     fun trainingVolumeExerciseData(exerciseName: String): List<Entry>{
         val entryList = userExerciseRecords.value
             ?.filter { it.exerciseName == exerciseName }
-            ?.mapNotNull { exerciseRecord ->
-                val volume = exerciseRecord.repsAndWeights.map{it.reps * it.weight}.sum()
+            ?.map { exerciseRecord ->
+                val volume = exerciseRecord.repsAndWeights.sumOf { it.reps * it.weight }
                 Entry(
                     (exerciseRecord.startTime).toFloat(),
                     volume.toFloat()
@@ -65,7 +65,7 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
             val groupedRecords: Map<Long, List<ExerciseRecord>> = exerciseRecords.groupBy { it.startTime }
             val summedRecords: List<Pair<Long, Int>> = groupedRecords.map { (startTime, records) ->
                 val sum = records.flatMap { it.repsAndWeights }
-                    .sumBy { repsAndWeight -> repsAndWeight.reps * repsAndWeight.weight }
+                    .sumOf { repsAndWeight -> repsAndWeight.reps * repsAndWeight.weight }
                 Pair(startTime, sum)
             }
             val resultEntries: List<BarEntry> = summedRecords.map { (startTime, sum) ->
@@ -93,7 +93,7 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
     fun getUserExerciseData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                val exerciseRecordList = UserManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
+                val exerciseRecordList = userManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
                 userExerciseRecords.postValue(exerciseRecordList)
             }
         }
@@ -101,9 +101,9 @@ class UserViewModel @Inject constructor(private val stackRepository: StackReposi
 
     fun getUserWorkoutData(){
         viewModelScope.launch{
+            Log.i("userManagerDi","${userManager.isTraining}")
             withContext(Dispatchers.IO){
-                val workoutList = UserManager.user?.id?.let{ stackRepository.findAllWorkoutById(it)}
-
+                val workoutList = userManager.user?.id?.let{ stackRepository.findAllWorkoutById(it)}
                 userWorkoutRecords.postValue(workoutList)
             }
         }

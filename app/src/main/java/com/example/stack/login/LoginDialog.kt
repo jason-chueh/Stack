@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.stack.MainViewModel
 import com.example.stack.NavigationDirections
@@ -75,18 +74,6 @@ class LoginDialog : AppCompatDialogFragment() {
             }
         )
 
-        viewModel.loginErrorToast.observe(
-            viewLifecycleOwner
-        ) {
-            if (it) {
-                Toast.makeText(
-                    this.context,
-                    "Authentication failed.",
-                    Toast.LENGTH_SHORT,
-                ).show()
-                viewModel.onLoginErrorToastCompleted()
-            }
-        }
 
         viewModel.registerErrorToast.observe(
             viewLifecycleOwner

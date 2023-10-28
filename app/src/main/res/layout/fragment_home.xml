@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="url"
             type="String" />
@@ -76,15 +75,16 @@
                     android:src="@drawable/chris"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:imageUrl="@{url}"
                     app:shapeAppearanceOverlay="@style/circular" />
 
                 <TextView
-                    android:id="@+id/textView19"
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/rubik_medium"
-                    android:text="Chris Bumbstead"
+                    android:text="Unknown User"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/personalImage"
                     app:layout_constraintStart_toEndOf="@+id/personalImage"
@@ -113,23 +113,23 @@
                             android:id="@+id/textView35"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
+                            android:layout_marginStart="8dp"
                             android:text="ago"
-                            app:layout_constraintBottom_toBottomOf="@+id/daysAgo"
                             app:layout_constraintStart_toEndOf="@+id/daysAgo"
                             app:layout_constraintTop_toTopOf="@+id/daysAgo" />
 
                         <TextView
                             android:id="@+id/daysAgo"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:fontFamily="@font/rubik_medium"
-                            android:text="TextView"
+                            android:text="\?"
+                            android:textAlignment="textEnd"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textView22"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintStart_toEndOf="@+id/datePreviousWorkoutCard"
+                            app:layout_constraintTop_toBottomOf="@+id/previousWorkoutName" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/datePreviousWorkoutCard"
@@ -150,40 +150,25 @@
                                 android:background="@color/primaryColor"
                                 android:fontFamily="@font/questrial"
                                 android:gravity="center"
-                                android:text="22"
+                                android:text="\?"
                                 android:textColor="@color/onPrimary"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </androidx.cardview.widget.CardView>
 
                         <TextView
-                            android:id="@+id/textView22"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/rubik_medium"
-                            android:text="Previous Workout"
-                            android:textColor="@color/darkGrey"
-                            android:textSize="16sp"
-                            app:layout_constraintBottom_toTopOf="@+id/previousWorkoutName"
-                            app:layout_constraintStart_toEndOf="@+id/datePreviousWorkoutCard"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
                             android:id="@+id/previousWorkoutName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginBottom="16dp"
                             android:fontFamily="@font/rubik_medium"
-                            android:text="TextView"
+                            android:text="No workout"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintBottom_toTopOf="@+id/daysAgo"
                             app:layout_constraintStart_toEndOf="@+id/datePreviousWorkoutCard"
-                            app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -212,6 +197,7 @@
                     android:text="See All"
                     android:textColor="@color/darkGrey"
                     android:textSize="20sp"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toStartOf="@+id/imageView5"
                     app:layout_constraintTop_toBottomOf="@+id/cardView3" />
 
@@ -222,6 +208,7 @@
                     android:layout_marginEnd="16dp"
                     android:rotation="180"
                     android:src="@drawable/angle_left"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/seeAllText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/seeAllText"
@@ -241,12 +228,13 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView2"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="4dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView3"
                     app:layout_constraintEnd_toStartOf="@+id/cardView3"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -255,7 +243,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout3"
                         android:layout_width="match_parent"
-                        android:layout_height="130dp">
+                        android:layout_height="match_parent">
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/imageView6"
@@ -277,7 +265,7 @@
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="8dp"
                             android:fontFamily="@font/questrial"
-                            android:text="Text"
+                            android:text="0"
                             android:textSize="30sp"
                             app:layout_constraintEnd_toStartOf="@+id/imageView6"
                             app:layout_constraintStart_toStartOf="parent"
@@ -286,7 +274,7 @@
                         <TextView
                             android:id="@+id/textView17"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
@@ -337,20 +325,22 @@
 
                         <TextView
                             android:id="@+id/totalWeightNum"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
+                            android:layout_marginEnd="8dp"
                             android:fontFamily="@font/questrial"
-                            android:text="\?"
+                            android:text="0"
                             android:textSize="30sp"
+                            app:layout_constraintEnd_toStartOf="@+id/riseLottie"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/textView18"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
@@ -367,6 +357,20 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
+                <TextView
+                    android:id="@+id/NoWorkoutText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubik_medium"
+                    android:text="There's no workout history. Start your first workout by clicking the button!"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkGrey"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/carousel_recycler_view"
+                    app:layout_constraintEnd_toEndOf="@+id/carousel_recycler_view"
+                    app:layout_constraintStart_toStartOf="@+id/carousel_recycler_view"
+                    app:layout_constraintTop_toTopOf="@+id/carousel_recycler_view" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/carousel_recycler_view"
                     android:layout_width="match_parent"
@@ -379,11 +383,12 @@
                     app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView25"
                     app:layout_constraintVertical_bias="1.0"
-                    tools:listitem="@layout/item_carousel_odd" />
+                    tools:listitem="@layout/item_carousel_odd"
+                    tools:visibility="invisible" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

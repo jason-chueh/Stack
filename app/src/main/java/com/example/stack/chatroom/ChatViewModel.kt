@@ -25,9 +25,10 @@ class ChatViewModel @Inject constructor(
     ViewModel() {
 
     val db = Firebase.firestore
-    val ref = db.collection("chat")
-    var registration: ListenerRegistration? = null
+    private val ref = db.collection("chat")
+    private var registration: ListenerRegistration? = null
     var chatList = MutableLiveData<List<Chat>>()
+    var timer = 0
 
 
 
@@ -46,6 +47,7 @@ class ChatViewModel @Inject constructor(
                     val result = mutableListOf<Chat>()
 
                     for (doc in snapshot) {
+                        timer ++
                         result.add(doc.toObject<Chat>())
                     }
                     Log.i("chat","$result")
@@ -53,6 +55,7 @@ class ChatViewModel @Inject constructor(
                 }catch(e: Exception){
                     Log.i("chat","$e")
                 }
+                Log.i("chat","timer: $timer")
             }
         }
     }

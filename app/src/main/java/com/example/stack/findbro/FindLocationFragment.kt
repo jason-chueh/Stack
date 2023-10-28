@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,16 +40,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-private const val RESULT_SEPARATOR = "\n---\n\t"
 
-private const val FIELD_SEPARATOR = "\n\t"
 @AndroidEntryPoint
 class FindLocationFragment() : Fragment(), OnMapReadyCallback {
     lateinit var binding: FragmentFindLocationBinding
     lateinit var mMap: GoogleMap
     private lateinit var placesClient: PlacesClient
     private val viewModel: FindLocationViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!Places.isInitialized()) {
@@ -75,12 +73,18 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
         binding.complete.setOnClickListener {
             if(userLat != "" && userLong != ""){
                 viewModel.upsertUser(userLat,userLong)
+                findNavController().navigate(NavigationDirections.navigateToMapsFragment())
             }
-            findNavController().navigate(NavigationDirections.navigateToMapsFragment())
+            else{
+                Toast.makeText(
+                    this.context,
+                    "Register your gym to connect with other users",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
         }
 
         val autocompleteFragment =
@@ -98,10 +102,9 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
             }
 
             override fun onPlaceSelected(place: Place) {
-                val address = place.address.toString()
+                place.address.toString()
                 mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 15f), 2000, null)
                 Log.i("googleMap", "${place}")
                 userLat = place.latLng.latitude.toString()
                 userLong = place.latLng.longitude.toString()
@@ -204,10 +207,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
                     Log.i("googleMap","${strongestCandidate.latLng.latitude.toString()}")
                     Log.i("googleMap","${strongestCandidate.latLng.longitude}")
                     Log.i("googleMap","${strongestCandidate.latLng.longitude.toString()}")
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(strongestCandidate.latLng))
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10f),2000, null)
-                    // Enable scrolling on the long list of likely places
-                    val movementMethod = ScrollingMovementMethod()
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(strongestCandidate.latLng, 15f), 1000, null)
 //                    binding.responseView.movementMethod = movementMethod
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -218,42 +218,6 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
         } else {
             Log.d(TAG, "LOCATION permission not granted")
             checkPermissionThenFindCurrentPlace()
-
-        }
-    }
-    private fun FindCurrentPlaceResponse.prettyPrint(): String {
-        return stringify(this, false)
-    }
-    private fun stringify(place: Place): String {
-        return "${place.name?.plus(" (") ?: ""}${place.address?.plus(")") ?: ""}"
-    }
-    private fun stringify(response: FindCurrentPlaceResponse, raw: Boolean): String {
-        val builder = StringBuilder()
-        builder.append(response.placeLikelihoods.size).append(" Current Place Results:")
-        if (raw) {
-            builder.append(RESULT_SEPARATOR)
-            appendListToStringBuilder(builder, response.placeLikelihoods)
-        } else {
-            for (placeLikelihood in response.placeLikelihoods) {
-                builder
-                    .append(RESULT_SEPARATOR)
-                    .append("Likelihood: ")
-                    .append(placeLikelihood.likelihood)
-                    .append(FIELD_SEPARATOR)
-                    .append("Place: ")
-                    .append(stringify(placeLikelihood.place))
-            }
-        }
-        return builder.toString()
-    }
-    private fun <T> appendListToStringBuilder(builder: StringBuilder, items: List<T>) {
-        if (items.isEmpty()) {
-            return
-        }
-        builder.append(items[0])
-        for (i in 1 until items.size) {
-            builder.append(RESULT_SEPARATOR)
-            builder.append(items[i])
         }
     }
 }

@@ -65,15 +65,15 @@ class ExerciseFilterDialog : AppCompatDialogFragment() {
                 }
             }
             Log.i("filter", "${viewModel.exerciseList.value}")
-            val filteredList = viewModel.exerciseList.value?.filter { exercise ->
-                (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag ->
-                    selectedMuscleChipsSet.contains(
-                        tag
-                    )
-                }) && exercise.equipment in selectedEquipmentChipsSet
-            }
-            viewModel.filteredExerciseList.value = filteredList?.map { it.toExerciseWithCheck() }
-
+//            val filteredList = viewModel.exerciseList.value?.filter { exercise ->
+//                (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag ->
+//                    selectedMuscleChipsSet.contains(
+//                        tag
+//                    )
+//                }) && exercise.equipment in selectedEquipmentChipsSet
+//            }
+//            viewModel.filteredExerciseList.value = filteredList?.map { it.toExerciseWithCheck() }
+            viewModel.applyFilter(selectedMuscleChipsSet, selectedEquipmentChipsSet)
             dismiss()
         }
 

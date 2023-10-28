@@ -10,10 +10,10 @@ import com.example.stack.StackApplication
 import com.example.stack.data.dataclass.User
 import com.google.gson.Gson
 
-object UserManager {
+class UserManager {
 
-    private const val USER_DATA = "user_data"
-    private const val USER_TOKEN = "user_token"
+    private val USER_DATA = "user_data"
+    private val USER_TOKEN = "user_token"
 
     var isTraining: Boolean = false
         private set

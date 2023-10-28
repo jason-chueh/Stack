@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,17 +29,9 @@ import com.example.stack.databinding.DialogTimerBinding
 import com.example.stack.service.ACTION_START_SERVICE
 import com.example.stack.service.TimerService
 
-
 class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
     lateinit var binding: DialogTimerBinding
-//    private var timeSelected: Int = 0
-//    private var timeCountDown: CountDownTimer? = null
-//    private var timeProgress = 0
-//    private var pauseOffSet: Long = 0
-//    private var isStart = true
-
-    var mService: TimerService? = null
-
+    private var mService: TimerService? = null
 
     override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
         val binder = p1 as TimerService.LocalBinder
@@ -55,7 +49,6 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
-
         mService = null
     }
 
@@ -69,31 +62,12 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
         super.onCreate(savedInstanceState)
     }
 
-//    private val notificationPermissionLauncher =
-//        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-//            hasNotificationPermissionGranted = isGranted
-//            if (!isGranted) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    if (Build.VERSION.SDK_INT >= 33) {
-//                        if (shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS)) {
-//                            showNotificationPermissionRationale()
-//                        } else {
-//                            showSettingDialog()
-//                        }
-//                    }
-//                }
-//            } else {
-//                Toast.makeText(applicationContext, "notification permission granted", Toast.LENGTH_SHORT)
-//                    .show()
-//            }
-//        }
-
-
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val permissionState =
             ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.POST_NOTIFICATIONS)
         // If the permission is not granted, request it.
@@ -119,8 +93,6 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
         }
         binding.btnPlayPause.setOnClickListener {
             sendCommandToService(ACTION_START_SERVICE)
-
-//            startTimerSetup()
         }
         binding.ibReset.setOnClickListener {
             resetTime()
@@ -153,13 +125,7 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
         val progressBar: ProgressBar = binding.pbTimer
         mService?.addExtraTime()
         progressBar.max = mService?.timeSelected?.value ?: 0
-//        if (timeSelected != 0) {
-//            timeSelected += 15
-//            progressBar.max = timeSelected
-//            timePause()
-//            startTimer(pauseOffSet)
-//            Toast.makeText(this.requireContext(), "15 sec added", Toast.LENGTH_SHORT).show()
-//        }
+
     }
 
     private fun resetTime() {
@@ -174,50 +140,6 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
             timeLeftTv.text = "0"
         }
     }
-
-    private fun timePause() {
-            mService?.timePause()
-        }
-    private fun startTimerSetup() {
-        mService?.startTimerSetup()
-//        val startBtn: Button = binding.btnPlayPause
-//        if (timeSelected > timeProgress) {
-//            if (isStart) {
-//                startBtn.text = "Pause"
-//                startTimer(pauseOffSet)
-//                isStart = false
-//            } else {
-//                isStart = true
-//                startBtn.text = "Resume"
-//                timePause()
-//            }
-//        } else {
-//            Toast.makeText(this.requireContext(), "Enter Time", Toast.LENGTH_SHORT).show()
-//        }
-    }
-
-//    private fun startTimer(pauseOffSetL: Long) {
-//        val progressBar = binding.pbTimer
-//        progressBar.progress = timeProgress
-//        timeCountDown = object : CountDownTimer(
-//            (timeSelected * 1000).toLong() - pauseOffSetL * 1000, 1000
-//        ) {
-//            override fun onTick(p0: Long) {
-//                timeProgress++
-//                pauseOffSet = timeSelected.toLong() - p0 / 1000
-//                progressBar.progress = timeSelected - timeProgress
-//                val timeLeftTv: TextView = binding.tvTimeLeft
-//                timeLeftTv.text = (timeSelected - timeProgress).toString()
-//            }
-//
-//            override fun onFinish() {
-//                resetTime()
-//                Toast.makeText(this@TimerFragment.requireContext(), "Times Up!", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }.start()
-//    }
-
 
     private fun setTimeFunction() {
         val timeDialog = Dialog(this.requireContext())
@@ -256,14 +178,4 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
         }
         timeDialog.show()
     }
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        if (timeCountDown != null) {
-//            timeCountDown?.cancel()
-//            timeProgress = 0
-//        }
-//    }
-
-
 }

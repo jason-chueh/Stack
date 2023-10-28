@@ -16,7 +16,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class TemplateViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class TemplateViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
 
     val templateList = MutableLiveData<List<Template>?>()
@@ -27,7 +29,7 @@ class TemplateViewModel @Inject constructor(private val stackRepository: StackRe
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var resultList =
-                    UserManager.user?.id?.let { stackRepository.searchTemplatesByUserId(it) }
+                    userManager.user?.id?.let { stackRepository.searchTemplatesByUserId(it) }
                 Log.i("template", "$resultList")
 
                 templateList.postValue(resultList)

@@ -16,7 +16,7 @@ data class User(
     @ColumnInfo(name = "user_email")
     var email: String = "",
     @ColumnInfo(name = "user_picture")
-    val picture: String? = "",
+    val picture: String? = null,
     @ColumnInfo(name = "user_gym_latitude")
     val gymLatitude: String? = null,
     @ColumnInfo(name = "user_gym_longitude")

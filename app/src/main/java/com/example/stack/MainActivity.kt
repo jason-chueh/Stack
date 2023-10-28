@@ -16,17 +16,22 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import com.example.stack.data.network.PythonManager
 import com.example.stack.databinding.ActivityMainBinding
 import com.example.stack.login.UserManager
 import com.example.stack.service.ACTION_SHOW_WORKOUT_FRAGMENT
 import com.example.stack.util.CurrentFragmentType
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var userManager: UserManager
+
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,28 +40,26 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
         }
 
-
-        PythonManager.initialize(this)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNav()
         setupNavController()
+
+
 
         navigateToWorkoutFragmentWithIntent(intent)
 
         viewModel.currentFragmentType.observe(
             this,
             Observer {
-                Log.i("type","~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                Log.i("type","[${viewModel.currentFragmentType.value}]")
-                Log.i("type","~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                Log.i("type", "[${viewModel.currentFragmentType.value}]")
+                Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
-                if(it == CurrentFragmentType.LOGIN){
+                if (it == CurrentFragmentType.LOGIN) {
                     binding.bottomNavView.visibility = View.GONE
-                }
-                else{
+                } else {
                     binding.bottomNavView.visibility = View.VISIBLE
 
                 }
@@ -78,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.userFragment -> CurrentFragmentType.USER
                 R.id.loginDialog -> CurrentFragmentType.LOGIN
                 R.id.planFragment -> CurrentFragmentType.PLAN
-                R.id.positionCorrectionFragment-> CurrentFragmentType.POSITION
+                R.id.positionCorrectionFragment -> CurrentFragmentType.POSITION
                 else -> viewModel.currentFragmentType.value
             }
         }
@@ -88,16 +91,28 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    if(UserManager.isTraining){
-                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
-                        return@setOnItemSelectedListener true
+                    when (viewModel.isLoggedIn) {
+                        true -> {
+                            if (userManager.isTraining) {
+                                findNavController(R.id.myNavHostFragment).navigate(
+                                    NavigationDirections.navigateToWorkoutFragment(
+                                        null
+                                    )
+                                )
+                                return@setOnItemSelectedListener true
+                            }
+                            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToHomeFragment())
+                            return@setOnItemSelectedListener true
+                        }
+                        false -> {
+                            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToLoginDialog())
+                            return@setOnItemSelectedListener false
+                        }
                     }
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToHomeFragment())
-                    return@setOnItemSelectedListener true
                 }
 
                 R.id.navigation_user -> {
-                    Log.i("test", "${UserManager.user}")
+                    Log.i("test", "${userManager.user}")
                     when (viewModel.isLoggedIn) {
                         true -> {
                             findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToUserFragment())
@@ -110,28 +125,41 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                R.id.navigation_find_bro -> {
-                    if(UserManager.user?.gymLongitude != null){
-                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToMapsFragment())
-                    }
-                    else{
-                        findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
-                    }
-//                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToFindLocationFragment())
 
-                    return@setOnItemSelectedListener true
+                R.id.navigation_find_bro -> {
+                    when (viewModel.isLoggedIn) {
+                        true -> {
+                            if (userManager.user?.gymLongitude != null) {
+                                findNavController(R.id.myNavHostFragment).navigate(
+                                    NavigationDirections.navigateToMapsFragment()
+                                )
+                            } else {
+                                findNavController(R.id.myNavHostFragment).navigate(
+                                    NavigationDirections.navigateToFindLocationFragment()
+                                )
+                            }
+                            return@setOnItemSelectedListener true
+                        }
+
+                        false -> {
+                            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToLoginDialog())
+                            return@setOnItemSelectedListener false
+                        }
+                    }
                 }
 
-//                R.id.navigation_plan -> {
-//
-//                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToGenderFragment())
-//                    return@setOnItemSelectedListener true
-//                }
+                R.id.navigation_chatroom -> {
+                    when (viewModel.isLoggedIn) {
+                        true -> {
+                            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToChatroomFragment())
+                            return@setOnItemSelectedListener true
+                        }
 
-                R.id.navigation_position -> {
-
-                    findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToChatroomFragment())
-                    return@setOnItemSelectedListener true
+                        false -> {
+                            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToLoginDialog())
+                            return@setOnItemSelectedListener false
+                        }
+                    }
                 }
 
                 else -> {
@@ -140,9 +168,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    private fun navigateToWorkoutFragmentWithIntent(intent: Intent?){
-        if(intent?.action == ACTION_SHOW_WORKOUT_FRAGMENT){
-            findNavController(R.id.myNavHostFragment).navigate(NavigationDirections.navigateToWorkoutFragment(null))
+
+    private fun navigateToWorkoutFragmentWithIntent(intent: Intent?) {
+        if (intent?.action == ACTION_SHOW_WORKOUT_FRAGMENT) {
+            findNavController(R.id.myNavHostFragment).navigate(
+                NavigationDirections.navigateToWorkoutFragment(
+                    null
+                )
+            )
         }
     }
 

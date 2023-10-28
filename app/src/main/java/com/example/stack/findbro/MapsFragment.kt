@@ -4,12 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,22 +20,15 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.R
 import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.DialogBroChattingBinding
-import com.example.stack.databinding.DialogTemplateBinding
-import com.example.stack.databinding.FragmentFindLocationBinding
 import com.example.stack.databinding.FragmentMapsBinding
-import com.example.stack.home.instruction.InstructionViewModel
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
@@ -47,8 +38,6 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 private const val RESULT_SEPARATOR = "\n---\n\t"
 private const val FIELD_SEPARATOR = "\n\t"
@@ -84,7 +73,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         binding.broRecycleView.visibility = View.GONE
         binding.broRecycleView.adapter = adapter
         binding.shimmerLayout.startShimmer()
-
+        viewModel.getUserFromFireStore()
+        viewModel.allUsersFromFireStore.observe(viewLifecycleOwner){
+            Log.i("googleMaps","$it")
+        }
         placesClient = Places.createClient(this.requireContext())
 //        viewModel.testApi()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
@@ -137,7 +129,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             Log.i("chatroom", "$it")
             val bottomNavigation =
                 requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView)
-            bottomNavigation.selectedItemId = R.id.navigation_position
+            bottomNavigation.selectedItemId = R.id.navigation_chatroom
             it?.let { findNavController().navigate(NavigationDirections.navigateToChatFragment(it)) }
 
         }
@@ -295,45 +287,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             Log.i("Jason", "called!")
             checkPermissionThenFindCurrentPlace()
 
-        }
-    }
-
-    private fun FindCurrentPlaceResponse.prettyPrint(): String {
-        return stringify(this, false)
-    }
-
-    private fun stringify(place: Place): String {
-        return "${place.name?.plus(" (") ?: ""}${place.address?.plus(")") ?: ""}"
-    }
-
-    private fun stringify(response: FindCurrentPlaceResponse, raw: Boolean): String {
-        val builder = StringBuilder()
-        builder.append(response.placeLikelihoods.size).append(" Current Place Results:")
-        if (raw) {
-            builder.append(RESULT_SEPARATOR)
-            appendListToStringBuilder(builder, response.placeLikelihoods)
-        } else {
-            for (placeLikelihood in response.placeLikelihoods) {
-                builder
-                    .append(RESULT_SEPARATOR)
-                    .append("Likelihood: ")
-                    .append(placeLikelihood.likelihood)
-                    .append(FIELD_SEPARATOR)
-                    .append("Place: ")
-                    .append(stringify(placeLikelihood.place))
-            }
-        }
-        return builder.toString()
-    }
-
-    private fun <T> appendListToStringBuilder(builder: StringBuilder, items: List<T>) {
-        if (items.isEmpty()) {
-            return
-        }
-        builder.append(items[0])
-        for (i in 1 until items.size) {
-            builder.append(RESULT_SEPARATOR)
-            builder.append(items[i])
         }
     }
 }

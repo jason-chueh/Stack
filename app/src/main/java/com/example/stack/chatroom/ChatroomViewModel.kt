@@ -10,19 +10,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
-class ChatroomViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class ChatroomViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
     var chatrooms = MutableLiveData<MutableList<Chatroom>>()
     fun getChatroom() {
         viewModelScope.launch {
-            UserManager.user?.id?.let { stackRepository.getChatroom(it, updateLiveDataCallback) }
+            userManager.user?.id?.let { stackRepository.getChatroom(it, updateLiveDataCallback) }
         }
     }
 
-    val updateLiveDataCallback: (MutableList<Chatroom>) -> Unit = { chatroomsFromFirestore ->
+    private val updateLiveDataCallback: (MutableList<Chatroom>) -> Unit = { chatroomsFromFirestore ->
         updateLiveData(chatroomsFromFirestore)
     }
-    fun updateLiveData(chatroomsFromFireStore: MutableList<Chatroom>){
+    private fun updateLiveData(chatroomsFromFireStore: MutableList<Chatroom>){
         chatrooms.postValue(chatroomsFromFireStore)
     }
 }

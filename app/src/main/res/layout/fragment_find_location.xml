@@ -4,46 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/rubik_medium"
-        android:text="Register your gym"
-        android:textAlignment="textStart"
-        android:textSize="30sp"
+    <View
+        android:id="@+id/view19"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/medium_blue_gradient"
+        android:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView31"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView14"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/lightgrey"
-        android:fontFamily="@font/rubik_medium"
-        android:text="Let nearby people find you to work out together"
-        android:textAlignment="center"
-        android:textColor="@color/lightGrey"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        android:layout_width="match_parent"
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="20dp"
+        android:fontFamily="@font/rubik_medium"
+        android:text="Register your gym"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:paddingBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView14"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="@color/lightgrey"-->
+<!--        android:fontFamily="@font/rubik_medium"-->
+<!--        android:text="Let nearby people find you to work out together"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/lightGrey"-->
+<!--        android:textSize="16sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView4" />-->
 
     <fragment
         android:id="@+id/map"
@@ -55,6 +57,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/place_autocomplete_fragment"
         tools:context=".MapsActivity" />
+
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view19" />
 
     <TextView
         android:id="@+id/complete"
