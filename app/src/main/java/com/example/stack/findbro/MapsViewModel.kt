@@ -88,8 +88,9 @@ class MapsViewModel @Inject constructor(
                         )
                 )
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(strongestCandidate.latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11f), 2000, null)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(strongestCandidate.latLng, 15f), 2000, null)
+//                mMap.animateCamera(CameraUpdateFactory.zoomTo(11f), 1000, null)
+
                 currentLatLng.value =
                     strongestCandidate.latLng.latitude.toString() + "," + strongestCandidate.latLng.longitude.toString()
             } catch (e: Exception) {
@@ -107,7 +108,7 @@ class MapsViewModel @Inject constructor(
                 val resultList = mutableListOf<User>()
                 withContext(Dispatchers.IO) {
                     val filteredUser =
-                        allUsersFromFireStore.value?.filter { it.gymLatitude != null && it.gymLongitude != null && it.id != userManager.user?.id}
+                        allUsersFromFireStore.value?.filter { it.gymLatitude != null && it.gymLongitude != null && !it.picture.isNullOrBlank() && it.id != userManager.user?.id}
                     val destinations = filteredUser
                         ?.mapNotNull { it.gymLatitude?.let { lat -> it.gymLongitude?.let { lon -> "$lat,$lon" } } }
                         ?.joinToString(separator = "|")

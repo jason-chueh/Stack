@@ -44,15 +44,13 @@ class ExerciseDialog : AppCompatDialogFragment() {
 
         val adapter = ExerciseAdapter(viewModel.updateExerciseListCheck)
         binding.next.setOnClickListener {
-                viewModel.addAllExercise()
-
-                dismiss()
+            viewModel.addAllExercise()
+            viewModel.cancelExerciseDialog()
+            dismiss()
         }
 
         binding.cancelAction.setOnClickListener {
-            var tempList = mutableListOf<ExerciseWithCheck>()
-            viewModel.exerciseList.value?.let { it1 -> tempList.addAll(it1.map{exercise -> exercise.toExerciseWithCheck() }) }
-            viewModel.filteredExerciseList.value = tempList
+            viewModel.cancelExerciseDialog()
             dismiss()
         }
 

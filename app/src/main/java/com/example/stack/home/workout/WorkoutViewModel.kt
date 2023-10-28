@@ -132,18 +132,18 @@ class WorkoutViewModel @AssistedInject constructor(
                 stackRepository.upsertWorkout(
                     workoutToUpload
                 )
-
                 stackRepository.upsertTemplate(workoutToUpload.WorkoutToTemplate(workoutToUpload.startTime.toString()))
+
                 val filteredExerciseRecords = _dataList.value?.map { exerciseRecord ->
                     exerciseRecord.copy(
-                        repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }
-                            .toMutableList()
+                        repsAndWeights = exerciseRecord.repsAndWeights.filter { it.check }.toMutableList()
                     )
                 }?.filter { it.repsAndWeights.isNotEmpty() }
 
                 Log.i("finishWorkout", "$filteredExerciseRecords")
                 val exerciseRecordsListToUpload =
                     filteredExerciseRecords?.map { it.toExerciseRecord() }
+
                 exerciseRecordsListToUpload?.let { stackRepository.upsertExerciseRecordList(it) }
                 exerciseRecordsListToUpload?.map { exerciseRecord ->
                     exerciseRecord.toTemplateExerciseRecord(
@@ -156,7 +156,7 @@ class WorkoutViewModel @AssistedInject constructor(
         }
     }
 
-    fun finishWorkoutWithoutSaveTemplate(workoutName: String) { //TODO fix logic
+    fun finishWorkoutWithoutSaveTemplate(workoutName: String) {
         userManager.updateIsTraining(false)
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -310,6 +310,22 @@ class WorkoutViewModel @AssistedInject constructor(
                 )
             _dataList.value = updatedList
         }
+
+    fun cancelExerciseDialog(){
+        var tempList = mutableListOf<ExerciseWithCheck>()
+        exerciseList.value?.let { it1 -> tempList.addAll(it1.map{exercise -> exercise.toExerciseWithCheck() }) }
+        filteredExerciseList.value = tempList
+    }
+    fun applyFilter(selectedMuscleChipsSet: MutableSet<String>, selectedEquipmentChipsSet: MutableSet<String>){
+        val filteredList = exerciseList.value?.filter { exercise ->
+            (exercise.target in selectedMuscleChipsSet || exercise.secondaryMuscles.any { tag ->
+                selectedMuscleChipsSet.contains(
+                    tag
+                )
+            }) && exercise.equipment in selectedEquipmentChipsSet
+        }
+        filteredExerciseList.value = filteredList?.map { it.toExerciseWithCheck() }
+    }
 }
 
 

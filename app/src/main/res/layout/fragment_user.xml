@@ -88,11 +88,14 @@
 
                     <TextView
                         android:id="@+id/textView34"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="Weight Lifted (Tons)"
+                        android:textAlignment="center"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -453,11 +456,14 @@
 
                     <TextView
                         android:id="@+id/exerciseTitle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         android:fontFamily="@font/rubik_medium"
                         android:text="Use the filter to choose the exercise"
+                        android:textAlignment="center"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

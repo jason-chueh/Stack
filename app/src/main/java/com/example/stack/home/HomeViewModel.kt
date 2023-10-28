@@ -29,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val stackRepository: StackRepository,
-    val userManager: UserManager) :
+    val userManager: UserManager
+) :
     ViewModel() {
 
     val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
@@ -118,7 +119,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun exerciseApiToDatabase(){
+    fun exerciseApiToDatabase() {
         viewModelScope.launch {
             stackRepository.exerciseApiToDatabase()
         }
@@ -131,8 +132,19 @@ class HomeViewModel @Inject constructor(
     }
 
     fun upsertTemplate() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            userManager.user?.id?.let {
+                val legTemplate = Template(
+                    templateId = "2",
+                    userId = it,
+                    templateName = "Killer Leg Workout Template",
+                )
+                val personalTemplate = Template(
+                    templateId = "1",
+                    userId = it,
+                    templateName = "Full Body Workout Template",
+                )
                 stackRepository.upsertTemplate(personalTemplate)
                 stackRepository.upsertTemplate(legTemplate)
             }
@@ -216,18 +228,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
-    val legTemplate = Template(
-        templateId = "2",
-        userId = "K8O0QzYjHrRkGTyJz1rgXpyaggn2",
-        templateName = "Killer Leg Workout Template",
-    )
-
-    val personalTemplate = Template(
-        templateId = "1",
-        userId = "K8O0QzYjHrRkGTyJz1rgXpyaggn2",
-        templateName = "Full Body Workout Template",
-    )
     val templateExerciseRecord1 = TemplateExerciseRecord(
         templateId = "1",
         exerciseName = "barbell bench front squat",

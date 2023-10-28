@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     android:background="@drawable/dark_blue_gradient">
 
+    <ImageView
+        android:id="@+id/cancel_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/cross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
     <TextView
         android:id="@+id/filterText"
         android:layout_width="wrap_content"
@@ -21,284 +32,291 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/cancel_image"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/cross"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
-
-    <TextView
-        android:id="@+id/muscleGroupText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/rubik_medium"
-        android:letterSpacing="0.1"
-        android:text="Muscle Group"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/filterText"
-        app:layout_constraintTop_toBottomOf="@+id/filterText" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/muscleGroup"
-        android:layout_width="0dp"
-        android:layout_height="270dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/applyButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/muscleGroupText">
+        app:layout_constraintTop_toBottomOf="@+id/filterText">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_abductors"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/abductors"
-            app:chipBackgroundColor="@color/chip_background_color" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_abs"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/abs"
-            app:chipBackgroundColor="@color/chip_background_color" />
+            <TextView
+                android:id="@+id/muscleGroupText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/rubik_medium"
+                android:letterSpacing="0.1"
+                android:text="Muscle Group"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_adductors"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/adductors"
-            app:chipBackgroundColor="@color/chip_background_color" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/muscleGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/muscleGroupText">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_biceps"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/biceps"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_abductors"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/abductors"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_calves"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_abs"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/abs"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/calves"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_adductors"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/adductors"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_delts"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_biceps"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/biceps"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:layout_height="wrap_content"
-            android:text="@string/delts"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_calves"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_forearms"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/calves"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="forearms"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_delts"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_glutes"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delts"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:fontFamily="@font/rubik_medium"
-            android:text="glutes"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_forearms"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_hamstrings"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="hamstrings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="forearms"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_glutes"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_lats"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubik_medium"
+                    android:text="glutes"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="lats"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_hamstrings"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hamstrings"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_scapulae"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="scapulae"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_lats"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_pectorals"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="lats"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="pectorals"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_scapulae"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_quads"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="scapulae"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="quads"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_pectorals"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_traps"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="pectorals"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="traps"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_quads"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_triceps"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="quads"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="triceps"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_traps"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_upper_back"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="traps"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="upper back"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_triceps"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-    </com.google.android.material.chip.ChipGroup>
+                    android:text="triceps"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-    <TextView
-        android:id="@+id/equipmentTypeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/rubik_medium"
-        android:letterSpacing="0.1"
-        android:text="Equipment Type"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/muscleGroup" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_upper_back"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/equipmentGroup"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/equipmentTypeText">
+                    android:text="upper back"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_barbell"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="barbell"
+            </com.google.android.material.chip.ChipGroup>
 
-            app:chipBackgroundColor="@color/chip_background_color" />
+            <TextView
+                android:id="@+id/equipmentTypeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/rubik_medium"
+                android:letterSpacing="0.1"
+                android:text="Equipment Type"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/muscleGroup" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_cable"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cable"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/equipmentGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/equipmentTypeText"
+                app:layout_constraintVertical_bias="0.0">
 
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_barbell"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="barbell"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_dumbbell"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="dumbbell"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cable"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cable"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_leverage_machine"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="leverage machine"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_dumbbell"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_smith_machine"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    android:text="dumbbell"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            android:text="smith machine"
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_leverage_machine"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="leverage machine"
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_body_weight"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="body weight"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-            app:chipBackgroundColor="@color/chip_background_color" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_smith_machine"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-    </com.google.android.material.chip.ChipGroup>
+                    android:text="smith machine"
+                    app:chipBackgroundColor="@color/chip_background_color" />
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/textCard"-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        app:cardCornerRadius="@dimen/cornerRadius">-->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_body_weight"
+                    style="@style/Widget.Material3.Chip.Filter.Elevated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="body weight"
+
+                    app:chipBackgroundColor="@color/chip_background_color" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!--    <androidx.cardview.widget.CardView-->
+            <!--        android:id="@+id/textCard"-->
+            <!--        android:layout_width="200dp"-->
+            <!--        android:layout_height="60dp"-->
+            <!--        app:cardCornerRadius="@dimen/cornerRadius">-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/applyButton"
         android:layout_width="200dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/round_corner_with_blue_gradient"
         android:fontFamily="@font/rubik_medium"
         android:gravity="center"
         android:text="Apply"
         android:textColor="@color/primaryColor"
         android:textSize="25sp"
-        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-<!--</androidx.cardview.widget.CardView>-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
+    <!--</androidx.cardview.widget.CardView>-->
+</androidx.constraintlayout.widget.ConstraintLayout>

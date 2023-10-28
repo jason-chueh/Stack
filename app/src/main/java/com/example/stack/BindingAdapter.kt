@@ -197,10 +197,10 @@ fun formatMessageTimestamp(timestamp: Long): String {
 
     return when {
         diffMillis < minuteMillis -> "just now"
-        diffMillis < 2 * minuteMillis -> "a minute ago"
-        diffMillis < hourMillis -> "${diffMillis / minuteMillis} minutes ago"
-        diffMillis < 2 * hourMillis -> "an hour ago"
-        diffMillis < dayMillis -> "${diffMillis / hourMillis} hours ago"
+        diffMillis < 2 * minuteMillis -> "a min ago"
+        diffMillis < hourMillis -> "${diffMillis / minuteMillis} min ago"
+        diffMillis < 2 * hourMillis -> "an hr ago"
+        diffMillis < dayMillis -> "${diffMillis / hourMillis} hr ago"
         diffMillis < 2 * dayMillis -> "yesterday"
         else -> {
             val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())

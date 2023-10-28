@@ -104,8 +104,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
             override fun onPlaceSelected(place: Place) {
                 place.address.toString()
                 mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 15f), 2000, null)
                 Log.i("googleMap", "${place}")
                 userLat = place.latLng.latitude.toString()
                 userLong = place.latLng.longitude.toString()
@@ -208,10 +207,7 @@ class FindLocationFragment() : Fragment(), OnMapReadyCallback {
                     Log.i("googleMap","${strongestCandidate.latLng.latitude.toString()}")
                     Log.i("googleMap","${strongestCandidate.latLng.longitude}")
                     Log.i("googleMap","${strongestCandidate.latLng.longitude.toString()}")
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(strongestCandidate.latLng))
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10f),2000, null)
-                    // Enable scrolling on the long list of likely places
-                    val movementMethod = ScrollingMovementMethod()
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(strongestCandidate.latLng, 15f), 1000, null)
 //                    binding.responseView.movementMethod = movementMethod
                 } catch (e: Exception) {
                     e.printStackTrace()
