@@ -9,12 +9,20 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.stack.NavigationDirections
 import com.example.stack.databinding.FragmentChatroomBinding
+import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ChatRoomFragment: Fragment() {
+class ChatRoomFragment : Fragment() {
+
     lateinit var binding: FragmentChatroomBinding
+
+    @Inject
+    lateinit var userManager: UserManager
+
     private val viewModel: ChatroomViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -22,12 +30,12 @@ class ChatRoomFragment: Fragment() {
     ): View? {
         binding = FragmentChatroomBinding.inflate(inflater, container, false)
         viewModel.getChatroom()
-        val adapter = ChatRoomAdapter { chatroom ->
+        val adapter = ChatRoomAdapter({ chatroom ->
             findNavController().navigate(NavigationDirections.navigateToChatFragment(chatroom))
-        }
+        }, userManager)
         binding.chatroomRecyclerView.adapter = adapter
 
-        viewModel.chatrooms.observe(viewLifecycleOwner){
+        viewModel.chatrooms.observe(viewLifecycleOwner) {
             adapter.submitList(it.sortedByDescending { it.lastMessageTime })
         }
         return binding.root

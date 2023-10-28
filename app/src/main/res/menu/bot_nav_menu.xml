@@ -19,7 +19,7 @@
         android:title="GymBro"/>
 
     <item
-        android:id="@+id/navigation_position"
+        android:id="@+id/navigation_chatroom"
         android:icon="@drawable/messages"
         android:title="Chatroom"/>
 

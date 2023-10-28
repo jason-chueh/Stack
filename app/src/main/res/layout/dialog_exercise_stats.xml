@@ -55,45 +55,62 @@
                 app:layout_constraintStart_toStartOf="@+id/filterText"
                 app:layout_constraintTop_toBottomOf="@+id/filterText" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/exerciseGroup"
+            <ScrollView
+                android:id="@+id/exerciseChipGroupScrollView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/statsGroupText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exerciseGroupText"
-                app:singleSelection="true" />
+                app:layout_constraintTop_toBottomOf="@+id/exerciseGroupText">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/exerciseGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:singleSelection="true" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
 
             <TextView
                 android:id="@+id/statsGroupText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.1"
                 android:text="Stats Type"
                 android:textColor="@color/onPrimary"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/exerciseGroup" />
+                app:layout_constraintBottom_toTopOf="@+id/statsTypeGroup"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/statsTypeGroup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:singleSelection="true"
-                android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="50dp"
+                app:layout_constraintBottom_toTopOf="@+id/applyButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/statsGroupText"/>
+                app:singleSelection="true" />
 
             <TextView
                 android:id="@+id/applyButton"

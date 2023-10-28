@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#80000000"
         android:onClick="@{() -> viewModel.leave()}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,36 +30,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/noto_sans"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.15"
                 android:maxLines="1"
                 android:text="@string/login_title"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/text_login_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/text_login_description"
-                tools:text="@string/login_title"/>
+                tools:text="@string/login_title" />
 
             <TextView
                 android:id="@+id/text_login_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/noto_sans"
+                android:fontFamily="@font/rubik_medium"
                 android:letterSpacing="0.15"
                 android:maxLines="2"
                 android:text="@{viewModel.error != null ? viewModel.error : @string/login_description}"
                 android:textColor="@color/black_3f3a3a"
                 android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/view_login_separation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/view_login_separation"
-                tools:text="@string/login_description"/>
+                tools:text="@string/login_description" />
 
             <View
                 android:id="@+id/view_login_separation"
@@ -88,15 +88,16 @@
                     android:id="@+id/edit_login_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/height_payment_editor"
+                    android:backgroundTint="@{@color/gray_646464}"
+                    android:fontFamily="@font/rubik_medium"
                     android:hint="@string/login_name"
-                    android:textColor="@color/black_3f3a3a"
-                    android:maxLines="1"
-                    android:singleLine="true"
                     android:imeOptions="actionNext"
+                    android:maxLines="1"
                     android:nextFocusForward="@+id/edit_login_email"
+                    android:singleLine="true"
                     android:text="@={viewModel.name}"
-                    android:textColorHint="@{@color/gray_646464}"
-                    android:backgroundTint="@{@color/gray_646464}"/>
+                    android:textColor="@color/black_3f3a3a"
+                    android:textColorHint="@{@color/gray_646464}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,16 +123,16 @@
                     android:id="@+id/edit_login_email"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/height_payment_editor"
-                    android:hint="@string/login_email"
-                    android:textColor="@color/black_3f3a3a"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:imeOptions="actionNext"
-                    android:nextFocusForward="@+id/edit_login_password"
-                    android:text="@={viewModel.email}"
-                    android:textColorHint="@{@color/gray_646464}"
                     android:backgroundTint="@{@color/gray_646464}"
-                    />
+                    android:fontFamily="@font/rubik_medium"
+                    android:hint="@string/login_email"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusForward="@+id/edit_login_password"
+                    android:singleLine="true"
+                    android:text="@={viewModel.email}"
+                    android:textColor="@color/black_3f3a3a"
+                    android:textColorHint="@{@color/gray_646464}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,16 +156,16 @@
                     android:id="@+id/edit_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/height_payment_editor"
+                    android:backgroundTint="@{@color/gray_646464}"
+                    android:fontFamily="@font/rubik_medium"
                     android:hint="@string/login_password"
-                    android:textColor="@color/black_3f3a3a"
-                    android:maxLines="1"
-                    android:singleLine="true"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="@={viewModel.password}"
-                    android:textColorHint="@{@color/gray_646464}"
-                    android:backgroundTint="@{@color/gray_646464}"
-                    />
+                    android:textColor="@color/black_3f3a3a"
+                    android:textColorHint="@{@color/gray_646464}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -175,18 +176,18 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/noto_sans"
+                android:clickable="@{viewModel.status == LoadApiStatus.LOADING ? false : true}"
+                android:fontFamily="@font/rubik_medium"
                 android:gravity="center"
                 android:letterSpacing="0.15"
+                android:text='@{viewModel.status != LoadApiStatus.LOADING ? @string/login_native_text : ""}'
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:text='@{viewModel.status != LoadApiStatus.LOADING ? @string/login_native_text : ""}'
-                android:clickable="@{viewModel.status == LoadApiStatus.LOADING ? false : true}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="@string/login_native_text"/>
+                tools:text="@string/login_native_text" />
 
             <ProgressBar
                 android:layout_width="@dimen/size_payment_progress"

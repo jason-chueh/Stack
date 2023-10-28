@@ -14,7 +14,6 @@ import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.User
 import com.example.stack.login.UserManager
-import com.google.android.gms.common.api.Api
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -30,22 +29,27 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class MapsViewModel @Inject constructor(private val stackRepository: StackRepository) :
+class MapsViewModel @Inject constructor(
+    private val stackRepository: StackRepository,
+    private val userManager: UserManager) :
     ViewModel() {
 
-    private var allUsers: LiveData<List<User>> = stackRepository.getUsers()
+
+    private var _allUsersFromFireStore = MutableLiveData<List<User>>()
+    val allUsersFromFireStore: LiveData<List<User>>
+        get() = _allUsersFromFireStore
 
     var currentLatLng = MutableLiveData<String>()
 
-    val mediatorLiveData = allUsers.combineWith(currentLatLng) { allUsers, currentLatLng ->
+    val mediatorLiveData = allUsersFromFireStore.combineWith(currentLatLng) { allUsers, _ ->
         allUsers
     }
-    var _sortedUserList = MutableLiveData<List<User>>()
-
-    var chatroomToGo = MutableLiveData<Chatroom>()
+    private var _sortedUserList = MutableLiveData<List<User>>()
 
     val sortedUserList: LiveData<List<User>>
         get() = _sortedUserList
+
+    var chatroomToGo = MutableLiveData<Chatroom>()
 
     init {
         viewModelScope.launch {
@@ -57,6 +61,13 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
             }
         }
     }
+    fun getUserFromFireStore(){
+        Log.i("googleMaps","called out")
+                stackRepository.getUsersFromFireStore {
+                    Log.i("googleMaps","called")
+                    _allUsersFromFireStore.value = it.toList()
+                }
+    }
 
     @SuppressLint("MissingPermission")
     fun findCurrentPlace(
@@ -67,8 +78,6 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
         viewModelScope.launch {
             try {
                 val response = placesClient.findCurrentPlace(request).await()
-//                    binding.responseView.text = response.prettyPrint()
-
                 val strongestCandidate = response.placeLikelihoods[0].place
 
                 mMap.addMarker(
@@ -79,8 +88,9 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
                         )
                 )
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(strongestCandidate.latLng))
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(20f), 2000, null)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(strongestCandidate.latLng, 15f), 2000, null)
+//                mMap.animateCamera(CameraUpdateFactory.zoomTo(11f), 1000, null)
+
                 currentLatLng.value =
                     strongestCandidate.latLng.latitude.toString() + "," + strongestCandidate.latLng.longitude.toString()
             } catch (e: Exception) {
@@ -93,12 +103,12 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
 
     fun calculateDistanceAndSort() {
         viewModelScope.launch {
-            if (allUsers.value?.isNotEmpty() == true) {
+            if (allUsersFromFireStore.value?.isNotEmpty() == true) {
 
                 val resultList = mutableListOf<User>()
                 withContext(Dispatchers.IO) {
                     val filteredUser =
-                        allUsers.value?.filter { it.gymLatitude != null && it.gymLongitude != null }
+                        allUsersFromFireStore.value?.filter { it.gymLatitude != null && it.gymLongitude != null && !it.picture.isNullOrBlank() && it.id != userManager.user?.id}
                     val destinations = filteredUser
                         ?.mapNotNull { it.gymLatitude?.let { lat -> it.gymLongitude?.let { lon -> "$lat,$lon" } } }
                         ?.joinToString(separator = "|")
@@ -142,12 +152,12 @@ class MapsViewModel @Inject constructor(private val stackRepository: StackReposi
     }
 
     fun createChatroom(user: User) {
-        if (UserManager.user != null) {
+        if (userManager.user != null) {
             val chatroom = Chatroom(
                 userId1 = user.id,
-                userId2 = UserManager.user!!.id,
-                userName = listOf(user.name, UserManager.user!!.name),
-                userPic = listOf(user.picture, UserManager.user!!.picture),
+                userId2 = userManager.user!!.id,
+                userName = listOf(user.name, userManager.user!!.name),
+                userPic = listOf(user.picture, userManager.user!!.picture),
                 lastMessageTime = Calendar.getInstance().timeInMillis
             )
             stackRepository.createChatroomAtFireStore(
@@ -219,7 +229,7 @@ val users = listOf(
         gymLatitude = "25.038658708007013",
         gymLongitude = "121.5767419197247437"
     ),
-    User(
+    User(//
         id = "2",
         name = "Jane Smith",
         email = "janesmith@example.com",

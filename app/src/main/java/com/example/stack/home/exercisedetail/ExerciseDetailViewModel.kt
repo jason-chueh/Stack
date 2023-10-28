@@ -1,17 +1,13 @@
 package com.example.stack.home.exercisedetail
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseYoutube
-import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.toExerciseYoutube
-import com.example.stack.data.network.PythonManager
-import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +26,7 @@ class ExerciseDetailViewModel @Inject constructor(private val stackRepository: S
             var tempList = listOf<ExerciseYoutube>()
             withContext(Dispatchers.IO) {
                 val youtubeListFromDb =  stackRepository.searchYoutubeByExercise(exerciseId)
-                if (!youtubeListFromDb.isEmpty()) {
+                if (youtubeListFromDb.isNotEmpty()) {
                     Log.i("python", "is not empty: $youtubeListFromDb")
                     // check if Database have any data
                     tempList = youtubeListFromDb

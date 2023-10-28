@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Chat(
-    var chatId: String = "",
-    var chatroomId: String = "",
-    var senderId: String = "",
-    var receiverId: String = "",
-    var message: String = "",
-    var sendTime: Long = 0
+    val chatId: String = "",
+    val chatroomId: String = "",
+    val senderId: String = "",
+    val receiverId: String = "",
+    val message: String = "",
+    val sendTime: Long = 0
 ):Parcelable

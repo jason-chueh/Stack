@@ -37,7 +37,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
     lateinit var binding: FragmentWorkoutBinding
 
     private val viewModel: WorkoutViewModel by activityViewModels {
-        WorkoutViewModel.provideWorkoutViewModelFactory(factory, "test")
+        WorkoutViewModel.provideWorkoutViewModelFactory(factory, "123")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

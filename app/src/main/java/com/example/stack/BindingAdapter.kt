@@ -197,10 +197,10 @@ fun formatMessageTimestamp(timestamp: Long): String {
 
     return when {
         diffMillis < minuteMillis -> "just now"
-        diffMillis < 2 * minuteMillis -> "a minute ago"
-        diffMillis < hourMillis -> "${diffMillis / minuteMillis} minutes ago"
-        diffMillis < 2 * hourMillis -> "an hour ago"
-        diffMillis < dayMillis -> "${diffMillis / hourMillis} hours ago"
+        diffMillis < 2 * minuteMillis -> "a min ago"
+        diffMillis < hourMillis -> "${diffMillis / minuteMillis} min ago"
+        diffMillis < 2 * hourMillis -> "an hr ago"
+        diffMillis < dayMillis -> "${diffMillis / hourMillis} hr ago"
         diffMillis < 2 * dayMillis -> "yesterday"
         else -> {
             val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
@@ -247,7 +247,7 @@ class HrSpan : ReplacementSpan() {
         paint.color = Color.rgb(205,231,236)
 
         val interval = 20f
-        val phase = 0f // Start with zero phase to ensure dots start from the beginning
+        val phase = 0f
 
         val pathEffect = DashPathEffect(floatArrayOf(interval, interval), phase)
         paint.pathEffect = pathEffect

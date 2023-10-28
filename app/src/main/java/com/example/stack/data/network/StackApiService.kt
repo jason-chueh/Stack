@@ -9,7 +9,6 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -18,14 +17,14 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-private const val HOST_NAME = "exercisedb.p.rapidapi.com"
-private const val BASE_URL = "https://$HOST_NAME/exercises/"
+const val HOST_NAME = "exercisedb.p.rapidapi.com"
+const val BASE_URL = "https://$HOST_NAME/exercises/"
 
-internal val moshi = Moshi.Builder()
+val moshi: Moshi = Moshi.Builder()
     .addLast(KotlinJsonAdapterFactory())
     .build()
 
-private val retrofit = Retrofit.Builder()
+val retrofitExercise: Retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
@@ -38,9 +37,7 @@ interface ExerciseApiService{
         @Query("limit")limit: Int ): List<Exercise>
 }
 
-
-
-val retrofitGpt = Retrofit.Builder()
+val retrofitGpt: Retrofit = Retrofit.Builder()
     .baseUrl("https://api.openai.com/")
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
@@ -54,7 +51,7 @@ interface ChatGptApiService {
     suspend fun generateChatResponse(@Body requestBody: ChatGptRequest): ChatGptResponse
 }
 
-val retrofitGoogleMap = Retrofit.Builder()
+val retrofitGoogleMap: Retrofit = Retrofit.Builder()
     .baseUrl("https://maps.googleapis.com/maps/api/")
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .build()
@@ -69,9 +66,3 @@ interface DistanceMatrixService {
 }
 
 
-object StackApi {
-
-    val retrofitService: ExerciseApiService by lazy { retrofit.create(ExerciseApiService::class.java) }
-    val retrofitGptService: ChatGptApiService by lazy{ retrofitGpt.create(ChatGptApiService::class.java)}
-    val distanceMatrixService: DistanceMatrixService by lazy{ retrofitGoogleMap.create(DistanceMatrixService::class.java)}
-}
