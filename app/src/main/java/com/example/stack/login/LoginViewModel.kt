@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -21,11 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val stackRepository: StackRepository,
-    private val userManager: UserManager) : ViewModel() {
+    private val userManager: UserManager
+) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     private var auth: FirebaseAuth = Firebase.auth
-
 
     val user: LiveData<User>
         get() = _user
@@ -36,7 +35,6 @@ class LoginViewModel @Inject constructor(
     val navigateToLoginSuccess: LiveData<User>
         get() = _navigateToLoginSuccess
 
-    // Handle leave login
     private val _leave = MutableLiveData<Boolean>()
     val leave: LiveData<Boolean>
         get() = _leave
@@ -52,52 +50,44 @@ class LoginViewModel @Inject constructor(
 
     val error: LiveData<String>
         get() = _error
+
     // two-way data binding
     val email = MutableLiveData<String>()
+
     // two-way data binding
     val password = MutableLiveData<String>()
 
     val name = MutableLiveData<String>()
 
 
-    private val _registerErrorToast = MutableLiveData<Boolean>(false)
+    private val _registerErrorToast = MutableLiveData(false)
 
     val registerErrorToast: LiveData<Boolean>
         get() = _registerErrorToast
 
-    private val _invalidCheckout = MutableLiveData<Int>()
 
-    val invalidCheckout: LiveData<Int>
-        get() = _invalidCheckout
-
-    // Create a Coroutine scope using a job to be able to cancel when needed
-    private var viewModelJob = Job()
-
-    // the Coroutine runs using the Main (UI) dispatcher
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
-    fun nativeLogin(displayName: String){
+    fun nativeLogin(displayName: String) {
         viewModelScope.launch {
-            if(email.value!=null && password.value!=null){
-            auth.signInWithEmailAndPassword(email.value!!, password.value!!)
-                .addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = auth.currentUser
-                        if(userManager.user == null && name.value != null){
-                            userManager.updateUser(User(user!!.uid, name.value!!, user!!.email!!))
-                            userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+            if (email.value != null && password.value != null) {
+                auth.signInWithEmailAndPassword(email.value!!, password.value!!)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            val user = auth.currentUser
+                            if (userManager.user == null && name.value != null) {
+                                userManager.updateUser(User(user!!.uid, name.value!!, user.email!!))
+                                viewModelScope.launch(Dispatchers.IO) {
+                                    userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+                                }
+                            }
+                            viewModelScope.launch(Dispatchers.IO) {
+                                userManager.user?.let { stackRepository.upsertUser(it) }
+                            }
+                            leave()
+                        } else {
+                            createAccount(email.value!!, password.value!!, displayName)
                         }
-                        viewModelScope.launch(Dispatchers.IO){
-                            userManager.user?.let { stackRepository.upsertUser(it) }
-                        }
-                        leave()
-                    } else {
-                        createAccount(email.value!!, password.value!!, displayName)
-                        // If sign in fails, display a message to the user.
-                        Log.i("signin", "createUserWithEmail:failure")
                     }
-                }
             }
         }
     }
@@ -105,17 +95,16 @@ class LoginViewModel @Inject constructor(
     private fun createAccount(email: String, password: String, displayName: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener() { task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.i("login", "createUserWithEmail:success")
-                    Log.i("login", "${auth.currentUser?.uid}")
+
                     val user = auth.currentUser
-                    userManager.updateUser(User(user!!.uid, displayName , email))
-                    userManager.user?.let{stackRepository.uploadUserToFireStore(it)}
+                    userManager.updateUser(User(user!!.uid, displayName, email))
                     viewModelScope.launch(Dispatchers.IO) {
-                        Log.i("login", "${userManager.user}")
-                        userManager.user?.let { stackRepository.upsertUser(it) }
+                        userManager.user?.let {
+                            stackRepository.upsertUser(it)
+                            stackRepository.uploadUserToFireStore(it)
+                        }
                     }
                     leave()
                 } else {
@@ -124,37 +113,11 @@ class LoginViewModel @Inject constructor(
                     _registerErrorToast.value = true
                 }
             }
-        // [END create_user_with_email]
     }
 
-    /**
-     * When the [ViewModel] is finished, we cancel our coroutine [viewModelJob], which tells the
-     * Retrofit service to stop.
-     */
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
-
-
-
-
-
-    private fun loginStylish(email: String, password: String) {
-
-    }
-
-    /**
-     * Login Stylish by Facebook: Step 1. Register FB Login Callback
-     */
     fun login() {
         _status.value = LoadApiStatus.LOADING
     }
-
-
-    /**
-     * Login Stylish by Facebook: Step 2. Login Facebook
-     */
 
     fun leave() {
         _leave.value = true
@@ -164,13 +127,7 @@ class LoginViewModel @Inject constructor(
         _leave.value = null
     }
 
-
-
-    fun onRegisterErrorToastCompleted(){
+    fun onRegisterErrorToastCompleted() {
         _registerErrorToast.value = false
     }
-
-    fun nothing() {}
-
-
 }

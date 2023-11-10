@@ -22,20 +22,15 @@ import com.example.stack.databinding.FragmentTemplateBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TemplateFragment() : Fragment() {
+class TemplateFragment : Fragment() {
     lateinit var binding: FragmentTemplateBinding
     val viewModel: TemplateViewModel by viewModels()
 
-    //    private val viewModel by viewModels<TinderViewModel> { getVmFactory() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTemplateBinding.inflate(inflater, container, false)
-
-//        binding.root.setOnClickListener {
-//            findNavController().navigate(NavigationDirections.navigateToWorkoutFragment())
-//        }
 
         val templateOnClick: (Template) -> Unit = {
             Log.i("template", "$it")
@@ -47,6 +42,7 @@ class TemplateFragment() : Fragment() {
         }
 
         val adapter = TemplateListAdapter(templateOnClick, templateOnLongClick)
+
         binding.templateRecyclerView.adapter = adapter
 
         viewModel.searchTemplateByUserId()
@@ -96,7 +92,6 @@ class TemplateFragment() : Fragment() {
             findNavController().navigate(NavigationDirections.navigateToWorkoutFragment(viewModel.templateExerciseList.value?.toTypedArray()))
             dialog.dismiss()
         }
-
 
         dialogBinding.dialogConstraint.setOnClickListener {
             dialog.dismiss()

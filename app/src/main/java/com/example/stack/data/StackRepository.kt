@@ -8,6 +8,7 @@ import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.DistanceMatrixResponse
 import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseRecord
+import com.example.stack.data.dataclass.ExerciseWithExerciseYoutube
 import com.example.stack.data.dataclass.ExerciseYoutube
 import com.example.stack.data.dataclass.Template
 import com.example.stack.data.dataclass.TemplateExerciseRecord
@@ -16,7 +17,7 @@ import com.example.stack.data.dataclass.VideoItem
 import com.example.stack.data.dataclass.Workout
 
 interface StackRepository {
-    suspend fun test2(): List<ExerciseRecord>
+    suspend fun test2(): List<ExerciseWithExerciseYoutube>?
 
     suspend fun upsertUser(user: User)
 
@@ -60,21 +61,21 @@ interface StackRepository {
 
     suspend fun searchTemplateIdListByUserId(userId: String): List<String>
 
-    suspend fun upsertTemplateExerciseRecord(templateExerciseRecords: TemplateExerciseRecord)
+    suspend fun upsertTemplateExerciseRecord(templateExerciseRecord: TemplateExerciseRecord)
 
-    suspend fun upsertTemplateExerciseRecord(templateExerciseRecordsList: List<TemplateExerciseRecord>)
+    suspend fun upsertTemplateExerciseRecords(templateExerciseRecordsList: List<TemplateExerciseRecord>)
 
     suspend fun getTemplateExerciseRecordListByTemplateId(templateId: String): List<TemplateExerciseRecord>
 
-    fun createChatroomAtFireStore(chatroom: Chatroom, callBack: (Chatroom)->Unit)
+    suspend fun createChatroomAtFireStore(chatroom: Chatroom, callBack: (Chatroom)->Unit)
 
     fun searchChatroomByUserId(userId1: String, userId2: String)
 
     suspend fun getChatroom(userId: String, callBack: (MutableList<Chatroom>) -> Unit)
 
-    fun updateChatroom(chatroom: Chatroom)
+    suspend fun updateChatroom(chatroom: Chatroom)
 
-    fun sendChatMessageToFireStore(chat: Chat)
+    suspend fun sendChatMessageToFireStore(chat: Chat)
 
     suspend fun upsertWorkout(workout: Workout)
 
@@ -84,7 +85,7 @@ interface StackRepository {
 
     suspend fun getAllExercisesByUserId(userId: String): List<ExerciseRecord>
 
-    fun uploadUserToFireStore(user: User)
+    suspend fun uploadUserToFireStore(user: User)
 
     suspend fun deleteAllTemplate()
 
@@ -92,5 +93,5 @@ interface StackRepository {
 
     suspend fun deleteTemplateByTemplateId(templateId: String)
 
-    fun getUsersFromFireStore(callback:(MutableList<User>) -> Unit)
+    suspend fun getUsersFromFireStore(callback:(MutableList<User>) -> Unit)
 }

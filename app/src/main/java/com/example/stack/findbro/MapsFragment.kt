@@ -34,7 +34,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -126,7 +125,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         }
 
         viewModel.chatroomToGo.observe(viewLifecycleOwner) {
-            Log.i("chatroom", "$it")
             val bottomNavigation =
                 requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView)
             bottomNavigation.selectedItemId = R.id.navigation_chatroom
@@ -137,7 +135,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         return binding.root
     }
 
-    fun showDialog(user: User) {
+    private fun showDialog(user: User) {
         val dialog = Dialog(this.requireContext())
         val dialogBinding: DialogBroChattingBinding = DataBindingUtil.inflate(
             layoutInflater,

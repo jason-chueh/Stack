@@ -5,11 +5,11 @@ import android.util.Log
 import android.view.View
 import android.view.animation.BounceInterpolator
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
-import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.data.dataclass.ExerciseRecord
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.Template
@@ -21,8 +21,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Calendar
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 import javax.inject.Inject
 
@@ -32,14 +32,20 @@ class HomeViewModel @Inject constructor(
     val userManager: UserManager
 ) :
     ViewModel() {
+    val userExerciseRecords: LiveData<List<ExerciseRecord>?>
+        get() = _userExerciseRecords
 
-    val userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
-    val userWorkoutRecords = MutableLiveData<List<Workout>?>()
+    private val _userExerciseRecords = MutableLiveData<List<ExerciseRecord>?>()
+
+    val userWorkoutRecords: LiveData<List<Workout>?>
+        get() = _userWorkoutRecords
+
+    private val _userWorkoutRecords = MutableLiveData<List<Workout>?>()
 
     fun getTotalWeight(): Int? {
-        userExerciseRecords.value?.let { exerciseRecords ->
+        _userExerciseRecords.value?.let { exerciseRecords ->
             return exerciseRecords.flatMap { it.repsAndWeights }
-                .sumBy { it.reps * it.weight }
+                .sumOf { it.reps * it.weight }
         }
         return null
     }
@@ -70,11 +76,12 @@ class HomeViewModel @Inject constructor(
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 currentUri = uri.toString()
                 userManager.updateUser(userManager.user?.copy(picture = currentUri))
-                userManager.user?.let { stackRepository.uploadUserToFireStore(it) }
+
                 viewModelScope.launch(Dispatchers.IO) {
-                    userManager.user?.let { stackRepository.upsertUser(it) }
+                    userManager.user?.let {
+                        stackRepository.uploadUserToFireStore(it)
+                        stackRepository.upsertUser(it) }
                 }
-//                uploadProfileToFirebase(currentUri)
                 Log.i("personal image", "upload successfully, url is $uri")
             }
         }.addOnFailureListener {
@@ -84,13 +91,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getUserExerciseData() {
-
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val exerciseRecordList =
                     userManager.user?.id?.let { stackRepository.getAllExercisesByUserId(it) }
 
-                userExerciseRecords.postValue(exerciseRecordList)
+                _userExerciseRecords.postValue(exerciseRecordList)
             }
         }
     }
@@ -100,22 +106,8 @@ class HomeViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 val workoutList =
                     userManager.user?.id?.let { stackRepository.findAllWorkoutById(it) }
-                userWorkoutRecords.postValue(workoutList)
+                _userWorkoutRecords.postValue(workoutList)
             }
-        }
-    }
-
-    fun deleteAllTemplate() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                stackRepository.deleteAllTemplate()
-            }
-        }
-    }
-
-    fun exerciseApi() {
-        viewModelScope.launch {
-            stackRepository.refreshExerciseDb()
         }
     }
 
@@ -125,11 +117,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun exerciseApiRe() {
-        viewModelScope.launch {
-            stackRepository.exerciseApiToFireStore()
-        }
-    }
 
     fun upsertTemplate() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -151,28 +138,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun searchTemplateByUserId() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                var resultList =
-                    userManager.user?.id?.let { stackRepository.searchTemplateIdListByUserId(it) }
-                Log.i("template", "$resultList")
-            }
-        }
-    }
-
-    fun upsertTemplateExerciseRecord() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                stackRepository.upsertTemplateExerciseRecord(templateExerciseRecord1)
-            }
-        }
-    }
-
     fun upsertTemplateExerciseRecordList() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                stackRepository.upsertTemplateExerciseRecord(
+                stackRepository.upsertTemplateExerciseRecords(
                     listOf(
                         templateExerciseRecord1,
                         templateExerciseRecord2,
@@ -187,108 +156,84 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
-    fun searchAllTemplateAndExerciseByUserId() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val resultList =
-                    userManager.user?.let { stackRepository.searchTemplateIdListByUserId(it.id) }
-                if (resultList != null) {
-                    for (i in resultList) {
-                        var exerciserList =
-                            stackRepository.getTemplateExerciseRecordListByTemplateId(i)
-                        Log.i("template", "$exerciserList")
-                    }
-                }
-            }
+    fun getTimeAgo(timestamp: Long): String {
+        val currentTimeMillis = System.currentTimeMillis()
+        val timeDifferenceMillis = currentTimeMillis - timestamp
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifferenceMillis)
+        val hours = TimeUnit.MILLISECONDS.toHours(timeDifferenceMillis)
+        val days = TimeUnit.MILLISECONDS.toDays(timeDifferenceMillis)
+        val months = days / 30
+        val years = days / 365
+        return when {
+            years > 1 -> "$years years"
+            months > 1 -> "$months months"
+            days > 1 -> "$days days"
+            hours > 1 -> "$hours hours"
+            minutes > 1 -> "$minutes minutes"
+            else -> "seconds"
         }
     }
 
-//    fun createChatroom() {
-//        viewModelScope.launch {
-//            if (UserManager.user?.id != null) {
-//                stackRepository.createChatroomAtFireStore(
-//                    Chatroom(
-//                        userId1 = UserManager.user!!.id,
-//                        userId2 = "23426",
-//                        userName = listOf("ww", "232"),
-//                        userPic = listOf("", ""),
-//                        lastMessage = "hi",
-//                        lastMessageTime = Calendar.getInstance().timeInMillis
-//                    )
-//                )
-//            }
-//        }
-//    }
 
-    fun deleteYoutube() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                stackRepository.deleteYoutubeById("tlfahNdNPPI")
-            }
-        }
-    }
-    val templateExerciseRecord1 = TemplateExerciseRecord(
+    private val templateExerciseRecord1 = TemplateExerciseRecord(
         templateId = "1",
         exerciseName = "barbell bench front squat",
         exerciseId = "0024",
-        repsAndWeights = mutableListOf<RepsAndWeights>(
+        repsAndWeights = mutableListOf(
             RepsAndWeights(10, 20),
             RepsAndWeights(10, 40),
             RepsAndWeights(10, 60)
         )
     )
-    val templateExerciseRecord2 = TemplateExerciseRecord(
+    private val templateExerciseRecord2 = TemplateExerciseRecord(
         templateId = "1",
         exerciseName = "barbell bench press",
         exerciseId = "0025",
-        repsAndWeights = mutableListOf<RepsAndWeights>(
+        repsAndWeights = mutableListOf(
             RepsAndWeights(12, 20),
             RepsAndWeights(12, 40),
             RepsAndWeights(12, 60)
         )
     )
-    val templateExerciseRecord3 = TemplateExerciseRecord(
+    private val templateExerciseRecord3 = TemplateExerciseRecord(
         templateId = "1",
         exerciseName = "barbell bench squat",
         exerciseId = "0026",
-        repsAndWeights = mutableListOf<RepsAndWeights>(
+        repsAndWeights = mutableListOf(
             RepsAndWeights(12, 40),
             RepsAndWeights(12, 60)
         )
     )
-    val templateExerciseRecord4 = TemplateExerciseRecord(
+    private val templateExerciseRecord4 = TemplateExerciseRecord(
         templateId = "1",
         exerciseName = "barbell biceps curl",
         exerciseId = "2407",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf()
     )
 
-    val templateExerciseRecord5 = TemplateExerciseRecord(
+    private val templateExerciseRecord5 = TemplateExerciseRecord(
         templateId = "2",
         exerciseName = "barbell bench front squat",
         exerciseId = "0024",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf()
     )
-    val templateExerciseRecord6 = TemplateExerciseRecord(
+    private val templateExerciseRecord6 = TemplateExerciseRecord(
         templateId = "2",
         exerciseName = "barbell deadlift",
         exerciseId = "0032",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf()
     )
-    val templateExerciseRecord7 = TemplateExerciseRecord(
+    private val templateExerciseRecord7 = TemplateExerciseRecord(
         templateId = "2",
         exerciseName = "barbell clean and press",
         exerciseId = "0028",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf()
     )
-    val templateExerciseRecord8 = TemplateExerciseRecord(
+    private val templateExerciseRecord8 = TemplateExerciseRecord(
         templateId = "2",
         exerciseName = "dumbbell bench squat",
         exerciseId = "0291",
-        repsAndWeights = mutableListOf<RepsAndWeights>()
+        repsAndWeights = mutableListOf()
     )
-
-
 }
 

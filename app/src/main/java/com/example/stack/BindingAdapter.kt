@@ -9,7 +9,6 @@ import android.text.Editable
 import android.text.Html
 import android.text.Spanned
 import android.text.style.ReplacementSpan
-import android.transition.Transition
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,9 +18,7 @@ import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.ImageViewTarget
 import com.example.stack.util.capitalizeFirstLetterOfWords
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -71,10 +68,10 @@ fun setGifImageResource(imageView: ImageView, resource: Int?) {
 //}
 
 @BindingAdapter("instructionList")
-fun setInstructionList(textView: TextView, instructionList: List<String>) {
+fun setInstructionList(textView: TextView, instructionList: List<String>?) {
         val formattedText = StringBuilder()
 
-        instructionList.forEachIndexed { index, instruction ->
+        instructionList?.forEachIndexed { index, instruction ->
             val stepTitle = "Step ${index + 1}"
 
             formattedText.append("<div>$stepTitle :</div>")
@@ -101,10 +98,12 @@ fun htmlText(textView: TextView, instruction: String?){
 
 @SuppressLint("ResourceAsColor", "ResourceType")
 @BindingAdapter("chips", "mainChip")
-fun setChips(chipGroup: ChipGroup, chipTextList: List<String>?, mainChip: String) {
+fun setChips(chipGroup: ChipGroup, chipTextList: List<String>?, mainChip: String?) {
     chipGroup.removeAllViews() // Clear existing chips
     val chipList = mutableListOf<String>()
-    chipList.add(mainChip)
+    mainChip?.let{
+        chipList.add(mainChip)
+    }
     if (chipTextList != null) {
         chipList.addAll(chipTextList)
     }
@@ -147,8 +146,10 @@ fun showChatroomMessageTime(textView: TextView, inputTime: Long){
 }
 
 @BindingAdapter("capitalize")
-fun capitalize(textView: TextView, inputText: String){
-    textView.text = inputText.capitalizeFirstLetterOfWords()
+fun capitalize(textView: TextView, inputText: String?){
+    inputText?.let{
+        textView.text = inputText.capitalizeFirstLetterOfWords()
+    }
 }
 
 
@@ -190,7 +191,7 @@ private fun getImageResourceForText(inputText: String): Int {
 
 fun formatMessageTimestamp(timestamp: Long): String {
     val now = Calendar.getInstance().timeInMillis
-    val diffMillis = abs(now - timestamp)
+    val diffMillis = kotlin.math.abs(now - timestamp)
     val minuteMillis: Long = 60 * 1000
     val hourMillis: Long = 60 * minuteMillis
     val dayMillis: Long = 24 * hourMillis
@@ -208,9 +209,8 @@ fun formatMessageTimestamp(timestamp: Long): String {
 
             val date = Date(timestamp)
             val formattedDate = dateFormat.format(date)
-            val formattedTime = timeFormat.format(date)
 
-            "$formattedDate"
+            formattedDate
         }
     }
 }

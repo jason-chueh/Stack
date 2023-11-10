@@ -132,7 +132,7 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
         if (mService?.timeCountDown != null) {
             mService?.resetTime()
             val startBtn: Button = binding.btnPlayPause
-            startBtn.text = "Start"
+            startBtn.text = getString(R.string.start)
 
             val progressBar = binding.pbTimer
             progressBar.progress = 0
@@ -160,19 +160,17 @@ class TimerDialogFragment : AppCompatDialogFragment(), ServiceConnection {
             } else {
                 when (mService) {
                     null -> {
-                        Log.i("timer","null: ${timeSet.text}")
 //                        progressBar.max = timeSet.text.toString().toInt()
                         sendCommandToService(ACTION_START_SERVICE, Bundle().apply { putInt("timeSelected", timeSet.text.toString().toInt()) }, autoStart = false)
                     }
                     else -> {
-                        Log.i("timer","service exist: ${timeSet.text}")
                         mService?.resetTime()
                         mService?.timeSelected?.postValue(timeSet.text.toString().toInt())
                         progressBar.max = mService?.timeSelected?.value ?: 0
                     }
                 }
                 timeLeftTv.text = timeSet.text
-                btnStart.text = "Start"
+                btnStart.text = getString(R.string.start)
             }
             timeDialog.dismiss()
         }

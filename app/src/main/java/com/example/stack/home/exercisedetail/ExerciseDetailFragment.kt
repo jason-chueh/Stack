@@ -1,6 +1,5 @@
 package com.example.stack.home.exercisedetail
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,14 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.bumptech.glide.Glide
 import com.example.stack.NavigationDirections
-import com.example.stack.R
 import com.example.stack.databinding.FragmentExerciseDetailBinding
-import com.example.stack.databinding.FragmentHomeBinding
-import com.example.stack.home.HomeViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,7 +35,7 @@ class ExerciseDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentExerciseDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
@@ -61,6 +54,7 @@ class ExerciseDetailFragment : Fragment() {
             adapter.submitList(it)
         }
         viewModel.exercise.observe(viewLifecycleOwner){
+            binding.exercise = it
             Log.i("exerciseDetail","$it")
         }
         binding.returnIcon.setOnClickListener{
@@ -69,28 +63,4 @@ class ExerciseDetailFragment : Fragment() {
 
         return binding.root
     }
-}
-
-fun ChipGroup.addChip(context: Context, label: String){
-
-    Chip(context).apply {
-
-        id = View.generateViewId()
-
-        text = label
-
-        isClickable = true
-
-        isCheckable = true
-
-        setChipSpacingHorizontalResource(R.dimen.dimen_16)
-
-        isCheckedIconVisible = false
-
-        isFocusable = true
-
-        addView(this)
-
-    }
-
 }

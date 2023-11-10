@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import kotlinx.parcelize.Parcelize
 @Entity(tableName = "exercise_youtube_table")
 @Parcelize
@@ -33,3 +34,16 @@ data class ExerciseYoutube(
     @ColumnInfo(name = "instruction")
     var instruction: String? = null
 ) : Parcelable
+
+
+data class ExerciseWithExerciseYoutube(
+
+    @ColumnInfo(name = "exercise_id")
+    val id: String,
+
+    @ColumnInfo(name = "exercise_name")
+    val name: String,
+
+    @ColumnInfo(name = "youtube_title")
+    val youtubeTitle: String,
+)

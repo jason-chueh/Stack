@@ -1,24 +1,14 @@
 package com.example.stack
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.view.ViewAnimationUtils
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import com.airbnb.lottie.LottieAnimationView
-import java.lang.Integer.max
-import java.time.Clock
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 //class SplashScreenActivity : AppCompatActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,8 +88,9 @@ import java.time.temporal.ChronoUnit
 //    }
 //}
 
+@SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
-    private val delayMillis: Long = 1000 // 3 seconds (adjust as needed)
+    private val delayMillis: Long = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +108,6 @@ class SplashScreenActivity : AppCompatActivity() {
         }
 
 
-//        lottieView.enableMergePathsForKitKatAndAbove(true)
 
         lottieView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator) {
@@ -130,34 +120,16 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animator) {
-                // Animation finished
-                // Open another activity here
+
                 Log.i("lottie", "onAnimationEnd")
                 Handler(Looper.getMainLooper()).postDelayed({
                     navigateToMainActivity()
 
-//                    val intent = Intent(this@SplashScreenActivity, MainActivity::class.java)
-//                    startActivity(intent)
-//                    overridePendingTransition(
-//                        R.anim.anim_fade_in,
-//                        R.anim.anim_fade_out
-//                    ) // Custom animation
-//                    finish()
                 }, delayMillis)
             }
         })
-//        lottieView.playAnimation()
     }
 
-    override fun onResume() {
-        super.onResume()
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Handle cleanup or any other necessary tasks.
-    }
 }
 
 

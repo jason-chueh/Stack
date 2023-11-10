@@ -1,6 +1,7 @@
 package com.example.stack.home.instruction
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,18 +10,18 @@ import com.example.stack.data.dataclass.ChatGptRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class InstructionViewModel @Inject constructor(private val stackRepository: StackRepository) :
     ViewModel() {
 
-    val instruction = MutableLiveData<String>()
+    private val _instruction = MutableLiveData<String>()
+    val instruction: LiveData<String>
+        get() = _instruction
+
     val title = MutableLiveData<String>()
     fun getInstruction(youtubeId: String) {
-
-        var instructionString: String = ""
 
         val promptPrefix =
             "This is the transcript of a youtube video, summarize it and turn it into bullet points instruction, the instruction should follow the below format:\n" +
@@ -38,11 +39,12 @@ class InstructionViewModel @Inject constructor(private val stackRepository: Stac
                     "The below is the transcript:\n"
 
         //transcript == null means that the video haven't been searched before, transcript == "" means the transcript does not exist
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            var instructionString: String = ""
 
-                var exerciseYoutube = stackRepository.searchYoutubeByYoutubeId(youtubeId)
-                if (exerciseYoutube.transcript == null) {
+            val exerciseYoutube = stackRepository.searchYoutubeByYoutubeId(youtubeId)
+            when (exerciseYoutube.transcript) {
+                null -> {
                     val transcript = stackRepository.getTranscript(youtubeId)
                     //call chat gpt to generate instruction, and update transcript & instruction to database
 
@@ -51,29 +53,36 @@ class InstructionViewModel @Inject constructor(private val stackRepository: Stac
                     if (transcript == "") {
                         instructionString = "The transcript is not available in this tutorial."
                     } else {
-                        val response = stackRepository.getInstruction(ChatGptRequest(prompt = (promptPrefix + transcript)))
-                        if(response != null){
+                        val response =
+                            stackRepository.getInstruction(ChatGptRequest(prompt = (promptPrefix + transcript)))
+                        if (response != null) {
                             instructionString = response.choices[0].text
+                        }
+                        else{
+                            instructionString = "The transcript fail to be converted into instructions by chatgpt"
                         }
 
                         exerciseYoutube.instruction = instructionString
                     }
 
                     stackRepository.updateYoutubeData(exerciseYoutube)
-                    Log.i("chatgpt", "get instruction from chatgpt ${exerciseYoutube.instruction}")
 
-                } else if (exerciseYoutube.transcript == "") {
+                }
+
+                "" -> {
 
                     instructionString = "The transcript is not available in this tutorial."
-                } else {
+                }
 
-                    Log.i("chatgpt", "${exerciseYoutube.transcript}")
+                else -> {
+
                     instructionString = exerciseYoutube.instruction!!
                 }
             }
-            instruction.value = instructionString
+            _instruction.postValue(instructionString)
         }
     }
+
 }
 
 

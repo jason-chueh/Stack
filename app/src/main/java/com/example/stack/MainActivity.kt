@@ -2,7 +2,6 @@ package com.example.stack
 
 import android.content.Intent
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -12,7 +11,6 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -36,9 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
-        }
+        window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -50,21 +46,20 @@ class MainActivity : AppCompatActivity() {
         navigateToWorkoutFragmentWithIntent(intent)
 
         viewModel.currentFragmentType.observe(
-            this,
-            Observer {
-                Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                Log.i("type", "[${viewModel.currentFragmentType.value}]")
-                Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            this
+        ) {
+            Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            Log.i("type", "[${viewModel.currentFragmentType.value}]")
+            Log.i("type", "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
-                if (it == CurrentFragmentType.LOGIN) {
-                    binding.bottomNavView.visibility = View.GONE
-                } else {
-                    binding.bottomNavView.visibility = View.VISIBLE
+            if (it == CurrentFragmentType.LOGIN) {
+                binding.bottomNavView.visibility = View.GONE
+            } else {
+                binding.bottomNavView.visibility = View.VISIBLE
 
-                }
             }
-        )
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.stack.MainViewModel
@@ -37,7 +36,7 @@ class LoginDialog : AppCompatDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DialogLoginBinding.inflate(inflater, container, false)
 
@@ -53,26 +52,24 @@ class LoginDialog : AppCompatDialogFragment() {
             }
         }
 
-        val mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        val mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         viewModel.user.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    mainViewModel.setupUser(it)
-                }
+            viewLifecycleOwner
+        ) {
+            it?.let {
+                mainViewModel.setupUser(it)
             }
-        )
+        }
 
         viewModel.navigateToLoginSuccess.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
+            viewLifecycleOwner
+        ) {
+            it?.let {
 //                    mainViewModel.navigateToLoginSuccess(it)
-                    dismiss()
-                }
+                dismiss()
             }
-        )
+        }
 
 
         viewModel.registerErrorToast.observe(
@@ -90,15 +87,14 @@ class LoginDialog : AppCompatDialogFragment() {
 
 
         viewModel.leave.observe(
-            viewLifecycleOwner,
-            Observer {
-                it?.let {
-                    dismiss()
-                    viewModel.onLeaveCompleted()
-                    findNavController().navigate(NavigationDirections.navigateToHomeFragment())
-                }
+            viewLifecycleOwner
+        ) {
+            it?.let {
+                dismiss()
+                viewModel.onLeaveCompleted()
+                findNavController().navigate(NavigationDirections.navigateToHomeFragment())
             }
-        )
+        }
 
 
         return binding.root

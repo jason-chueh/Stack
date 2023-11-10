@@ -47,14 +47,11 @@ class UserFragment : Fragment() {
     ): View? {
         binding = FragmentUserBinding.inflate(inflater, container, false)
 
-//        binding.logout.setOnClickListener {
-//            UserManager.clear()
-//        }
+
         viewModel.getUserExerciseData()
         viewModel.getUserWorkoutData()
 
 
-//        setLineChartData(dataList)
 
         viewModel.userExerciseRecords.observe(viewLifecycleOwner) { it ->
             if (it != null) {
@@ -179,22 +176,6 @@ class UserFragment : Fragment() {
         if (exerciseNameList != null) {
             val sortedList = exerciseNameList.sortedBy { it.length }
             for (exerciseName in sortedList) {
-                // Create a new Chip
-//                val chip = Chip(this.requireContext()) // "this" should be your activity or context
-//                // Set Chip attributes
-//                chip.id = View.generateViewId() // Assign a unique ID to each Chip
-//                chip.text = exerciseName
-//                chip.isCheckable = true
-//                chip.setChipDrawable(
-//                    ChipDrawable.createFromAttributes(
-//                        this.requireContext(),
-//                        null,
-//                        0,
-//                        R.style.Widget_Material3_Chip_Filter_Elevated
-//                    )
-//                )
-//                chip.chipBackgroundColor = backgroundColor
-//                dialogBinding.exerciseGroup.addView(chip)
                 val chip = layoutInflater.inflate(R.layout.customize_chip_layout, null) as Chip
                 chip.id = View.generateViewId()
                 chip.text = exerciseName
@@ -202,7 +183,6 @@ class UserFragment : Fragment() {
             }
         }
 
-//        dialogBinding.statsTypeGroup.setChipSpacingHorizontal(resources.getDimensionPixelSize(R.dimen.chip_spacing))
         for (statsTypeName in listOf("maximum weight", "training volume")) {
             val chip = layoutInflater.inflate(R.layout.customize_chip_layout, null) as Chip
             chip.id = View.generateViewId()
@@ -238,7 +218,6 @@ class UserFragment : Fragment() {
 
 class XAxisValueFormatter : IAxisValueFormatter {
     override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-        // Convert the value (timestamp) to the desired format "MM/dd"
         val timestamp = value.toLong()
         val date = Date(timestamp)
         val sdf = SimpleDateFormat("MM/dd", Locale.getDefault())
