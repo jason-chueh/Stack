@@ -9,9 +9,6 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.stack.R
-import com.example.stack.data.dataclass.Exercise
-import com.example.stack.data.dataclass.ExerciseWithCheck
-import com.example.stack.data.dataclass.toExerciseWithCheck
 import com.example.stack.databinding.DialogExerciseListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -43,6 +40,9 @@ class ExerciseDialog : AppCompatDialogFragment() {
 
 
         val adapter = ExerciseAdapter(viewModel.updateExerciseListCheck)
+
+        binding.exerciseRecyclerView.adapter = adapter
+
         binding.next.setOnClickListener {
             viewModel.addAllExercise()
             viewModel.cancelExerciseDialog()
@@ -59,9 +59,6 @@ class ExerciseDialog : AppCompatDialogFragment() {
             dialog.show(childFragmentManager, "EXERCISE_FILTER_TAG")
         }
 
-        binding.exerciseRecyclerView.adapter = adapter
-
-
         viewModel.filteredExerciseList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
@@ -70,13 +67,4 @@ class ExerciseDialog : AppCompatDialogFragment() {
         return binding.root
     }
 
-    interface ExerciseDialogListener {
-        fun onExerciseSelected(position: Int)
-    }
-
-    // let any intense can set the listener itself through setCategoryDialogListener()
-    private var listener: ExerciseDialogListener? = null
-    fun setExerciseDialogListener(listener: ExerciseDialogListener) {
-        this.listener = listener
-    }
 }

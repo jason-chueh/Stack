@@ -131,7 +131,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/chartCard">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout3"
+                    android:id="@+id/workoutCompleteConstraint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/surfaceVariant">
@@ -281,7 +281,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/constraintLayout7"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+                    app:layout_constraintTop_toBottomOf="@+id/workoutCompleteConstraint">
 
                     <ImageView
                         android:id="@+id/imageView62"

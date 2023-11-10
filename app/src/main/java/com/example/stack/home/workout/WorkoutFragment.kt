@@ -25,12 +25,11 @@ import com.example.stack.databinding.DialogCancelWorkoutBinding
 import com.example.stack.databinding.DialogSaveTemplateBinding
 import com.example.stack.databinding.FragmentWorkoutBinding
 import com.example.stack.home.workout.timer.TimerDialogFragment
-import com.example.stack.login.UserManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
+class WorkoutFragment : Fragment() {
     @Inject
     lateinit var factory: WorkoutViewModel.Factory
 
@@ -41,17 +40,15 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val templateExerciseList =
             WorkoutFragmentArgs.fromBundle(requireArguments()).templateExercises?.toList()
         if (templateExerciseList != null) {
             viewModel.setDataListFromBundle(templateExerciseList)
         }
-        Log.i("template", "$templateExerciseList")
-
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             showCancelDialog()
         }
-
         super.onCreate(savedInstanceState)
     }
 
@@ -59,7 +56,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentWorkoutBinding.inflate(inflater, container, false)
         Log.i("workout", "$viewModel")
         binding.lifecycleOwner = viewLifecycleOwner
@@ -74,16 +71,15 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
             deleteOnClick = viewModel.deleteExerciseRecord
         )
 
+        binding.workoutRecyclerView.adapter = adapter
+
         enableSwipeToDelete()
+
+        viewModel.getAllExerciseFromDb()
 
         viewModel.notifyItemChangePosition.observe(viewLifecycleOwner) {
             adapter.notifyItemChanged(it)
         }
-
-        binding.workoutRecyclerView.adapter = adapter
-
-
-        viewModel.getAllExerciseFromDb()
 
         viewModel.dataList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -120,7 +116,6 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
 
         binding.addExercise.setOnClickListener {
             val dialog = ExerciseDialog()
-            dialog.setExerciseDialogListener(this)
             dialog.show(childFragmentManager, "EXERCISE_DIALOG_TAG")
         }
 
@@ -149,7 +144,7 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         return binding.root
     }
 
-    val navigateToExerciseDetailFragment: (String, String) -> Unit = { exerciseName, exerciseId ->
+    private val navigateToExerciseDetailFragment: (String, String) -> Unit = { exerciseName, exerciseId ->
         findNavController().navigate(
             NavigationDirections.navigateToExerciseDetailFragment(
                 exerciseId,
@@ -256,9 +251,5 @@ class WorkoutFragment : Fragment(), ExerciseDialog.ExerciseDialogListener {
         dialogBinding.root.setOnClickListener {
             dialog.dismiss()
         }
-    }
-
-    override fun onExerciseSelected(position: Int) {
-        Log.i("terry", "$position")
     }
 }

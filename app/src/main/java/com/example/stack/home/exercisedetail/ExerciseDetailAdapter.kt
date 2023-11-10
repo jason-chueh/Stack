@@ -11,10 +11,6 @@ import com.example.stack.databinding.ItemYoutubeBinding
 class ExerciseDetailAdapter(val clickListener: (exercise: ExerciseYoutube) -> Unit) :
     ListAdapter<ExerciseYoutube, ExerciseDetailAdapter.ExerciseDetailViewHolder>(DiffCallback) {
 
-    class OnClickListener(val clickListener: (exercise: ExerciseYoutube) -> Unit) {
-        fun onClick(exercise: ExerciseYoutube) = clickListener(exercise)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseDetailViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemYoutubeBinding.inflate(layoutInflater, parent, false)

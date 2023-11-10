@@ -7,7 +7,9 @@
         <variable
             name="viewModel"
             type="com.example.stack.home.exercisedetail.ExerciseDetailViewModel" />
-
+        <variable
+            name="exercise"
+            type="com.example.stack.data.dataclass.Exercise" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -41,7 +43,7 @@
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                app:capitalize="@{viewModel.exercise.name}"
+                app:capitalize="@{exercise.name}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/returnIcon"
@@ -52,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="fitCenter"
-                app:imageUrl="@{viewModel.exercise.gifUrl}"
+                app:imageUrl="@{exercise.gifUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
@@ -90,11 +92,11 @@
                 android:layout_marginTop="16dp"
                 app:chipSpacingVertical="4dp"
                 android:layout_marginEnd="16dp"
-                app:chips="@{viewModel.exercise.secondaryMuscles}"
+                app:chips="@{exercise.secondaryMuscles}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:mainChip="@{viewModel.exercise.target}">
+                app:mainChip="@{exercise.target}">
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -137,7 +139,7 @@
                 android:lineSpacingExtra="8sp"
                 android:text="TextView"
                 android:textSize="16sp"
-                app:instructionList="@{viewModel.exercise.instructions}"
+                app:instructionList="@{exercise.instructions}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/instructionText" />

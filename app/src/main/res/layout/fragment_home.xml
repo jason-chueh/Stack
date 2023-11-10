@@ -241,12 +241,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/calendarCard">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout3"
+                        android:id="@+id/workoutCompleteConstraint"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/imageView6"
+                            android:id="@+id/flameLottie"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_marginTop="16dp"
@@ -267,7 +267,7 @@
                             android:fontFamily="@font/questrial"
                             android:text="0"
                             android:textSize="30sp"
-                            app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                            app:layout_constraintEnd_toStartOf="@+id/flameLottie"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

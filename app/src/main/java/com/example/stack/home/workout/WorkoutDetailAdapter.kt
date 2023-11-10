@@ -1,8 +1,6 @@
 package com.example.stack.home.workout
 
 import android.annotation.SuppressLint
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,10 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.R
-import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.RepsAndWeightsWithCheck
 import com.example.stack.databinding.ItemSetBinding
-import kotlin.math.abs
 
 class WorkoutDetailAdapter(
     val exercisePosition: Int,

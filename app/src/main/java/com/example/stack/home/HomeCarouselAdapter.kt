@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.data.dataclass.Workout
 import com.example.stack.databinding.ItemCarouselEvenBinding
 import com.example.stack.databinding.ItemCarouselOddBinding
-import com.example.stack.databinding.ItemHomeWorkoutHistoryEvenBinding
-import com.example.stack.databinding.ItemHomeWorkoutHistoryOddBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

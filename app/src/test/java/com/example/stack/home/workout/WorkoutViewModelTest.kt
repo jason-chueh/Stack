@@ -1,10 +1,8 @@
 package com.example.stack.home.workout
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.stack.data.FakeStackRepository
-import com.example.stack.data.dataclass.ExerciseRecordWithCheck
 import com.example.stack.data.dataclass.RepsAndWeights
 import com.example.stack.data.dataclass.TemplateExerciseRecord
 import com.example.stack.data.dataclass.User
@@ -16,7 +14,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations

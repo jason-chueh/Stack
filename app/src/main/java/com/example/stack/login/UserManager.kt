@@ -3,9 +3,6 @@ package com.example.stack.login
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.stack.StackApplication
 import com.example.stack.data.dataclass.User
 import com.google.gson.Gson
@@ -47,9 +44,7 @@ class UserManager {
     val isLoggedIn: Boolean
         get() = user != null
 
-    /**
-     * Clear the [userToken] and the [user]/[_user] data
-     */
+
     fun clear() {
         user = null
         val sharedPreferences = StackApplication.instance.getSharedPreferences("USER_DATA", Context.MODE_PRIVATE)

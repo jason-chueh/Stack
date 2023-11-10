@@ -22,8 +22,7 @@
             android:background="@drawable/bg_dialog_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> viewModel.nothing()}">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/text_login_title"

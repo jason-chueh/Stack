@@ -27,7 +27,7 @@ const val NOTIFICATION_CHANNEL_ID_FINISH = "timer_channel_finish"
 const val NOTIFICATION_CHANNEL_NAME = "Timer"
 const val NOTIFICATION_CHANNEL_NAME_FINISH = "Finish"
 
-const val NOTIFICATION_ID = 1 //at least 1, 0 does not work
+const val NOTIFICATION_ID = 1
 const val NOTIFICATION_ID_FINISH = 2
 const val ACTION_SHOW_WORKOUT_FRAGMENT = "showWorkoutFragment"
 
@@ -117,7 +117,7 @@ class TimerService : LifecycleService() {
         ) {
             override fun onTick(p0: Long) {
                 timeProgress.value = (timeProgress.value?.plus(1))
-                Log.i("timer", "timelected: ${timeSelected.value}")
+                Log.i("timer", "timeSelected: ${timeSelected.value}")
                 Log.i("timer", "${timeSelected.value?.minus(timeProgress.value!!)}")
                 pauseOffSet = timeSelected.value!!.toLong() - p0 / 1000
 
@@ -133,8 +133,8 @@ class TimerService : LifecycleService() {
                 resetTime()
                 val notification =
                     NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID_FINISH)
-                        .setAutoCancel(false)
-                        .setOngoing(true)
+                        .setAutoCancel(true)
+                        .setOngoing(false)
                         .setSmallIcon(R.drawable.gym)
                         .setContentTitle("Stack")
                         .setContentIntent(pendingIntent)

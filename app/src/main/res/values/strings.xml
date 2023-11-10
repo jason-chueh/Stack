@@ -31,4 +31,6 @@
     <string name="biceps">biceps</string>
     <string name="delts">delts</string>
     <string name="calves">calves</string>
+    <string name="no_workout_history">No workout history</string>
+    <string name="start">Start</string>
 </resources>

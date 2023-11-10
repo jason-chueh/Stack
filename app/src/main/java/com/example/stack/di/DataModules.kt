@@ -9,7 +9,9 @@ import com.example.stack.data.StackRepository
 import com.example.stack.data.local.ExerciseDao
 import com.example.stack.data.local.ExerciseRecordDao
 import com.example.stack.data.local.ExerciseYoutubeDao
+import com.example.stack.data.local.LocalDataSource
 import com.example.stack.data.local.StackDatabase
+import com.example.stack.data.local.StackLocalDataSource
 import com.example.stack.data.local.TemplateDao
 import com.example.stack.data.local.TemplateExerciseRecordDao
 import com.example.stack.data.local.UserDao
@@ -38,6 +40,10 @@ abstract class DataSourceModule {
     @Singleton
     @Binds
     abstract fun bindNetworkDataSource(dataSource: StackNetworkDataSource): NetworkDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindLocalDataSource(dataSource: StackLocalDataSource): LocalDataSource
 }
 
 @Module
@@ -48,6 +54,7 @@ object ApiModule {
     fun provideExerciseApi(): ExerciseApiService{
         return retrofitExercise.create(ExerciseApiService::class.java)
     }
+
     @Singleton
     @Provides
     fun provideGptApi(): ChatGptApiService {
@@ -121,6 +128,7 @@ object DatabaseModule {
 
     @Provides
     fun provideTemplateExerciseRecordDao(database: StackDatabase): TemplateExerciseRecordDao = database.templateExerciseRecordDao
+
     @Provides
     fun provideWorkoutDao(database: StackDatabase): WorkoutDao = database.workoutDao
 
