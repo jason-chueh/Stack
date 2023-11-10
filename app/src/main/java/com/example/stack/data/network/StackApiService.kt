@@ -28,6 +28,7 @@ val retrofitExercise: Retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .build()
+
 interface ExerciseApiService{
     @GET("equipment/{equipment}")
     suspend fun getExerciseByEquipment(

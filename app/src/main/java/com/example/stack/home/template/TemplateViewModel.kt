@@ -1,7 +1,7 @@
 package com.example.stack.home.template
 
-import android.icu.text.Transliterator.Position
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,45 +18,44 @@ import javax.inject.Inject
 @HiltViewModel
 class TemplateViewModel @Inject constructor(
     private val stackRepository: StackRepository,
-    private val userManager: UserManager) :
+    private val userManager: UserManager
+) :
     ViewModel() {
 
-    val templateList = MutableLiveData<List<Template>?>()
+    private val _templateList = MutableLiveData<List<Template>?>()
+    val templateList: LiveData<List<Template>?>
+        get() = _templateList
 
-    val templateExerciseList = MutableLiveData<List<TemplateExerciseRecord>>()
+    private val _templateExerciseList = MutableLiveData<List<TemplateExerciseRecord>>()
+
+    val templateExerciseList: LiveData<List<TemplateExerciseRecord>>
+        get() = _templateExerciseList
 
     fun searchTemplateByUserId() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                var resultList =
-                    userManager.user?.id?.let { stackRepository.searchTemplatesByUserId(it) }
-                Log.i("template", "$resultList")
-
-                templateList.postValue(resultList)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            val resultList =
+                userManager.user?.id?.let { stackRepository.searchTemplatesByUserId(it) }
+            _templateList.postValue(resultList)
         }
     }
-    fun searchAllTemplateExerciseByTemplateId(templateId: String){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                val exerciserList =
-                    stackRepository.getTemplateExerciseRecordListByTemplateId(templateId)
 
-                templateExerciseList.postValue(exerciserList)
-            }
+    fun searchAllTemplateExerciseByTemplateId(templateId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val exerciserList =
+                stackRepository.getTemplateExerciseRecordListByTemplateId(templateId)
+            _templateExerciseList.postValue(exerciserList)
         }
     }
-    fun deleteTemplate(template: Template, templatePosition: Int){
+
+    fun deleteTemplate(template: Template, templatePosition: Int) {
         val updatedList = mutableListOf<Template>()
-        templateList.value?.let{
+        _templateList.value?.let {
             updatedList.addAll(it)
             updatedList.removeAt(templatePosition)
-            templateList.value = updatedList
+            _templateList.value = updatedList
         }
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                stackRepository.deleteTemplateByTemplateId(templateId = template.templateId)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            stackRepository.deleteTemplateByTemplateId(templateId = template.templateId)
         }
     }
 }

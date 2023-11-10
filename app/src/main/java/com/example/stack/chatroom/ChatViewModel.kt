@@ -1,21 +1,20 @@
 package com.example.stack.chatroom
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.Chat
 import com.example.stack.data.dataclass.Chatroom
-import com.example.stack.home.workout.WorkoutViewModel
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,13 +26,15 @@ class ChatViewModel @Inject constructor(
     val db = Firebase.firestore
     private val ref = db.collection("chat")
     private var registration: ListenerRegistration? = null
-    var chatList = MutableLiveData<List<Chat>>()
-    var timer = 0
-
-
+    private val _chatList = MutableLiveData<List<Chat>>()
+    val chatList: LiveData<List<Chat>>
+        get() = _chatList
+    private var timer = 0
 
     fun sendMessage(chat: Chat) {
-        stackRepository.sendChatMessageToFireStore(chat)
+        viewModelScope.launch(Dispatchers.IO){
+            stackRepository.sendChatMessageToFireStore(chat)
+        }
     }
 
     fun addListener(chatroomId: String){
@@ -51,7 +52,7 @@ class ChatViewModel @Inject constructor(
                         result.add(doc.toObject<Chat>())
                     }
                     Log.i("chat","$result")
-                    chatList.postValue(result.toList())
+                    _chatList.postValue(result.toList())
                 }catch(e: Exception){
                     Log.i("chat","$e")
                 }
@@ -65,6 +66,8 @@ class ChatViewModel @Inject constructor(
         registration?.remove()
     }
     fun updateChatroom(chatroom: Chatroom){
-        stackRepository.updateChatroom(chatroom)
+        viewModelScope.launch(Dispatchers.IO){
+            stackRepository.updateChatroom(chatroom)
+        }
     }
 }

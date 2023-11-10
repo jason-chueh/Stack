@@ -10,14 +10,13 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.R
 
 
-abstract class SwipeToDeleteCallback internal constructor(var mContext: Context) :
+abstract class SwipeToDeleteCallback internal constructor(private var mContext: Context) :
     ItemTouchHelper.Callback() {
     private val mClearPaint: Paint = Paint()
     private val mBackground: ColorDrawable = ColorDrawable()
@@ -98,7 +97,7 @@ abstract class SwipeToDeleteCallback internal constructor(var mContext: Context)
     }
 
     // Extension function to convert dp to pixels
-    fun Int.dpToPx(): Int {
+    private fun Int.dpToPx(): Int {
         return (this * Resources.getSystem().displayMetrics.density).toInt()
     }
 

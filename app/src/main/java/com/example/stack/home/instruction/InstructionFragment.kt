@@ -1,6 +1,7 @@
 package com.example.stack.home.instruction
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,12 +37,14 @@ class InstructionFragment : Fragment() {
         youtubePlayerListener = MyYouTubePlayerListener(bundle.youtubeId)
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentInstructionBinding.inflate(inflater, container, false)
+
 
         val youTubePlayerView: YouTubePlayerView = binding.youtubePlayerView
         viewLifecycleOwner.lifecycle.addObserver(binding.youtubePlayerView)
@@ -56,27 +59,26 @@ class InstructionFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        viewLifecycleOwner.lifecycle.addObserver(object: DefaultLifecycleObserver{
+
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStop(owner: LifecycleOwner) {
                 youTubePlayerView.removeYouTubePlayerListener(youtubePlayerListener)
             }
         })
 
-        viewModel.instruction.observe(viewLifecycleOwner){
+        viewModel.instruction.observe(viewLifecycleOwner) {
+            Log.i("instruction","$it")
             binding.instruction = it
         }
-
         return binding.root
     }
 
 
-
-
 }
-class MyYouTubePlayerListener(var videoId: String): AbstractYouTubePlayerListener(){
-    override fun onReady(youTubePlayer: YouTubePlayer) {
 
-        youTubePlayer.loadVideo(videoId, 0F);
+class MyYouTubePlayerListener(private var videoId: String) : AbstractYouTubePlayerListener() {
+    override fun onReady(youTubePlayer: YouTubePlayer) {
+        youTubePlayer.loadVideo(videoId, 0F)
     }
 }
 

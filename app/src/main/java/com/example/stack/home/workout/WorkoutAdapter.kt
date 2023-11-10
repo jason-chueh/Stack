@@ -18,7 +18,7 @@ class WorkoutAdapter(
     val completeSet: (exercisePosition: Int, setPosition: Int, repsAndWeight: RepsAndWeightsWithCheck) -> Unit,
     val cancelCompleteSet: (exercisePosition: Int, setPosition: Int, repsAndWeight: RepsAndWeightsWithCheck) -> Unit,
     val addSetOnClick: (exercisePosition: Int) -> Unit,
-    val expandListener: (exercisePosition: Int)->Unit,
+    val expandListener: (exercisePosition: Int) -> Unit,
     val deleteOnClick: (exercisePosition: Int, setPosition: Int) -> Unit
 
 ) : ListAdapter<ExerciseRecordWithCheck, WorkoutAdapter.WorkoutViewHolder>(DiffCallback) {
@@ -27,13 +27,12 @@ class WorkoutAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(exerciseRecord: ExerciseRecordWithCheck) {
             binding.exerciseName.text = exerciseRecord.exerciseName.capitalizeFirstLetterOfWords()
-            if(exerciseRecord.expand){
+            if (exerciseRecord.expand) {
                 binding.repsRecyclerView.visibility = View.VISIBLE
                 binding.arrow.rotation = 90.0f
                 binding.addSetButton.visibility = View.VISIBLE
                 binding.infoImage.visibility = View.VISIBLE
-            }
-            else{
+            } else {
                 binding.repsRecyclerView.visibility = View.GONE
                 binding.arrow.rotation = 270.0f
                 binding.addSetButton.visibility = View.GONE
@@ -48,13 +47,15 @@ class WorkoutAdapter(
             }
             binding.addSetButton.setOnClickListener {
                 addSetOnClick(absoluteAdapterPosition)
-//                notifyItemChanged(absoluteAdapterPosition)
             }
-            val adapter = WorkoutDetailAdapter(absoluteAdapterPosition, completeSet, cancelCompleteSet, deleteOnClick)
+            val adapter = WorkoutDetailAdapter(
+                absoluteAdapterPosition,
+                completeSet,
+                cancelCompleteSet,
+                deleteOnClick
+            )
             binding.repsRecyclerView.adapter = adapter
             adapter.submitList(exerciseRecord.repsAndWeights)
-
-//            binding.repsRecyclerView.scrollToPosition()
         }
     }
 
@@ -67,27 +68,30 @@ class WorkoutAdapter(
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         val exerciseRecord = getItem(position)
         holder.bind(exerciseRecord)
-        Log.i("workout","holder onBind: ${holder.absoluteAdapterPosition}")
+        Log.i("workout", "holder onBind: ${holder.absoluteAdapterPosition}")
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<ExerciseRecordWithCheck>() {
-        override fun areItemsTheSame(oldItem: ExerciseRecordWithCheck, newItem: ExerciseRecordWithCheck): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ExerciseRecordWithCheck,
+            newItem: ExerciseRecordWithCheck
+        ): Boolean {
             Log.i("workout", "areItemsTheSame: ${oldItem.exerciseId == newItem.exerciseId}")
             return oldItem.exerciseId == newItem.exerciseId
         }
 
-        override fun areContentsTheSame(oldItem: ExerciseRecordWithCheck, newItem: ExerciseRecordWithCheck): Boolean {
-//            Log.i("workout", "areContentsTheSame")
-            Log.i("workout", "oldItem: ${oldItem.repsAndWeights}, newItem: ${newItem.repsAndWeights}")
-            Log.i("workout", "are content the same: ${(oldItem.repsAndWeights.compareContent(newItem.repsAndWeights) && oldItem == newItem)}")
+        override fun areContentsTheSame(
+            oldItem: ExerciseRecordWithCheck,
+            newItem: ExerciseRecordWithCheck
+        ): Boolean {
             return (oldItem.repsAndWeights.compareContent(newItem.repsAndWeights) && oldItem.expand == newItem.expand)
         }
 
         private fun <E> List<E>.compareContent(target: List<E>): Boolean {
-            if(this != target) return false
-            if(this.size != target.size) return false
-            for(i in this.indices){
-                if(this[i] != target[i]) {
+            if (this != target) return false
+            if (this.size != target.size) return false
+            for (i in this.indices) {
+                if (this[i] != target[i]) {
                     return false
                 }
             }

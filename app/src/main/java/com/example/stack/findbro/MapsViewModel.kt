@@ -31,7 +31,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MapsViewModel @Inject constructor(
     private val stackRepository: StackRepository,
-    private val userManager: UserManager) :
+    private val userManager: UserManager
+) :
     ViewModel() {
 
 
@@ -39,9 +40,12 @@ class MapsViewModel @Inject constructor(
     val allUsersFromFireStore: LiveData<List<User>>
         get() = _allUsersFromFireStore
 
-    var currentLatLng = MutableLiveData<String>()
+    private val _currentLatLng = MutableLiveData<String>()
 
-    val mediatorLiveData = allUsersFromFireStore.combineWith(currentLatLng) { allUsers, _ ->
+    val currentLatLng: LiveData<String>
+        get() = _currentLatLng
+
+    val mediatorLiveData = allUsersFromFireStore.combineWith(_currentLatLng) { allUsers, _ ->
         allUsers
     }
     private var _sortedUserList = MutableLiveData<List<User>>()
@@ -61,12 +65,14 @@ class MapsViewModel @Inject constructor(
             }
         }
     }
-    fun getUserFromFireStore(){
-        Log.i("googleMaps","called out")
-                stackRepository.getUsersFromFireStore {
-                    Log.i("googleMaps","called")
-                    _allUsersFromFireStore.value = it.toList()
-                }
+
+    fun getUserFromFireStore() {
+        viewModelScope.launch(Dispatchers.IO) {
+            stackRepository.getUsersFromFireStore {
+                Log.i("googleMaps", "called")
+                _allUsersFromFireStore.value = it.toList()
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -88,10 +94,15 @@ class MapsViewModel @Inject constructor(
                         )
                 )
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(strongestCandidate.latLng, 15f), 2000, null)
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        strongestCandidate.latLng,
+                        15f
+                    ), 2000, null
+                )
 //                mMap.animateCamera(CameraUpdateFactory.zoomTo(11f), 1000, null)
 
-                currentLatLng.value =
+                _currentLatLng.value =
                     strongestCandidate.latLng.latitude.toString() + "," + strongestCandidate.latLng.longitude.toString()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -108,7 +119,7 @@ class MapsViewModel @Inject constructor(
                 val resultList = mutableListOf<User>()
                 withContext(Dispatchers.IO) {
                     val filteredUser =
-                        allUsersFromFireStore.value?.filter { it.gymLatitude != null && it.gymLongitude != null && !it.picture.isNullOrBlank() && it.id != userManager.user?.id}
+                        allUsersFromFireStore.value?.filter { it.gymLatitude != null && it.gymLongitude != null && !it.picture.isNullOrBlank() && it.id != userManager.user?.id }
                     val destinations = filteredUser
                         ?.mapNotNull { it.gymLatitude?.let { lat -> it.gymLongitude?.let { lon -> "$lat,$lon" } } }
                         ?.joinToString(separator = "|")
@@ -117,7 +128,7 @@ class MapsViewModel @Inject constructor(
 
                     val distanceMatrixList = destinations?.let {
                         stackRepository.getDistanceMatrix(
-                            currentLatLng.value!!,
+                            _currentLatLng.value!!,
                             it,
                             BuildConfig.MAPS_API_KEY
                         )
@@ -160,9 +171,11 @@ class MapsViewModel @Inject constructor(
                 userPic = listOf(user.picture, userManager.user!!.picture),
                 lastMessageTime = Calendar.getInstance().timeInMillis
             )
-            stackRepository.createChatroomAtFireStore(
-                chatroom, chatroomCallBack
-            )
+            viewModelScope.launch(Dispatchers.IO) {
+                stackRepository.createChatroomAtFireStore(
+                    chatroom, chatroomCallBack
+                )
+            }
         }
     }
 

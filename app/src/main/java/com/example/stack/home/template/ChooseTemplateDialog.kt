@@ -29,7 +29,7 @@ class ChooseTemplateDialog: AppCompatDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogChooseTemplateBinding.inflate(inflater, container, false)
 
         binding.root.setOnClickListener {
@@ -45,7 +45,6 @@ class ChooseTemplateDialog: AppCompatDialogFragment() {
             findNavController().navigate(NavigationDirections.navigateToTemplateFragment())
             dialog?.dismiss()
         }
-
 
         return binding.root
     }

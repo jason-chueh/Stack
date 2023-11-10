@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stack.R
-import com.example.stack.data.dataclass.Exercise
 import com.example.stack.data.dataclass.ExerciseWithCheck
-import com.example.stack.data.dataclass.User
 import com.example.stack.databinding.ItemExerciseBinding
+
 //adapter for exercise list (dialog)
-class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<ExerciseWithCheck, ExerciseAdapter.ExerciseViewHolder>(DiffCallback) {
+class ExerciseAdapter(val clickListener: (Int) -> Unit): ListAdapter<ExerciseWithCheck, ExerciseAdapter.ExerciseViewHolder>(
+    DiffCallback
+) {
 
     inner class ExerciseViewHolder(val binding: ItemExerciseBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(exercise: ExerciseWithCheck){

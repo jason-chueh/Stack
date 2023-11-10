@@ -7,9 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import co.yml.charts.common.extensions.isNotNull
-import com.example.stack.data.StackRepository
 import com.example.stack.data.dataclass.Chat
 import com.example.stack.data.dataclass.Chatroom
 import com.example.stack.databinding.FragmentChatBinding
@@ -39,9 +36,9 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        var sender: String
-        var receiver: String
-        var picture: String?
+        val sender: String
+        val receiver: String
+        val picture: String?
         if (userManager.user?.id == chatroom.userId1) {
             sender = chatroom.userId1 //user is the sender
             receiver = chatroom.userName[1]
@@ -92,17 +89,10 @@ class ChatFragment : Fragment() {
             val itemCount = adapter?.itemCount
             if (itemCount != null) {
                 if (itemCount > 1) {
-//                    binding.chatRecyclerView.scrollToPosition(itemCount - 1)
-//                    val totalContentHeight = binding.chatRecyclerView.computeVerticalScrollRange()
-//                    val recyclerViewHeight = binding.chatRecyclerView.height
-//                    val bottomPosition = totalContentHeight - recyclerViewHeight
                     binding.chatRecyclerView.smoothScrollToPosition(it.size - 1)
-//                    val layoutManager = binding.chatRecyclerView.layoutManager as LinearLayoutManager
-//                    layoutManager.scrollToPositionWithOffset(itemCount - 1, 0)
                 }
             }
         }
-
         return binding.root
     }
 
